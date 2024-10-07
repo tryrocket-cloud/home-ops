@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.0](https://github.com/tryrocket-cloud/home-ops/compare/v0.0.1...v0.1.0) (2024-10-07)
+
+
+### Features
+
+* **app:** add homer dashboard ([26c40c1](https://github.com/tryrocket-cloud/home-ops/commit/26c40c1cfce6203d06185ef24dc9dedd558b3909)), closes [#35](https://github.com/tryrocket-cloud/home-ops/issues/35)
+* **docs:** add documentation ([8ede2da](https://github.com/tryrocket-cloud/home-ops/commit/8ede2da74d1d83d07a74faf5f1d080216a10c5c7))
+* Introduce Justfile ([3117ed8](https://github.com/tryrocket-cloud/home-ops/commit/3117ed8d46da03a197f37b292bed6d67c1d4517c))
+
 ## 0.0.1 (2024-09-26)
 
 
