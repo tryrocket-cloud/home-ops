@@ -2,7 +2,7 @@
 version: "2"
 services:
   homer:
-    image: b4bz/homer
+    image: b4bz/homer@sha256:c1f5bfcfd2fe2ea07b8c5a574d9deb5aa5054f2f3582a1a3f8833394d2a06656
     #To build from source, comment previous line and uncomment below
     #build: .
     container_name: homer
