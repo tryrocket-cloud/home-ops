@@ -1,5 +1,5 @@
 # build stage
-FROM node:18-alpine3.19 as build-stage
+FROM node:18-alpine3.19@sha256:09bb03a66e4700aa77306e6ab393f3860e991651635c6ac7b354e7c063935880 as build-stage
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -15,7 +15,7 @@ COPY . .
 RUN pnpm build
 
 # production stage
-FROM alpine:3.19
+FROM alpine:3.19@sha256:ae65dbf8749a7d4527648ccee1fa3deb6bfcae34cbc30fc67aa45c44dcaa90ee
 
 ENV GID 1000
 ENV UID 1000
