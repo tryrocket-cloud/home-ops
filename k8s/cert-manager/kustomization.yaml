@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - cloudflare-api-token-secret.yaml
+  - letsencrypt-staging-cluster-issuer.yaml
+  #- letsencrypt-production-cluster-issuer.yaml
+  - tryrocket-cloud-staging-cert.yaml
+  #- tryrocket-cloud-production-cert.yaml
