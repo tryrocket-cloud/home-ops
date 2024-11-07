@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: helm-chart-apps
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: longhorn
+            chart: longhorn
+            repoURL: https://charts.longhorn.io/
+            targetRevision: v1.7.2
+            namespace: longhorn-system
+            valuesFilePath: $values/k8s/longhorn/values.yaml
+  template:
+    metadata:
+      name: '{{name}}'
+      labels:
+        app.kubernetes.io/managed-by: argocd
+    spec:
+      project: default
+      sources:
+      - repoURL: '{{repoURL}}'
+        chart: '{{chart}}'
+        targetRevision: '{{targetRevision}}'
+        helm:
+          valueFiles:
+            - '{{valuesFilePath}}'
+      
+      - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+        targetRevision: main
+        ref: values
+        
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
