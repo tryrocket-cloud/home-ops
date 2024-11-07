@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: longhorn-tryrocket-cloud-production
+spec:
+  secretName: longhorn-tryrocket-cloud-production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: longhorn.tryrocket.cloud
+  dnsNames:
+    - 'longhorn.tryrocket.cloud'
