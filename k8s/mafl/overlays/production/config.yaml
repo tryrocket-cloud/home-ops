@@ -1,0 +1,66 @@
+title: Rocket Cloud
+services:
+  Info:
+    - title: Wetter in Schorndorf
+      description: Home automation
+      link: https://www.wetterstation-schorndorf.de/index.php
+      icon:
+        name: simple-icons:homeassistant
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: false
+  Services:
+    - title: Home Assistant
+      description: Home automation
+      link: https://home-assistant.home.local/
+      icon:
+        name: simple-icons:homeassistant
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: true
+      tags:
+        - Home
+    - title: NAS
+      description: Synology DS223
+      link: https://nas.home.local/
+      icon:
+        name: mdi:nas
+        wrap: true
+      status:
+        enabled: true
+  Infrastructure:
+    - title: GitHub
+      description: home-ops repository
+      link: https://github.com/tryrocket-cloud/home-ops.git
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
+      status:
+        enabled: false
+    - title: ArgoCD
+      description: GitOps for Kubernetes
+      link: https://argocd.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/argo-cd.svg
+      status:
+        enabled: true
+    - title: Traefik
+      description: Cloud Native Edge Router
+      link: https://traefik.tryrocket.cloud/dashboard/
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/traefik.svg
+      status:
+        enabled: true
+    - title: Longhorn
+      description: Cloud-Native distributed block storage
+      link: https://longhorn.tryrocket.cloud
+      icon:
+        url: https://longhorn.io/img/logos/longhorn-icon-color.png
+      status:
+        enabled: true
+tags:
+  - name: Home
+    color: green
+  - name: Work
+    color: blue
