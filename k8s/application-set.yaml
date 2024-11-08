@@ -27,6 +27,13 @@ spec:
             targetRevision: '0.10.5'
             namespace: external-secrets
             valuesFilePath: $values/k8s/external-secrets/values.yaml
+
+          - name: kubernetes-dashboard
+            chart: kubernetes-dashboard
+            repoURL: https://kubernetes.github.io/dashboard/
+            targetRevision: '7.10.0'
+            namespace: kubernetes-dashboard
+            valuesFilePath: $values/k8s/kubernetes-dashboard/values.yaml
   template:
     metadata:
       name: '{{name}}'
