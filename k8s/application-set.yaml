@@ -13,12 +13,20 @@ spec:
             targetRevision: v1.7.2
             namespace: longhorn-system
             valuesFilePath: $values/k8s/longhorn/values.yaml
+          
           - name: cert-manager
             chart: cert-manager
             repoURL: https://charts.jetstack.io
             targetRevision: v1.16.1
             namespace: cert-manager
             valuesFilePath: $values/k8s/cert-manager/values.yaml
+          
+          - name: external-secrets
+            chart: external-secrets
+            repoURL: https://charts.external-secrets.io
+            targetRevision: "0.10.5"
+            namespace: external-secrets
+            valuesFilePath: $values/k8s/external-secrets/values.yaml
   template:
     metadata:
       name: '{{name}}'
