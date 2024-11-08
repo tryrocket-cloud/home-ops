@@ -13,18 +13,18 @@ spec:
             targetRevision: v1.7.2
             namespace: longhorn-system
             valuesFilePath: $values/k8s/longhorn/values.yaml
-          
+
           - name: cert-manager
             chart: cert-manager
             repoURL: https://charts.jetstack.io
             targetRevision: v1.16.1
             namespace: cert-manager
             valuesFilePath: $values/k8s/cert-manager/values.yaml
-          
+
           - name: external-secrets
             chart: external-secrets
             repoURL: https://charts.external-secrets.io
-            targetRevision: "0.10.5"
+            targetRevision: '0.10.5'
             namespace: external-secrets
             valuesFilePath: $values/k8s/external-secrets/values.yaml
   template:
@@ -35,17 +35,17 @@ spec:
     spec:
       project: default
       sources:
-      - repoURL: '{{repoURL}}'
-        chart: '{{chart}}'
-        targetRevision: '{{targetRevision}}'
-        helm:
-          valueFiles:
-            - '{{valuesFilePath}}'
-      
-      - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-        targetRevision: main
-        ref: values
-        
+        - repoURL: '{{repoURL}}'
+          chart: '{{chart}}'
+          targetRevision: '{{targetRevision}}'
+          helm:
+            valueFiles:
+              - '{{valuesFilePath}}'
+
+        - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+          targetRevision: main
+          ref: values
+
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
@@ -55,3 +55,34 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kustomize-apps
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: mafl
+            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+            revision: main
+  template:
+    metadata:
+      name: '{{name}}'
+      labels:
+        app.kubernetes.io/managed-by: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/tryrocket-cloud/home-ops.git
+        targetRevision: main
+        path: 'k8s/{{name}}/overlays/production'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{name}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
