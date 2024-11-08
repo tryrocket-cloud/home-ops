@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-tryrocket-cloud-production
+spec:
+  secretName: argocd-tryrocket-cloud-production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: argocd.tryrocket.cloud
+  dnsNames:
+    - 'argocd.tryrocket.cloud'
