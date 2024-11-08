@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: traefik-tryrocket-cloud-production
+spec:
+  secretName: traefik-tryrocket-cloud-production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: traefik.tryrocket.cloud
+  dnsNames:
+    - 'traefik.tryrocket.cloud'
