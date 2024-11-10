@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - certificate.yaml
-  - pvc.yaml
-  - pv.yaml
+#  - pvc.yaml
+#  - pv.yaml
 
 namespace: linkding
 

@@ -36,6 +36,13 @@ spec:
             targetRevision: '7.10.0'
             namespace: kubernetes-dashboard
             valuesFilePath: $values/k8s/kubernetes-dashboard/values.yaml
+
+          - name: gitea
+            chart: gitea
+            repoURL: https://dl.gitea.com/charts/
+            targetRevision: 'v10.6.0'
+            namespace: gitea
+            valuesFilePath: $values/k8s/gitea/values.yaml
   template:
     metadata:
       name: '{{name}}'
@@ -86,6 +93,9 @@ spec:
           - name: linkding
             repoURL: https://github.com/tryrocket-cloud/home-ops.git
             revision: main
+  #          - name: gitea
+  #            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+  #            revision: main
   template:
     metadata:
       name: '{{name}}'
