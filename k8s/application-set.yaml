@@ -80,6 +80,9 @@ spec:
           - name: opengist
             repoURL: https://github.com/tryrocket-cloud/home-ops.git
             revision: main
+          - name: memos
+            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+            revision: main
   template:
     metadata:
       name: '{{name}}'
