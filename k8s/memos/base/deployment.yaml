@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memos
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: memos
+  template:
+    metadata:
+      labels:
+        app: memos
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: memos
+          image: neosmemo/memos:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: MEMOS_PORT
+              value: '5230'
+          ports:
+            - name: http
+              containerPort: 5230
+              protocol: TCP
+          volumeMounts:
+            - name: memos-volume
+              mountPath: /var/opt/memos
+      volumes:
+        - name: memos-volume
+          persistentVolumeClaim:
+            claimName: memos-pvc
