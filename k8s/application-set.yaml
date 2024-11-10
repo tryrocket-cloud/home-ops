@@ -1,3 +1,5 @@
+# kubectl apply -f https://raw.githubusercontent.com/tryrocket-cloud/home-ops/refs/heads/main/k8s/application-set.yaml -n argocd
+---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -73,6 +75,9 @@ spec:
     - list:
         elements:
           - name: mafl
+            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+            revision: main
+          - name: opengist
             repoURL: https://github.com/tryrocket-cloud/home-ops.git
             revision: main
   template:
