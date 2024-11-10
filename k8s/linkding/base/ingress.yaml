@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: linkding
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: linkding.tryrocket.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: linkding
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - linkding.tryrocket.cloud
+      secretName: linkding-tryrocket-cloud-production-tls
