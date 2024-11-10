@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - certificate.yaml
+  - pvc.yaml
+  - pv.yaml
+
+namespace: gitea
+
+# https://github.com/go-gitea/gitea/releases
+images:
+  - name: gitea/gitea:latest
+    newTag: 1.22.1

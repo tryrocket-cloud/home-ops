@@ -86,6 +86,9 @@ spec:
           - name: linkding
             repoURL: https://github.com/tryrocket-cloud/home-ops.git
             revision: main
+          - name: gitea
+            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+            revision: main
   template:
     metadata:
       name: '{{name}}'
