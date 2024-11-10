@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: linkding
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: linkding
+  template:
+    metadata:
+      labels:
+        app: linkding
+    spec:
+      containers:
+        - name: linkding
+          image: sissbruecker/linkding:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9090
+          env:
+            - name: TZ
+              value: Europe/Berlin
+          volumeMounts:
+            - name: linkding-volume
+              mountPath: /etc/linkding/data
+      volumes:
+        - name: linkding-volume
+          persistentVolumeClaim:
+            claimName: linkding-pvc
