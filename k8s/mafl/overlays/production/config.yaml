@@ -51,6 +51,13 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
       status:
         enabled: true
+    - title: Gitea
+      description: Git with a cup of tea!
+      link: https://gitea.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+      status:
+        enabled: true
   Infrastructure:
     - title: GitHub
       description: home-ops repository
@@ -68,6 +75,13 @@ services:
         name: simple-icons:mikrotik
         wrap: true
         color: '#3dbcf3'
+      status:
+        enabled: false
+    - title: Fritz!Box
+      description: 6660 Cable
+      link: http://192.168.178.1
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/fritz.webp
       status:
         enabled: false
     - title: ArgoCD

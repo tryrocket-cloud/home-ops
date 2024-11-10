@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitea
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://dl.gitea.com/charts/
+      targetRevision: v10.6.0
+      chart: gitea
+      helm:
+        valueFiles:
+          - $values/k8s/gitea/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitea
+
+  info:
+    - name: 'Example:'
+      value: 'https://example.com'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true

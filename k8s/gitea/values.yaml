@@ -1,0 +1,66 @@
+# https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
+
+deployment:
+  env:
+    - name: TZ
+      value: Europe/Berlin
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  hosts:
+    - host: gitea.tryrocket.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: gitea-tryrocket-cloud-production-tls
+      hosts:
+        - gitea.tryrocket.cloud
+
+persistence:
+  enabled: true
+  create: true
+  mount: true
+  claimName: gitea-pvc
+  size: 4Gi
+  labels:
+    app: gitea
+  accessModes:
+    - ReadWriteOnce
+  storageClass: longhorn-retain
+  # volumeName: gitea-pv
+
+redis-cluster:
+  enabled: false
+redis:
+  enabled: false
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+# image:
+#   rootless: false
+
+strategy:
+  type: 'Recreate'
+
+gitea:
+  config:
+    APP_NAME: 'Rocket Cloud'
+    database:
+      DB_TYPE: sqlite3
+    session:
+      PROVIDER: memory
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: level
+# extraVolumes:
+#   - name: data
+#     persistentVolumeClaim:
+#       claimName: gitea-pvc
