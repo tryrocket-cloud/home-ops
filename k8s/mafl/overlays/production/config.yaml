@@ -37,6 +37,13 @@ services:
         url: https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg
       status:
         enabled: true
+    - title: Memos
+      description: Open Source, Self-hosted, Your Notes, Your Way
+      link: https://memos.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/memos.webp
+      status:
+        enabled: true
   Infrastructure:
     - title: GitHub
       description: home-ops repository
