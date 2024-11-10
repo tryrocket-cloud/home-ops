@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: opengist-tryrocket-cloud-production
+spec:
+  secretName: opengist-tryrocket-cloud-production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: opengist.tryrocket.cloud
+  dnsNames:
+    - 'opengist.tryrocket.cloud'

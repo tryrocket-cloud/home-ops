@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opengist
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: opengist
+  template:
+    metadata:
+      labels:
+        app: opengist
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: opengist
+          image: ghcr.io/thomiceli/opengist:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: OG_EXTERNAL_URL
+              value: https://opengist.tryrocket.cloud
+          ports:
+            - containerPort: 6157
+            - containerPort: 2222
+          volumeMounts:
+            - name: opengist-volume
+              mountPath: /opengist
+      volumes:
+        - name: opengist-volume
+          persistentVolumeClaim:
+            claimName: opengist-pvc

@@ -30,12 +30,28 @@ services:
         wrap: true
       status:
         enabled: true
+    - title: Opengist
+      description: Self-hosted pastebin powered by Git
+      link: https://opengist.tryrocket.cloud
+      icon:
+        url: https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg
+      status:
+        enabled: true
   Infrastructure:
     - title: GitHub
       description: home-ops repository
       link: https://github.com/tryrocket-cloud/home-ops.git
       icon:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/github-light.webp
+      status:
+        enabled: false
+    - title: MikroTik
+      description: CRS326-24G-2S+RM
+      link: http://192.168.178.205
+      icon:
+        name: simple-icons:mikrotik
+        wrap: true
+        color: '#3dbcf3'
       status:
         enabled: false
     - title: ArgoCD
