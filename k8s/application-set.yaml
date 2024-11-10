@@ -83,6 +83,9 @@ spec:
           - name: memos
             repoURL: https://github.com/tryrocket-cloud/home-ops.git
             revision: main
+          - name: linkding
+            repoURL: https://github.com/tryrocket-cloud/home-ops.git
+            revision: main
   template:
     metadata:
       name: '{{name}}'

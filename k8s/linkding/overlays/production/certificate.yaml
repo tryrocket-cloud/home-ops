@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkding-tryrocket-cloud-production
+spec:
+  secretName: linkding-tryrocket-cloud-production-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: linkding.tryrocket.cloud
+  dnsNames:
+    - 'linkding.tryrocket.cloud'

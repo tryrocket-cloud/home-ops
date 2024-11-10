@@ -44,6 +44,13 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/memos.webp
       status:
         enabled: true
+    - title: Linkding
+      description: Self-hosted bookmark manager
+      link: https://linkding.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+      status:
+        enabled: true
   Infrastructure:
     - title: GitHub
       description: home-ops repository
