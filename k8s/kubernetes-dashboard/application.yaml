@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubernetes-dashboard
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://kubernetes.github.io/dashboard/
+      targetRevision: '7.10.0'
+      chart: kubernetes-dashboard
+      helm:
+        valueFiles:
+          - $values/k8s/kubernetes-dashboard/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      path: 'k8s/kubernetes-dashboard'
+      targetRevision: main
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kubernetes-dashboard
+
+  info:
+    - name: 'Example:'
+      value: 'https://example.com'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true

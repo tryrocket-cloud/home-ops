@@ -9,4 +9,4 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: longhorn-retain
-  volumeName: linkding-pv
+  # volumeName: linkding-pv

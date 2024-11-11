@@ -9,40 +9,29 @@ spec:
   generators:
     - list:
         elements:
-          - name: longhorn
-            chart: longhorn
-            repoURL: https://charts.longhorn.io/
-            targetRevision: v1.7.2
-            namespace: longhorn-system
-            valuesFilePath: $values/k8s/longhorn/values.yaml
+          # - name: cert-manager
+          #   chart: cert-manager
+          #   repoURL: https://charts.jetstack.io
+          #   targetRevision: v1.16.1
+          #   namespace: cert-manager
 
-          - name: cert-manager
-            chart: cert-manager
-            repoURL: https://charts.jetstack.io
-            targetRevision: v1.16.1
-            namespace: cert-manager
-            valuesFilePath: $values/k8s/cert-manager/values.yaml
+          # - name: external-secrets
+          #   chart: external-secrets
+          #   repoURL: https://charts.external-secrets.io
+          #   targetRevision: '0.10.5'
+          #   namespace: external-secrets
 
-          - name: external-secrets
-            chart: external-secrets
-            repoURL: https://charts.external-secrets.io
-            targetRevision: '0.10.5'
-            namespace: external-secrets
-            valuesFilePath: $values/k8s/external-secrets/values.yaml
+          # - name: kubernetes-dashboard
+          #   chart: kubernetes-dashboard
+          #   repoURL: https://kubernetes.github.io/dashboard/
+          #   targetRevision: '7.10.0'
+          #   namespace: kubernetes-dashboard
 
-          - name: kubernetes-dashboard
-            chart: kubernetes-dashboard
-            repoURL: https://kubernetes.github.io/dashboard/
-            targetRevision: '7.10.0'
-            namespace: kubernetes-dashboard
-            valuesFilePath: $values/k8s/kubernetes-dashboard/values.yaml
-
-          - name: gitea
-            chart: gitea
-            repoURL: https://dl.gitea.com/charts/
-            targetRevision: 'v10.6.0'
-            namespace: gitea
-            valuesFilePath: $values/k8s/gitea/values.yaml
+          # - name: gitea
+          #   chart: gitea
+          #   repoURL: https://dl.gitea.com/charts/
+          #   targetRevision: 'v10.6.0'
+          #   namespace: gitea
 
   template:
     metadata:
@@ -57,14 +46,14 @@ spec:
           targetRevision: '{{targetRevision}}'
           helm:
             valueFiles:
-              - '{{valuesFilePath}}'
+              - $values/k8s/{{name}}/values.yaml
 
         - repoURL: https://github.com/tryrocket-cloud/home-ops.git
           targetRevision: main
           ref: values
 
         - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-          path: 'k8s/{{name}}/overlays/production'
+          path: 'k8s/{{name}}'
           targetRevision: main
 
       destination:
@@ -76,46 +65,3 @@ spec:
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: kustomize-apps
-  namespace: argocd
-spec:
-  generators:
-    - list:
-        elements:
-          - name: mafl
-            repoURL: https://github.com/tryrocket-cloud/home-ops.git
-            revision: main
-          - name: opengist
-            repoURL: https://github.com/tryrocket-cloud/home-ops.git
-            revision: main
-          - name: memos
-            repoURL: https://github.com/tryrocket-cloud/home-ops.git
-            revision: main
-          - name: linkding
-            repoURL: https://github.com/tryrocket-cloud/home-ops.git
-            revision: main
-  #          - name: gitea
-  #            repoURL: https://github.com/tryrocket-cloud/home-ops.git
-  #            revision: main
-  template:
-    metadata:
-      name: '{{name}}'
-      labels:
-        app.kubernetes.io/managed-by: argocd
-    spec:
-      project: default
-      source:
-        repoURL: https://github.com/tryrocket-cloud/home-ops.git
-        targetRevision: main
-        path: 'k8s/{{name}}/overlays/production'
-      destination:
-        server: https://kubernetes.default.svc
-        namespace: '{{name}}'
-      syncPolicy:
-        automated:
-          prune: true
-          selfHeal: true

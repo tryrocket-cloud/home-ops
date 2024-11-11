@@ -11,4 +11,4 @@ spec:
   storageClassName: longhorn-retain
   csi:
     driver: driver.longhorn.io
-    volumeHandle: opengist-production
+    volumeHandle: pvc-46a7cdf3-f41b-4172-9804-9d05e8022c56
