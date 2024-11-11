@@ -1,15 +1,15 @@
 # https://github.com/kubernetes/dashboard/blob/master/charts/kubernetes-dashboard/values.yaml
-# app:
-#   ingress:
-#     enabled: true
-#     hosts:
-#       - kubernetes-dashboard.tryrocket.cloud
-#     ingressClassName: traefik
-#     useDefaultAnnotations: false
-#     issuer:
-#       name: disabled
-#     annotations:
-#       traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd,kube-system-basic-auth@kubernetescrd'
-#     tls:
-#       enabled: true
-#       secretName: 'tryrocket-cloud-wildcard-staging-tls'
+app:
+  ingress:
+    enabled: true
+    hosts:
+      - k8s-dashboard.tryrocket.cloud
+    ingressClassName: traefik
+    useDefaultAnnotations: false
+    issuer:
+      name: letsencrypt-production
+    annotations:
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    tls:
+      enabled: true
+      secretName: kubernets-dashboard-tryrocket-cloud-production
