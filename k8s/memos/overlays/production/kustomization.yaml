@@ -5,13 +5,7 @@ namespace: memos
 
 resources:
   - ../../base
-<<<<<<< HEAD
-  - certificate.yaml
   - pvc.yaml
-  - pv.yaml
-=======
-  - pvc.yaml
->>>>>>> 4840f39 (fixup! feat(app): add memos)
 
 images:
   - name: neosmemo/memos:latest

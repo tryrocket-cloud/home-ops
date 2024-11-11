@@ -59,6 +59,15 @@ services:
       status:
         enabled: true
   Infrastructure:
+    - title: Kubernetes
+      description: k3s
+      link: https://k3s-dashboard.tryrocket.cloud
+      icon:
+        name: simple-icons:k3s
+        wrap: true
+        color: '#FFC61C'
+      status:
+        enabled: true
     - title: GitHub
       description: home-ops repository
       link: https://github.com/tryrocket-cloud/home-ops.git

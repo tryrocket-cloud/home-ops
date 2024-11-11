@@ -10,3 +10,4 @@ spec:
   commonName: memos.tryrocket.cloud
   dnsNames:
     - 'memos.tryrocket.cloud'
+    - 'dev.memos.tryrocket.cloud'
