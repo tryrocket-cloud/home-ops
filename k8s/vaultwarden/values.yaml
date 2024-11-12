@@ -1,0 +1,28 @@
+# https://github.com/guerzon/vaultwarden/blob/main/charts/vaultwarden/values.yaml
+
+resourceType: 'Deployment'
+
+domain: 'https://vaultwarden.tryrocket.cloud'
+
+data:
+  name: 'data'
+  size: '1Gi'
+  class: 'longhorn-retain'
+  path: '/data'
+  keepPvc: true
+  accessMode: 'ReadWriteOnce'
+
+signupsVerify: false
+invitationsAllowed: false
+
+timeZone: 'Europe/Berlin'
+
+ingress:
+  enabled: true
+  class: traefik
+  nginxIngressAnnotations: false
+  additionalAnnotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  hostname: vaultwarden.tryrocket.cloud
+  tlsSecret: vaultwarden-tryrocket-cloud-production-tls
