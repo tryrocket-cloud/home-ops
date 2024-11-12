@@ -58,6 +58,15 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
       status:
         enabled: true
+    - title: Vaultwarden
+      description: Password manager
+      link: https://vaultwarden.tryrocket.cloud
+      icon:
+        name: simple-icons:vaultwarden
+        wrap: true
+        color: '#000000'
+      status:
+        enabled: true
   Infrastructure:
     - title: Kubernetes
       description: k3s
