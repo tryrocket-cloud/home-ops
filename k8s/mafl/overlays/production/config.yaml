@@ -86,6 +86,15 @@ services:
         color: '#FFC61C'
       status:
         enabled: true
+    - title: Vault
+      description: Secrets Vault
+      link: https://vault.tryrocket.cloud
+      icon:
+        name: simple-icons:vault
+        wrap: true
+        color: '#FFEC6E'
+      status:
+        enabled: true
     - title: GitHub
       description: home-ops repository
       link: https://github.com/tryrocket-cloud/home-ops.git
@@ -115,9 +124,7 @@ services:
       description: GitOps for Kubernetes
       link: https://argocd.tryrocket.cloud
       icon:
-        name: simple-icons:argo
-        wrap: true
-        color: '#EF7B4D'
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/argo-cd.webp
       status:
         enabled: true
     - title: Traefik
