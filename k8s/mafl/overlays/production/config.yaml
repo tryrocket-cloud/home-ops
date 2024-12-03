@@ -67,6 +67,15 @@ services:
         color: '#000000'
       status:
         enabled: true
+    - title: Vaultwarden Admin
+      description: Administration for Vaultwarden
+      link: https://vaultwarden.tryrocket.cloud/admin
+      icon:
+        name: simple-icons:vaultwarden
+        wrap: true
+        color: '#000000'
+      status:
+        enabled: true
   Infrastructure:
     - title: Kubernetes
       description: k3s
