@@ -1,0 +1,28 @@
+# https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+
+injector:
+  # Supported log levels include: trace, debug, info, warn, error
+  logLevel: 'info'
+  # Configure the logging verbosity for the Vault server.
+
+server:
+  # Supported log levels include: trace, debug, info, warn, error
+  logLevel: 'info'
+
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    ingressClassName: traefik
+
+    hosts:
+      - host: vault.tryrocket.cloud
+    tls:
+      - hosts:
+          - vault.tryrocket.cloud
+        secretName: vault-tryrocket-cloud-production-tls
+
+  dataStorage:
+    size: 1Gi
+    storageClass: longhorn-retain

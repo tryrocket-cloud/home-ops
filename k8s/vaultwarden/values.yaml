@@ -26,3 +26,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
   hostname: vaultwarden.tryrocket.cloud
   tlsSecret: vaultwarden-tryrocket-cloud-production-tls
+
+adminToken:
+  existingSecret: admin-token
+  existingSecretKey: ADMIN_TOKEN
