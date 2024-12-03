@@ -1,31 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets
+  name: vault
   namespace: argocd
   labels:
     app.kubernetes.io/managed-by: argocd
 spec:
   project: default
   sources:
-    - repoURL: https://charts.external-secrets.io
-      targetRevision: '0.10.5'
-      chart: external-secrets
+    - repoURL: https://helm.releases.hashicorp.com
+      targetRevision: 0.28.1
+      chart: vault
       helm:
         valueFiles:
-          - $values/k8s/external-secrets/values.yaml
+          - $values/k8s/vault/values.yaml
 
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
       targetRevision: main
       ref: values
 
-    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-      path: 'k8s/external-secrets/overlays/production'
-      targetRevision: main
-
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-secrets
+    namespace: vault
 
   info:
     - name: 'Example:'
@@ -37,3 +33,10 @@ spec:
       selfHeal: true
       allowEmpty: false
     syncOptions:
+      - CreateNamespace=true
+
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
