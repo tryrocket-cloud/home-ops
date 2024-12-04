@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subscription-manager
+  labels:
+    app: subscription-manager
+    app.kubernetes.io/name: subscription-manager
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: subscription-manager
+      app.kubernetes.io/name: subscription-manager
+  template:
+    metadata:
+      labels:
+        app: subscription-manager
+        app.kubernetes.io/name: subscription-manager
+    spec:
+      containers:
+        - name: subscription-manager
+          image: dh1011/subscription-manager:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: TZ
+              value: Europe/Berlin
+            - name: NODE_ENV
+              value: production
+            - name: HOST
+              value: 0.0.0.0
+            - name: DANGEROUSLY_DISABLE_HOST_CHECK
+              value: 'true'
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
+          volumeMounts:
+            - name: subscription-manager-volume
+              mountPath: /app/server
+      volumes:
+        - name: subscription-manager-volume
+          persistentVolumeClaim:
+            claimName: subscription-manager-pvc

@@ -20,6 +20,13 @@ services:
         color: '#0033FF'
       status:
         enabled: true
+    - title: Subscription manager
+      description: Track subscriptions and manage expenses
+      link: https://subscription-manager.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/subscription-manager.webp
+      status:
+        enabled: true
     - title: Home Assistant
       description: Home automation
       link: https://home-assistant.home.local/
