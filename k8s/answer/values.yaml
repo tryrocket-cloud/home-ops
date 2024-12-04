@@ -1,0 +1,24 @@
+# https://github.com/apache/incubator-answer/blob/main/charts/values.yaml
+persistence:
+  storageClass: longhorn-retain
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  hosts:
+    - host: answer.tryrocket.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: answer-tryrocket-cloud-production-tls
+      hosts:
+        - answer.tryrocket.cloud
+
+serviceAccount:
+  create: false
