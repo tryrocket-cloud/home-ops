@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: subscription-manager
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tryrocket-cloud/home-ops.git
+    targetRevision: main
+    path: 'k8s/subscription-manager/overlays/production'
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: subscription-manager
+
+  info:
+    - name: 'Example:'
+      value: 'https://example.com'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
