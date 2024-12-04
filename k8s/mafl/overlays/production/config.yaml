@@ -11,6 +11,15 @@ services:
       status:
         enabled: false
   Services:
+    - title: Answer
+      description: Q&A platform
+      link: https://answer.tryrocket.cloud
+      icon:
+        name: simple-icons:answer
+        wrap: true
+        color: '#0033FF'
+      status:
+        enabled: true
     - title: Home Assistant
       description: Home automation
       link: https://home-assistant.home.local/
