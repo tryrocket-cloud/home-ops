@@ -18,7 +18,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: memos
-          image: neosmemo/memos:latest
+          image: neosmemo/memos:latest@sha256:d92b2c5dd6eb064cfb22c8a81a0a70b1c7a1d09068b30ddccd5e9d92cb6e300a
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
