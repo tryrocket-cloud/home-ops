@@ -93,6 +93,24 @@ services:
       status:
         enabled: true
   Infrastructure:
+    - title: Portainer
+      description: docker
+      link: https://portainer.tryrocket.cloud
+      icon:
+        name: simple-icons:portainer
+        wrap: true
+        color: '#13BEF9'
+      status:
+        enabled: true
+    - title: AdGuard Home
+      description: Ad Blocker
+      link: https://adguardhome.tryrocket.cloud
+      icon:
+        name: simple-icons:adguardhome
+        wrap: true
+        color: '#68BC71'
+      status:
+        enabled: true
     - title: Kubernetes
       description: k3s
       link: https://k3s-dashboard.tryrocket.cloud
