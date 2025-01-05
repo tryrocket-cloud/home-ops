@@ -106,7 +106,7 @@ services:
       description: Ad Blocker
       link: https://adguardhome.tryrocket.cloud
       icon:
-        name: simple-icons:adguardhome
+        name: simple-icons:adguard
         wrap: true
         color: '#68BC71'
       status:
