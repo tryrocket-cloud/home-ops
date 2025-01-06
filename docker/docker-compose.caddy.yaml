@@ -2,6 +2,7 @@
 services:
   caddy:
     image: ghcr.io/tryrocket-cloud/tryrocket-cloud:caddy
+    container_name: caddy
     restart: unless-stopped
     ports:
       - '80:80'
