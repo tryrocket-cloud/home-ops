@@ -1,9 +1,7 @@
 ---
 services:
   caddy:
-    build:
-      context: .
-      dockerfile: Dockerfile.caddy
+    image: ghcr.io/tryrocket-cloud/tryrocket-cloud:caddy
     restart: unless-stopped
     ports:
       - '80:80'
