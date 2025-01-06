@@ -2,7 +2,7 @@ services:
   caddy:
     build:
       context: .  
-      dockerfile: Dockerfile  
+      dockerfile: Dockerfile.caddy  
     restart: unless-stopped
     ports:
       - "80:80"
