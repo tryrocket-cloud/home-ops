@@ -8,3 +8,6 @@ services:
       - ./upsnap/data:/app/pb_data
     environment:
       - TZ=Europe/Berlin
+      - UPSNAP_INTERVAL=@every 5m
+      - UPSNAP_SCAN_RANGE=192.168.178.0/24
+      - UPSNAP_WEBSITE_TITLE=Rocket Cloud
