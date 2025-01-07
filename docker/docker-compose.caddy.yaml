@@ -1,8 +1,14 @@
 services:
   caddy:
-    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
     container_name: caddy
+    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
     restart: unless-stopped
+    
+#services:
+#  caddy:
+#    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
+#    container_name: caddy
+#    restart: unless-stopped
 #    ports:
 #      - '80:80'
 #      - '443:443'
