@@ -10,10 +10,4 @@ services:
     volumes:
       - ./caddy/config:/config
       - ./caddy/data:/data
-    configs:
-      - source: caddyfile
-        target: /etc/caddy/Caddyfile
-
-configs:
-  caddyfile:
-    file: ./caddy/Caddyfile
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
