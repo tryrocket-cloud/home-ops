@@ -10,4 +10,4 @@ services:
     volumes:
       - './caddy/config:/config'
       - './caddy/data:/data'
-      - './caddy/Caddyfile:/etc/caddy/Caddyfile'
+#      - './caddy/Caddyfile:/etc/caddy/Caddyfile'
