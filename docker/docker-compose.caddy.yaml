@@ -4,10 +4,10 @@ services:
     image: ghcr.io/caddybuilds/caddy-cloudflare:latest
     restart: unless-stopped
     ports:
-      - '80:80'
-      - '443:443'
-      - '443:443/udp'
+      - 80:80
+      - 443:443
+      - 443:443/udp
     volumes:
-      - './caddy/config:/config'
-      - './caddy/data:/data'
-#      - './caddy/Caddyfile:/etc/caddy/Caddyfile'
+      - ./caddy/config:/config
+      - ./caddy/data:/data
+#      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
