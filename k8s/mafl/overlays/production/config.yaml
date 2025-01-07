@@ -11,6 +11,15 @@ services:
       status:
         enabled: false
   Services:
+    - title: Immich
+      description: Photo and video
+      link: https://immich.tryrocket.cloud
+      icon:
+        name: simple-icons:immich
+        wrap: true
+        color: '#4250AF'
+      status:
+        enabled: true
     - title: Answer
       description: Q&A platform
       link: https://answer.tryrocket.cloud
