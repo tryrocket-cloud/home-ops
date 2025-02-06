@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: neosmemo/memos:latest
-    newTag: 0.23.0@sha256:d92b2c5dd6eb064cfb22c8a81a0a70b1c7a1d09068b30ddccd5e9d92cb6e300a
+    newTag: 0.24.0@sha256:4723d86e6797fd629f1f2ff7afd4e37e669df7318f00de31c7ff9acf1fe9db7f
