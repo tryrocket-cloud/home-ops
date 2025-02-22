@@ -1,0 +1,44 @@
+---
+- name: Fetch Vaultwarden config and extract version
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Fetch Vaultwarden configuration via HTTP
+      uri:
+        url: "https://vaultwarden.tryrocket.cloud/api/config"
+        return_content: yes
+        status_code: 200
+      register: vaultwarden_config
+      # The task will fail automatically if status code is not 200
+
+    - name: Extract version from JSON response
+      set_fact:
+        vaultwarden_version: "{{ vaultwarden_config.json.version }}"
+      when: vaultwarden_config.json is defined
+
+    - name: Fail if the version could not be extracted
+      fail:
+        msg: "Error: Failed to extract .version from Vaultwarden config"
+      when: vaultwarden_version is not defined
+
+    - name: Write extracted version to file
+      copy:
+        content: "{{ vaultwarden_version }}"
+        dest: /export/vaultwarden.env
+
+    - name: Verify /export/vaultwarden.env exists and is not empty
+      stat:
+        path: /export/vaultwarden.env
+      register: export_file
+
+    - name: Fail if /export/vaultwarden.env does not exist or is empty
+      fail:
+        msg: "/export/vaultwarden.env file does not exist or is empty"
+      when: not export_file.stat.exists or export_file.stat.size == 0
+
+    - name: Display the contents of /export/vaultwarden.env
+      shell: cat /export/vaultwarden.env
+      register: cat_output
+
+    - debug:
+        msg: "{{ cat_output.stdout }}"
