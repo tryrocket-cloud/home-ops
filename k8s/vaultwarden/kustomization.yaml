@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - admin-token-ExternalSecret.yaml
+
+  - export-and-backup/
