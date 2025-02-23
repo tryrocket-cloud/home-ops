@@ -10,4 +10,4 @@ namespace: linkding
 # https://github.com/sissbruecker/linkding/releases
 images:
   - name: sissbruecker/linkding:latest
-    newTag: 1.38.0-alpine@sha256:3143c348f310e748d013dab0e19278e37a515a4bd5b598c715f3b4caeb0eb55e
+    newTag: 1.38.1-alpine@sha256:b26e58caa48922366a08b00410d75d9d9479a229b0510d20e06abadcdedc32a0
