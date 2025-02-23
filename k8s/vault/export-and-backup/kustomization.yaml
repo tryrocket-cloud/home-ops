@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - vault-export-and-backup-cronjob.yaml
+
+  - ionos.com-s3-repository-external-secret.yaml
+  - ionos.com-kopia-repository-external-secret.yaml
+  - ionos.com-restic-repository-external-secret.yaml
+
+  - vault-token-external-secret.yaml

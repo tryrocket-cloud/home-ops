@@ -1,0 +1,143 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vault-export-backup
+spec:
+  suspend: false
+  schedule: "5 22 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          initContainers:
+            - name: export-hashicorp-vault
+              image: ghcr.io/jonasvinther/medusa:latest
+              imagePullPolicy: IfNotPresent
+              command: ["./medusa", "export", "$(VAULT_PATH)", "-o", "/export/vault-export.json"]
+              env:
+                - name: VAULT_ADDR
+                  value: https://vault.tryrocket.cloud
+                - name: VAULT_PATH
+                  value: kv
+                - name: VAULT_SKIP_VERIFY
+                  value: "true"
+              envFrom:
+                - secretRef:
+                    name: vault-token-secret
+              volumeMounts:
+                - name: export-volume
+                  mountPath: /export
+
+          containers:
+            - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: EXPORT_JSON
+                  value: /export/vault-export.json
+                - name: KOPIA_CHECK_FOR_UPDATES
+                  value: "false"
+                - name: KOPIA_CACHE_DIRECTORY
+                  value: /cache/ionos.com/vault/kopia
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: ionos-com-objectstorage-bucket-secret
+                - secretRef:
+                    name: ionos-com-objectstorage-user-secret
+                - secretRef:
+                    name: ionos-com-kopia-repository-secret
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  #VAULTWARDEN_VERSION=$(cat /export/vaultwarden.env)
+                  KOPIA_VERSION=$(kopia --version | awk '{print $1}')
+                  
+                  [ -z "$KOPIA_VERSION" ] && exit 1  # Ensure Kopia version is set
+
+                  # Start health check
+                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/start
+
+                  kopia repository connect s3 --bucket="$BUCKET" --endpoint="$ENDPOINT" --region="$REGION" --prefix="$PREFIX"
+
+                  # Perform Kopia backup
+                  kopia snapshot create /export --description="Daily export" --tags="hostname:$HOSTNAME kopia:$KOPIA_VERSION"
+                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                  # Perform Kopia consistency check
+                  kopia snapshot verify --verify-files-percent 33
+                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                  #cat /etc/environment
+                  #cat ~/.config/kopia/repository.config
+              volumeMounts:
+                - name: export-volume
+                  mountPath: /export
+                  readOnly: true
+                # - name: backup-cache-volume
+                #   mountPath: /cache
+            - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: EXPORT_JSON
+                  value: /export/vault-export.json
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vault/restic
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: ionos-com-objectstorage-bucket-secret
+                - secretRef:
+                    name: ionos-com-objectstorage-user-secret
+                - secretRef:
+                    name: ionos.com-restic-repository-secret
+              command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    cat /etc/environment
+
+                    #export VAULTWARDEN_VERSION=$(cat /export/vaultwarden.env)
+                    export RESTIC_VERSION=$(restic version | awk '{print $2}')
+                    export RESTIC_REPOSITORY="s3:$ENDPOINT/$BUCKET/$PREFIX"
+
+                    #[ -z "$VAULTWARDEN_VERSION" ] && exit 1
+                    [ -z "$RESTIC_VERSION" ] && exit 1
+                    [ -z "$RESTIC_REPOSITORY" ] && exit 1
+
+                    # Start health check
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/start
+
+                    # Perform restic backup
+                    restic backup --host "$HOSTNAME" --tag restic:"$RESTIC_VERSION" --tag --tag export $EXPORT_JSON
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                    # Perform restic check
+                    restic check --read-data-subset 1/3
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                    # Prune old backups
+                    restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+              volumeMounts:
+                - name: export-volume
+                  mountPath: /export
+                  readOnly: true
+                # - name: backup-cache-volume
+                #   mountPath: /cache
+          volumes:
+            - name: export-volume
+              emptyDir: {}
+            # - name: backup-cache-volume
+            #   persistentVolumeClaim:
+            #     claimName: backup-cache-pvc
