@@ -6,7 +6,7 @@ domain: 'https://vaultwarden.tryrocket.cloud'
 
 storage:
   existingVolumeClaim:
-    claimName: "pvc-851a04a0-a9a7-497e-9e3c-47b3f7b23d2f"
+    claimName: "data-vaultwarden-0"
 #  data:
 #    name: 'data'
 #    size: '1Gi'
