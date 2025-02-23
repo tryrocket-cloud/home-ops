@@ -4,13 +4,14 @@ resourceType: 'Deployment'
 
 domain: 'https://vaultwarden.tryrocket.cloud'
 
-data:
-  name: 'data'
-  size: '1Gi'
-  class: 'longhorn-retain'
-  path: '/data'
-  keepPvc: true
-  accessMode: 'ReadWriteOnce'
+storage:
+  data:
+    name: 'data'
+    size: '1Gi'
+    class: 'longhorn-retain'
+    path: '/data'
+    keepPvc: true
+    accessMode: 'ReadWriteOnce'
 
 signupsVerify: false
 invitationsAllowed: false
