@@ -2,7 +2,7 @@
 ingress:
   enabled: true
   className: "traefik"
-  annotations: {}
+  annotations:
     cert-manager.io/cluster-issuer: 'letsencrypt-production'
     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
   hosts:
@@ -10,15 +10,13 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-  tls: []
+  tls:
     - secretName: wallos-tryrocket-cloud-production-tls
       hosts:
         - wallos.tryrocket.cloud
 
-
 env:
   TZ: 'Europe/Berlin'
-
 
 persistence:
   existingClaim: null
