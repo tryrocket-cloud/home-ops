@@ -1,0 +1,5 @@
+- import_playbook: /ansible/shared/send-healthchecksio-start.yaml
+- import_playbook: /ansible/vault/export-vault-data.yaml
+- import_playbook: /ansible/vault/get-vault-version.yaml
+- import_playbook: /ansible/vault/backup-vault-export-restic.yaml
+- import_playbook: /ansible/vault/backup-vault-export-kopia.yaml

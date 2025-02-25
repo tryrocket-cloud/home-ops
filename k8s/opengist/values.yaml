@@ -1,0 +1,24 @@
+# https://github.com/thomiceli/opengist/blob/master/helm/opengist/values.yaml
+
+config:
+  log-level: "info"
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  hosts:
+    - host: opengist.tryrocket.cloud
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: opengist-tryrocket-cloud-production-tls
+      hosts:
+        - opengist.tryrocket.cloud
+
+persistence:
+  enabled: true
+  existingClaim: opengist-pvc

@@ -1,0 +1,112 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vault-export-backup
+spec:
+  suspend: false
+  schedule: "0 22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: EXPORT_JSON
+                  value: /export/vault-export.json
+                - name: KOPIA_CHECK_FOR_UPDATES
+                  value: "false"
+                - name: KOPIA_CACHE_DIRECTORY
+                  value: /cache/ionos.com/vault/kopia
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: ionos-com-s3-bucket-configuration
+                - secretRef:
+                    name: ionos-com-s3-credentials
+                - secretRef:
+                    name: ionos-com-kopia-repository-configuration
+                - secretRef:
+                    name: ionos-com-healthchecks-configuration
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  #VAULTWARDEN_VERSION=$(cat /export/vaultwarden.env)
+                  KOPIA_VERSION=$(kopia --version | awk '{print $1}')
+                  
+                  [ -z "$KOPIA_VERSION" ] && exit 1  # Ensure Kopia version is set
+
+                  # Start health check
+                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/start
+
+                  kopia repository connect s3 --bucket="$BUCKET" --endpoint="$ENDPOINT" --region="$REGION" --prefix="$PREFIX"
+
+                  # Perform Kopia backup
+                  kopia snapshot create /export --description="Daily export" --tags="hostname:$HOSTNAME kopia:$KOPIA_VERSION"
+                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                  # Perform Kopia consistency check
+                  kopia snapshot verify --verify-files-percent 33
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$KOPIA_HC_UUID
+
+                  #cat /etc/environment
+                  #cat ~/.config/kopia/repository.config
+              volumeMounts:
+                - name: vault-export-volume
+                  mountPath: /export
+                  readOnly: true
+            - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: EXPORT_JSON
+                  value: /export/vault-export.json
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vault/restic
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: ionos-com-s3-bucket-configuration
+                - secretRef:
+                    name: ionos-com-s3-credentials
+                - secretRef:
+                    name: ionos-com-restic-repository-configuration
+                - secretRef:
+                    name: ionos-com-healthchecks-configuration
+              command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    cat /etc/environment
+
+                    #export VAULTWARDEN_VERSION=$(cat /export/vaultwarden.env)
+                    export RESTIC_VERSION=$(restic version | awk '{print $2}')
+                    export RESTIC_REPOSITORY="s3:$ENDPOINT/$BUCKET/$PREFIX"
+
+                    #[ -z "$VAULTWARDEN_VERSION" ] && exit 1
+                    [ -z "$RESTIC_VERSION" ] && exit 1
+                    [ -z "$RESTIC_REPOSITORY" ] && exit 1
+
+                    # Start health check
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/start
+
+                    # Perform restic backup
+                    restic backup --host "$HOSTNAME" --tag restic:"$RESTIC_VERSION" --tag --tag export $EXPORT_JSON
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                    # Perform restic check
+                    restic check --read-data-subset 1/3
+                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+
+                    # Prune old backups
+                    restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
+                    curl -fsS -m 10 --retry 5 https://hc-ping.com/$RESTIC_HC_UUID
+              volumeMounts:
+                - name: vault-export-volume
+                  mountPath: /export
+                  readOnly: true

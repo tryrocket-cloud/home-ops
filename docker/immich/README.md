@@ -1,0 +1,1 @@
+ rsync -aHAX tryrocket.cloud/immich/immich-data apps/immich/data/

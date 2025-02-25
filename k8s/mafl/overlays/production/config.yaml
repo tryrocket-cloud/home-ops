@@ -38,14 +38,6 @@ services:
         enabled: true
       tags:
         - Home
-    - title: NAS
-      description: Synology DS223
-      link: https://nas.home.local/
-      icon:
-        name: mdi:nas
-        wrap: true
-      status:
-        enabled: true
     - title: Opengist
       description: Self-hosted pastebin powered by Git
       link: https://opengist.tryrocket.cloud
@@ -92,16 +84,63 @@ services:
         color: '#000000'
       status:
         enabled: true
-  Infrastructure:
-    - title: Portainer
-      description: docker
-      link: https://portainer.tryrocket.cloud
+  TrueNAS:
+    - title: TrueNAS
+      description: Admin Dashboard
+      link: https://truenas.tryrocket.cloud
       icon:
-        name: simple-icons:portainer
+        name: simple-icons:truenas
         wrap: true
-        color: '#13BEF9'
+        color: '#0095D5'
       status:
-        enabled: true
+        enabled: false
+    - title: TrueNAS API
+      description: API docs
+      link: https://truenas.tryrocket.cloud/api/docs/
+      icon:
+        name: simple-icons:swagger
+        wrap: true
+        color: '#85EA2D'
+      status:
+        enabled: false
+    - title: TrueNAS Netdata
+      description: Monitoring
+      link: https://truenas.tryrocket.cloud/netdata
+      icon:
+        name: simple-icons:netdata
+        wrap: true
+        color: '#00AB44'
+      status:
+        enabled: false
+    - title: Immich
+      description: Photo and Video management solution
+      link: https://immich.tryrocket.cloud
+      icon:
+        name: simple-icons:immich
+        wrap: true
+        color: '#4250AF'
+      status:
+        enabled: false
+    - title: Paperless
+      description: Document Management
+      link: https://paperless.tryrocket.cloud
+      icon:
+        name: simple-icons:paperlessngx
+        wrap: true
+        color: '#17541F'
+      status:
+        enabled: false
+    - title: Minio
+      description: High Performance Object Storage
+      link: https://minio.tryrocket.cloud
+      icon:
+        name: simple-icons:minio
+        wrap: true
+        color: '#C72E49'
+      status:
+        enabled: false
+
+  Infrastructure:
     - title: AdGuard Home
       description: Ad Blocker
       link: https://adguardhome.tryrocket.cloud
@@ -173,6 +212,15 @@ services:
       link: https://longhorn.tryrocket.cloud
       icon:
         url: https://longhorn.io/img/logos/longhorn-icon-color.png
+      status:
+        enabled: true
+    - title: Portainer
+      description: Docker and Kubernetes management
+      link: https://portainer.tryrocket.cloud
+      icon:
+        name: simple-icons:portainer
+        wrap: true
+        color: '#13BEF9'
       status:
         enabled: true
 tags:

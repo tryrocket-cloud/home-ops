@@ -1,0 +1,30 @@
+- name: Retrieve current Portainer stack status
+  uri:
+    url: "http://{{ portainer_api }}/api/stacks/{{ stack_id }}"
+    method: GET
+    headers:
+      X-API-Key: "{{ portainer_api_key }}"
+    return_content: yes
+  register: portainer_stack_info_initial
+
+- name: Stop Portainer stack if active (Status == 1)
+  uri:
+    url: "http://{{ portainer_api }}/api/stacks/{{ stack_id }}/stop?endpointId={{ endpointId }}"
+    method: POST
+    headers:
+      X-API-Key: "{{ portainer_api_key }}"
+    status_code: [200]
+  register: portainer_stop
+  when: portainer_stack_info_initial.json.Status == 1
+
+- name: Wait until containers are terminated
+  become: true
+  community.docker.docker_container_info:
+    name: "{{ item }}"
+  register: container
+  until: not container.exists
+  retries: 12
+  delay: 5
+  loop: "{{ containers }}"
+  loop_control:
+    label: "{{ item }}"

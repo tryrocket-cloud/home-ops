@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-vault-export
+spec:
+  suspend: false
+  schedule: "0 22 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: backup-vault-export
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              imagePullPolicy: Always
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /root/.cache/restic/vault
+                - name: KOPIA_CACHE_DIRECTORY
+                  value: /root/.cache/kopia/vault
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              args: ["backup-vault"]
+              volumeMounts:
+                - name: support-volume
+                  mountPath: /root/.cache
+                  readOnly: false
+          volumes:
+            - name: support-volume
+              persistentVolumeClaim:
+                claimName: vault-support-pvc

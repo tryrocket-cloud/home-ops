@@ -1,0 +1,230 @@
+title: Rocket Cloud
+services:
+  Info:
+    - title: Wetter in Schorndorf
+      description: Home automation
+      link: https://www.wetterstation-schorndorf.de/index.php
+      icon:
+        name: simple-icons:homeassistant
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: false
+  Services:
+    - title: Answer
+      description: Q&A platform
+      link: https://answer.tryrocket.cloud
+      icon:
+        name: simple-icons:answer
+        wrap: true
+        color: '#0033FF'
+      status:
+        enabled: true
+    - title: Subscription manager
+      description: Track subscriptions and manage expenses
+      link: https://subscription-manager.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/subscription-manager.webp
+      status:
+        enabled: true
+    - title: Home Assistant
+      description: Home automation
+      link: https://home-assistant.home.local/
+      icon:
+        name: simple-icons:homeassistant
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: true
+      tags:
+        - Home
+    - title: Opengist
+      description: Self-hosted pastebin powered by Git
+      link: https://opengist.tryrocket.cloud
+      icon:
+        url: https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg
+      status:
+        enabled: true
+    - title: Memos
+      description: Open Source, Self-hosted, Your Notes, Your Way
+      link: https://memos.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/memos.webp
+      status:
+        enabled: true
+    - title: Linkding
+      description: Self-hosted bookmark manager
+      link: https://linkding.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
+      status:
+        enabled: true
+    - title: Gitea
+      description: Git with a cup of tea!
+      link: https://gitea.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+      status:
+        enabled: true
+    - title: Vaultwarden
+      description: Password manager
+      link: https://vaultwarden.tryrocket.cloud
+      icon:
+        name: simple-icons:vaultwarden
+        wrap: true
+        color: '#000000'
+      status:
+        enabled: true
+    - title: Vaultwarden Admin
+      description: Administration for Vaultwarden
+      link: https://vaultwarden.tryrocket.cloud/admin
+      icon:
+        name: simple-icons:vaultwarden
+        wrap: true
+        color: '#000000'
+      status:
+        enabled: true
+  TrueNAS:
+    - title: TrueNAS
+      description: Admin Dashboard
+      link: https://truenas.tryrocket.cloud
+      icon:
+        name: simple-icons:truenas
+        wrap: true
+        color: '#0095D5'
+      status:
+        enabled: true
+    - title: TrueNAS API
+      description: API docs
+      link: https://truenas.tryrocket.cloud/api/docs/
+      icon:
+        name: simple-icons:swagger
+        wrap: true
+        color: '#85EA2D'
+      status:
+        enabled: false
+    - title: TrueNAS Netdata
+      description: Monitoring
+      link: https://truenas.tryrocket.cloud/netdata
+      icon:
+        name: simple-icons:netdata
+        wrap: true
+        color: '#00AB44'
+      status:
+        enabled: false
+    - title: Immich
+      description: Photo and Video management solution
+      link: https://immich.tryrocket.cloud
+      icon:
+        name: simple-icons:immich
+        wrap: true
+        color: '#4250AF'
+      status:
+        enabled: true
+    - title: Paperless
+      description: Document Management
+      link: https://paperless.tryrocket.cloud
+      icon:
+        name: simple-icons:paperlessngx
+        wrap: true
+        color: '#17541F'
+      status:
+        enabled: true
+    - title: Minio
+      description: High Performance Object Storage
+      link: https://minio.tryrocket.cloud
+      icon:
+        name: simple-icons:minio
+        wrap: true
+        color: '#C72E49'
+      status:
+        enabled: true
+
+  Infrastructure:
+    - title: AdGuard Home
+      description: Ad Blocker
+      link: https://adguardhome.tryrocket.cloud
+      icon:
+        name: simple-icons:adguard
+        wrap: true
+        color: '#68BC71'
+      status:
+        enabled: true
+    - title: Kubernetes
+      description: k3s
+      link: https://k3s-dashboard.tryrocket.cloud
+      icon:
+        name: simple-icons:k3s
+        wrap: true
+        color: '#FFC61C'
+      status:
+        enabled: true
+    - title: Vault
+      description: Secrets Vault
+      link: https://vault.tryrocket.cloud
+      icon:
+        name: simple-icons:vault
+        wrap: true
+        color: '#FFEC6E'
+      status:
+        enabled: true
+    - title: GitHub
+      description: home-ops repository
+      link: https://github.com/tryrocket-cloud/home-ops.git
+      icon:
+        name: simple-icons:github
+        wrap: true
+        color: '#181717'
+      status:
+        enabled: false
+    - title: MikroTik
+      description: CRS326-24G-2S+RM
+      link: http://192.168.178.205
+      icon:
+        name: simple-icons:mikrotik
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: false
+    - title: Fritz!Box
+      description: 6660 Cable
+      link: http://192.168.178.1
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/fritz.webp
+      status:
+        enabled: false
+    - title: ArgoCD
+      description: GitOps for Kubernetes
+      link: https://argocd.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/argo-cd.webp
+      status:
+        enabled: true
+    - title: Traefik
+      description: Cloud Native Edge Router
+      link: https://traefik.tryrocket.cloud/dashboard/
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/traefik.svg
+      status:
+        enabled: true
+    - title: Longhorn
+      description: Cloud-Native distributed block storage
+      link: https://longhorn.tryrocket.cloud
+      icon:
+        url: https://longhorn.io/img/logos/longhorn-icon-color.png
+      status:
+        enabled: true
+    - title: Portainer
+      description: Docker and Kubernetes management
+      link: https://portainer.tryrocket.cloud
+      icon:
+        name: simple-icons:portainer
+        wrap: true
+        color: '#13BEF9'
+      status:
+        enabled: true
+tags:
+  - name: Home
+    color: green
+  - name: Work
+    color: blue

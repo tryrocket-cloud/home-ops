@@ -1,0 +1,29 @@
+services:
+  caddy:
+    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - /home/dietpi/portainer/data/compose/7/docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      # - /etc/ca.crt:/etc/ca.crt
+      - ./data:/data
+      - ./config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    networks:
+      - mafl_default
+      - semaphoreui_default
+      - portainer_default
+      - pocket-id_default
+
+networks:
+  mafl_default:
+    external: true
+  semaphoreui_default:
+    external: true
+  portainer_default:
+    external: true
+  pocket-id_default:
+    external: true

@@ -1,0 +1,29 @@
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id
+    container_name: pocket-id
+    restart: unless-stopped
+    environment:
+      - PUBLIC_APP_URL=https://id.tryrocket.cloud
+      - TRUST_PROXY=true
+      - MAXMIND_LICENSE_KEY=
+      - PUID=1000
+      - PGID=1000
+      - PUBLIC_UI_CONFIG_DISABLED=true
+      - EMAILS_VERIFIED=true
+      - SMTP_HOST=$SMTP_HOST
+      - SMTP_PORT=$SMTP_PORT
+      - SMTP_FROM=$SMTP_FROM
+      - SMTP_USER=$SMTP_USER
+      - SMTP_PASSWORD=$SMTP_PASSWORD
+      - SMTP_TLS=$SMTP_TLS
+      - SMTP_SKIP_CERT_VERIFY=$SMTP_SKIP_CERT_VERIFY
+      - EMAIL_ONE_TIME_ACCESS_ENABLED=${EMAIL_ONE_TIME_ACCESS_ENABLED}
+    volumes:
+      - "./data:/app/backend/data"
+    healthcheck:
+      test: "curl -f http://localhost/health"
+      interval: 1m30s
+      timeout: 5s
+      retries: 2
+      start_period: 10s

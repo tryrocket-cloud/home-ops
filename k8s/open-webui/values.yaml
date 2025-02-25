@@ -1,0 +1,16 @@
+ingress:
+  enabled: true
+  class: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  host: chat.tryrocket.cloud
+  tls: true
+  existingSecret: open-webui-tryrocket-cloud-production-tls
+
+persistence:
+  enabled: true
+  size: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: longhorn-retain

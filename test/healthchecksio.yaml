@@ -1,0 +1,6 @@
+- name: Send a signal to healthchecks.io
+  community.healthchecksio.ping:
+    state: present
+    uuid: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_CHECK_UUID') }}"
+    api_key: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_API_KEY') }}"
+    signal: "{{ signal }}"

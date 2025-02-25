@@ -1,2 +1,8 @@
 crds:
   enabled: true
+
+prometheus:
+  servicemonitor:
+    enabled: true
+    labels:
+      release: prometheus-stack

@@ -1,0 +1,47 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    hosts:
+      - grafana.tryrocket.cloud
+    tls:
+      - secretName: grafana-tryrocket-cloud-production-tls
+        hosts:
+          - grafana.tryrocket.cloud
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: "longhorn-retain"
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
+
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    hosts:
+      - alertmanager.tryrocket.cloud
+    tls:
+      - secretName: alertmanager-tryrocket-cloud-production-tls
+        hosts:
+          - alertmanager.tryrocket.cloud
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    hosts:
+      - prometheus.tryrocket.cloud
+    tls:
+      - secretName: prometheus-tryrocket-cloud-production-tls
+        hosts:
+          - prometheus.tryrocket.cloud

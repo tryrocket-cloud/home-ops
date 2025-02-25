@@ -6,6 +6,5 @@ resources:
   - ingress.yaml
   - https-redirect-middleware.yaml
   - basic-auth-middleware.yaml
-  - certificate.yaml
 
 namespace: kube-system

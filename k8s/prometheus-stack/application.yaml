@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-stack
+  namespace: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 70.4.1
+      helm:
+        valueFiles:
+          - $values/k8s/prometheus-stack/values.yaml
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      path: k8s/prometheus-stack
+      targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true # To avoid Too long: must have at most 262144 bytes

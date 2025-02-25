@@ -1,0 +1,30 @@
+---
+- name: Start TrueNAS by sending a Wake-on-LAN packet
+  hosts: localhost
+  gather_facts: no
+  vars:
+    truenas_mac_address: "{{ use_mac_address }}"
+    truenas_api: "{{ lookup('env', 'TRUENAS_API') | default('https://truenas.tryrocket.cloud', true) }}"
+
+  tasks:
+    - name: Send Wake-on-LAN packet port 7
+      community.general.wakeonlan:
+        mac: "{{ truenas_mac_address }}"
+        port: 7
+
+    - name: Send Wake-on-LAN packet port 9
+      community.general.wakeonlan:
+        mac: "{{ truenas_mac_address }}"
+        port: 9
+
+    - name: Remove "https://" from truenas_api variable
+      set_fact:
+        truenas_api_no_protocol: "{{ truenas_api | regex_replace('^https://', '') }}"
+
+    - name: Wait for TrueNAS to become reachable
+      wait_for:
+        host: "{{ truenas_api_no_protocol }}"
+        port: 443
+        state: started
+        delay: 10
+        timeout: 300

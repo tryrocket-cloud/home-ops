@@ -1,9 +1,10 @@
 # https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
 
-deployment:
-  env:
-    - name: TZ
-      value: Europe/Berlin
+image:
+  tag: '1.23.6'
+
+strategy:
+  type: 'Recreate'
 
 ingress:
   enabled: true
@@ -20,47 +21,77 @@ ingress:
     - secretName: gitea-tryrocket-cloud-production-tls
       hosts:
         - gitea.tryrocket.cloud
+# https://docs.gitea.com/administration/config-cheat-sheet
+deployment:
+  env:
+    - name: TZ
+      value: Europe/Berlin
+    - name: GITEA____APP_NAME
+      value: Rocket Cloud
+    - name: GITEA__server__ROOT_URL
+      value: https://gitea.tryrocket.cloud
+    - name: GITEA__server__DOMAIN
+      value: gitea.tryrocket.cloud
+    - name: GITEA__oauth2_client__UPDATE_AVATAR
+      value: 'true'
+    - name: GITEA__oauth2_client__USERNAME
+      value: preferred_username
+    - name: GITEA__oauth2_client__OPENID_CONNECT_SCOPES
+      value: 'openid profile email'
+    - name: GITEA__oauth2_client__REGISTER_EMAIL_CONFIRM
+      value: 'false'
+    - name: GITEA__mailer__ENABLED
+      value: "true"
+    - name: GITEA__mailer__FROM
+      value: "gitea@tryrocket.cloud"
+    - name: GITEA__mailer__SMTP_ADDR
+      value: "mail.smtp2go.com"
+    - name: GITEA__mailer__SMTP_PORT
+      value: "587"
+    - name: GITEA__mailer__PROTOCOL
+      value: "smtp+starttls"
+    - name: GITEA__mailer__USER
+      valueFrom:
+        secretKeyRef:
+          name: smtp
+          key: SMTP_USERNAME
+    - name: GITEA__mailer__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: smtp
+          key: SMTP_PASSWORD
+    - name: GITEA__server__DISABLE_SSH
+      value: "true"
 
 persistence:
-  enabled: true
-  create: true
-  mount: true
   claimName: gitea-pvc
   size: 4Gi
-  labels:
-    app: gitea
-  accessModes:
-    - ReadWriteOnce
   storageClass: longhorn-retain
-  # volumeName: gitea-pv
-
-redis-cluster:
-  enabled: false
-redis:
-  enabled: false
-postgresql:
-  enabled: false
-postgresql-ha:
-  enabled: false
-
-# image:
-#   rootless: false
-
-strategy:
-  type: 'Recreate'
 
 gitea:
   config:
     APP_NAME: 'Rocket Cloud'
     database:
       DB_TYPE: sqlite3
-    session:
-      PROVIDER: memory
-    cache:
-      ADAPTER: memory
-    queue:
-      TYPE: level
-# extraVolumes:
-#   - name: data
-#     persistentVolumeClaim:
-#       claimName: gitea-pvc
+    server:
+      START_SSH_SERVER: false
+
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus-stack
+      interval: 60s
+      scrapeTimeout: 30s
+
+redis-cluster:
+  enabled: false
+redis:
+  enabled: false
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: false
+
+  

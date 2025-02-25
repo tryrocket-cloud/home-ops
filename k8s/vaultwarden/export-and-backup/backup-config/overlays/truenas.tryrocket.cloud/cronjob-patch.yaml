@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vaultwarden-export-backup
+spec:
+  suspend: false
+  schedule: "2 22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: truenas-tryrocket-cloud-objectstorage-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: VAULTWARDEN_EXPORT_JSON
+                  value: /export/vaultwarden-export.json
+              envFrom:
+                - secretRef:
+                    name: truenas-tryrocket-cloud-s3-bucket-configuration
+                - secretRef:
+                    name: truenas-tryrocket-cloud-s3-credentials
+                - secretRef:
+                    name: truenas-tryrocket-cloud-healthchecks-configuration
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
+                  echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
+                  aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup$VAULTWARDEN_EXPORT_WITH_DATE_JSON # TODO: missing / in path
+
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
+                  readOnly: true

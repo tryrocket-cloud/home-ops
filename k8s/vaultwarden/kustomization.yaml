@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - admin-token-ExternalSecret.yaml
+  - smtp-external-secret.yaml
   - data-vaultwarden-0-pvc.yaml
 
   - export-and-backup/

@@ -9,7 +9,7 @@ spec:
   project: default
   sources:
     - repoURL: https://dl.gitea.com/charts/
-      targetRevision: v10.6.0
+      targetRevision: v11.0.1
       chart: gitea
       helm:
         valueFiles:
@@ -18,6 +18,10 @@ spec:
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
       targetRevision: main
       ref: values
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      path: k8s/gitea
+      targetRevision: main
 
   destination:
     server: https://kubernetes.default.svc

@@ -1,0 +1,24 @@
+services:
+  upsnap:
+    container_name: upsnap
+    image: ghcr.io/seriousm4x/upsnap:5
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - ./data:/app/pb_data
+    environment:
+      - TZ=Europe/Berlin
+      - UPSNAP_INTERVAL=*/5 * * * * *
+      - UPSNAP_SCAN_RANGE=192.168.178.0/24
+      - UPSNAP_SCAN_TIMEOUT=500ms
+      - UPSNAP_PING_PRIVILEGED=true
+      - UPSNAP_WEBSITE_TITLE=Rocket Cloud
+    dns:
+      - 192.168.178.200
+      - 192.168.178.205
+    healthcheck:
+      test: curl -fs "http://localhost:8090/api/health" || exit 1
+      interval: 10s
+    entrypoint: /bin/sh -c "./upsnap serve --http 0.0.0.0:8090"
+    # or install custom packages for shutdown
+    # entrypoint: /bin/sh -c "apk update && apk add --no-cache <YOUR_PACKAGE> && rm -rf /var/cache/apk/* && ./upsnap serve --http 0.0.0.0:8090"

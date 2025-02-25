@@ -1,0 +1,22 @@
+help:
+    @just --list
+
+build:
+    @docker buildx build --platform linux/amd64 -t tryrocket.cloud/backup:latest . --load
+
+version:
+	@docker run --rm --platform linux/amd64 tryrocket.cloud/backup:latest version
+
+backup env_file target:
+	@docker run --rm \
+	  --platform linux/amd64 \
+	  -v $(pwd)/.cache/restic/vaultwarden:/root/.cache/restic/vaultwarden \
+	  -v $(pwd)/.cache/kopia/vaultwarden:/root/.cache/kopia/vaultwarden \
+	  --env-file {{env_file}} \
+	  tryrocket.cloud/backup:latest {{target}}
+
+backup-vaultwarden:
+	@just backup .env.vaultwarden backup-vaultwarden
+
+backup-vault:
+	@just backup .env.vault backup-vault

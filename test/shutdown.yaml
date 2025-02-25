@@ -1,0 +1,8 @@
+- name: Gracefully shut down the server
+  hosts: k3s
+  become: true
+
+  tasks:
+    - name: Ensure server is powered off
+      community.general.shutdown:
+        

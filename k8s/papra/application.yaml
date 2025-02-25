@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: papra
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tryrocket-cloud/home-ops.git
+    targetRevision: main
+    path: 'k8s/papra/overlays/production'
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: papra
+
+  info:
+    - name: 'GitHub'
+      value: 'https://github.com/papra-hq/papra'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true

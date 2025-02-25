@@ -1,0 +1,7 @@
+services:
+  mafl:
+    image: hywax/mafl
+    container_name: mafl
+    restart: unless-stopped
+    volumes:
+      - /home/dietpi/portainer/data/compose/3/docker/mafl/config.yml:/app/data/config.yml

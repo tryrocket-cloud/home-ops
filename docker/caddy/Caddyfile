@@ -1,0 +1,25 @@
+{
+    acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+tryrocket.cloud {
+    reverse_proxy mafl:3000
+}
+portainer.tryrocket.cloud {
+    reverse_proxy portainer:9000
+}
+semaphoreui.tryrocket.cloud {
+    reverse_proxy semaphore:3000
+}
+upsnap.tryrocket.cloud {
+    reverse_proxy 192.168.178.120:8090
+}
+minio.tryrocket.cloud {
+    reverse_proxy 192.168.178.75:9002
+}
+immich.tryrocket.cloud {
+    reverse_proxy 192.168.178.75:30041
+}
+id.tryrocket.cloud {
+    reverse_proxy pocket-id:80
+}

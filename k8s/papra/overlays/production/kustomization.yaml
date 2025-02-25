@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: papra
+
+resources:
+  - ../../base
+  - pvc.yaml
+
+# https://github.com/thomiceli/opengist/releases
+images:
+  - name: ghcr.io/papra-hq/papra
+    newTag: latest

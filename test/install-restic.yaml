@@ -1,0 +1,82 @@
+---
+# Description: Ansible tasks to install restic on a Linux system.
+# This tasks file:
+#   1. Ensures the target binary directory (bin_path) exists.
+#   2. Checks if restic is already installed by running its version command.
+#   3. Extracts the version string from the output.
+#   4. Sets a fact (restic_installed) if the binary exists and its version matches the desired setup_restic_version.
+#   5. Downloads and installs restic from GitHub if not installed or if the version is incorrect.
+#   6. Sets the fact (restic_cmd) with the full path to the restic binary.
+#   7. Displays a debug message showing the restic binary path.
+#
+# Variables required:
+#   - bin_path: the directory where restic should be installed (e.g., "{{ ansible_env.HOME }}/bin")
+#   - setup_restic_version: the desired version string (e.g., "0.17.3")
+#
+# To run only these tasks, use the tag 'install-restic':
+#   ansible-playbook -i inventory.ini your_playbook.yaml --tags install-restic
+
+- name: Ensure the target bin directory exists
+  file:
+    path: "{{ bin_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Check if restic is installed
+  command: "{{ bin_path }}/restic version"
+  register: restic_version_output
+  ignore_errors: yes
+  changed_when: false
+
+- name: Check if restic binary exists
+  stat:
+    path: "{{ bin_path }}/restic"
+  register: restic_bin_stat
+
+- name: Extract version string from restic output
+  set_fact:
+    extracted_restic_version: "{{ (restic_version_output.stdout | regex_search('restic\\s+([0-9.]+)', '\\1') | first) | trim | default('') }}"
+
+- name: Set restic_installed fact based on version check
+  set_fact:
+    restic_installed: "{{ restic_bin_stat.stat.exists and (restic_version_output.rc == 0) and (extracted_restic_version == setup_restic_version) }}"
+
+- name: Debug restic installation check
+  debug:
+    msg: >
+      Extracted version: '{{ extracted_restic_version }}';
+      Expected version: '{{ setup_restic_version }}';
+      restic_installed: {{ restic_installed }}
+  when: restic_installed
+
+- name: Download and install restic if not installed or wrong version
+  block:
+    - name: Download restic binary from GitHub releases
+      get_url:
+        url: "https://github.com/restic/restic/releases/download/v{{ setup_restic_version }}/restic_{{ setup_restic_version }}_linux_amd64.bz2"
+        dest: "/tmp/restic_{{ setup_restic_version }}_linux_amd64.bz2"
+        mode: '0755'
+
+    - name: Extract restic binary to {{ bin_path }}
+      shell: "bunzip2 -c /tmp/restic_{{ setup_restic_version }}_linux_amd64.bz2 > {{ bin_path }}/restic"
+      args:
+        executable: /bin/bash
+
+    - name: Remove temporary restic download file (if exists)
+      file:
+        path: "/tmp/restic_{{ setup_restic_version }}_linux_amd64.bz2"
+        state: absent
+
+    - name: Set executable permissions on restic binary
+      file:
+        path: "{{ bin_path }}/restic"
+        mode: '0755'
+  when: not restic_installed
+
+- name: Set restic command path fact
+  set_fact:
+    restic_cmd: "{{ bin_path }}/restic"
+
+- name: Debug restic binary path
+  debug:
+    msg: "Restic binary is located at: {{ restic_cmd }}"

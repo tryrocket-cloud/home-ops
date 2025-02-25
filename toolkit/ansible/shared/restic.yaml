@@ -1,0 +1,35 @@
+- name: Get restic version output
+  command: restic version
+  register: restic_version_output
+
+- name: Extract version using split
+  set_fact:
+    restic_version: "{{ restic_version_output.stdout.split()[1] }}"
+
+- name: Construct extra tags string
+  set_fact:
+    extra_tags_string: >-
+      {%- set tags = [] -%}
+      {%- for item in extra_backup_tags | dict2items -%}
+      {%- set _ = tags.append('--tag ' ~ item.key ~ ':' ~ item.value) -%}
+      {%- endfor -%}
+      {{ tags | join(' ') }}
+
+- name: Run Restic backup
+  shell: >
+    restic backup --host {{ lookup('ansible.builtin.env', 'HOSTNAME') | default(ansible_hostname, true) }}
+    --tag restic_version:"{{ restic_version }}"
+    {{ extra_tags_string }}
+    "{{ backup_paths | join(' ') }}"
+  environment: "{{ restic_env }}"
+  register: restic_backup_result
+
+- name: Run Restic check
+  shell: restic check --read-data-subset 1/10
+  environment: "{{ restic_env }}"
+  register: restic_check_result
+
+- name: Run Restic forget and prune snapshots
+  shell: restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
+  environment: "{{ restic_env }}"
+  register: restic_forget_result
