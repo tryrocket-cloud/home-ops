@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wallos
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://helm-charts.rm3l.org
+      targetRevision: 0.1.1
+      chart: wallos
+      helm:
+        valueFiles:
+          - $values/k8s/wallos/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: wallos
+
+  info:
+    - name: 'GitHub:'
+      value: 'https://github.com/ellite/Wallos'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
