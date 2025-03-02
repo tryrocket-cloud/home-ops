@@ -26,7 +26,7 @@ spec:
             #     mountPath: /playbooks
 
             - name: get-vaultwarden-version
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:06b793fee964067d0ad43c43523a9e704a395246e6a8ffa27bad3ea97963fdfe
               command:
                 - /bin/sh
                 - -c
@@ -61,7 +61,7 @@ spec:
                 mountPath: /export
 
             - name: export-vaultwarden-user-vault
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:06b793fee964067d0ad43c43523a9e704a395246e6a8ffa27bad3ea97963fdfe
               imagePullPolicy: Always
               env:
                 - name: NODE_NO_WARNINGS
@@ -101,7 +101,7 @@ spec:
 
           containers:
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:06b793fee964067d0ad43c43523a9e704a395246e6a8ffa27bad3ea97963fdfe
               imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_EXPORT_JSON
@@ -150,7 +150,7 @@ spec:
                 # - name: backup-cache-volume
                 #   mountPath: /cache
             - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:06b793fee964067d0ad43c43523a9e704a395246e6a8ffa27bad3ea97963fdfe
               imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_EXPORT_JSON
