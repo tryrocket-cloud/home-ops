@@ -1,5 +1,8 @@
 # https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
 
+image:
+  tag: gitea:1.23.5
+
 deployment:
   env:
     - name: TZ
