@@ -31,7 +31,8 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  ping vaultwarden.tryrocket.cloud
+                  ping -c 1 vaultwarden.tryrocket.cloud
+                  nslookup vaultwarden.tryrocket.cloud
 
                   HTTP_STATUS=$(curl --verbose --write-out "%{http_code}" --output /tmp/vaultwarden_config.json https://vaultwarden.tryrocket.cloud/api/config)
 
