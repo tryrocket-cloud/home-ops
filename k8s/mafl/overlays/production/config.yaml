@@ -94,12 +94,30 @@ services:
         enabled: true
   NAS:
     - title: TrueNAS
-      description: Main NAS
+      description: Admin Dashboard
       link: https://truenas.tryrocket.cloud
       icon:
         name: simple-icons:truenas
         wrap: true
         color: '#0095D5'
+      status:
+        enabled: false
+    - title: Immich
+      description: Photo and Video backup
+      link: https://immich.tryrocket.cloud
+      icon:
+        name: simple-icons:immich
+        wrap: true
+        color: '#4250AF'
+      status:
+        enabled: false
+    - title: Paperless
+      description: Document Management
+      link: https://paperless.tryrocket.cloud
+      icon:
+        name: simple-icons:paperlessngx
+        wrap: true
+        color: '#17541F'
       status:
         enabled: false
   Infrastructure:
