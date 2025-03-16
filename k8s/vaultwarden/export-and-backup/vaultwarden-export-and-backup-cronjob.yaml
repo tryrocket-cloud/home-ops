@@ -4,7 +4,7 @@ metadata:
   name: vaultwarden-export-backup
 spec:
   suspend: false
-  schedule: "28 15 * * *"
+  schedule: "0 22 * * *"
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 600
   successfulJobsHistoryLimit: 1
