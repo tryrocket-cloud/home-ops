@@ -92,6 +92,16 @@ services:
         color: '#000000'
       status:
         enabled: true
+  NAS:
+    - title: TrueNAS
+      description: Main NAS
+      link: https://truenas.tryrocket.cloud
+      icon:
+        name: simple-icons:truenas
+        wrap: true
+        color: '#0095D5'
+      status:
+        enabled: false
   Infrastructure:
     - title: Portainer
       description: docker
