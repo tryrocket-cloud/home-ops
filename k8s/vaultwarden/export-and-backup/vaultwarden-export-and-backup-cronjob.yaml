@@ -4,7 +4,7 @@ metadata:
   name: vaultwarden-export-backup
 spec:
   suspend: false
-  schedule: "0 22 * * *"
+  schedule: "22 15 * * *"
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 600
   successfulJobsHistoryLimit: 1
@@ -31,7 +31,9 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  HTTP_STATUS=$(curl --silent --write-out "%{http_code}" --output /tmp/vaultwarden_config.json https://vaultwarden.tryrocket.cloud/api/config)
+                  ping vaultwarden.tryrocket.cloud
+
+                  HTTP_STATUS=$(curl --verbose --write-out "%{http_code}" --output /tmp/vaultwarden_config.json https://vaultwarden.tryrocket.cloud/api/config)
 
                   if [ "$HTTP_STATUS" -ne 200 ]; then
                     echo "Error: Failed to fetch Vaultwarden config, HTTP status: $HTTP_STATUS"
