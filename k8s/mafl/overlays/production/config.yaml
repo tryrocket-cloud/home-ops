@@ -102,6 +102,24 @@ services:
         color: '#0095D5'
       status:
         enabled: false
+    - title: TrueNAS API
+      description: API docs
+      link: https://truenas.tryrocket.cloud/api/docs/
+      icon:
+        name: simple-icons:swagger
+        wrap: true
+        color: '#85EA2D'
+      status:
+        enabled: false
+    - title: TrueNAS Netdata
+      description: Monitoring
+      link: https://truenas.tryrocket.cloud/netdata
+      icon:
+        name: simple-icons:netdata
+        wrap: true
+        color: '#00AB44'
+      status:
+        enabled: false
     - title: Immich
       description: Photo and Video backup
       link: https://immich.tryrocket.cloud
