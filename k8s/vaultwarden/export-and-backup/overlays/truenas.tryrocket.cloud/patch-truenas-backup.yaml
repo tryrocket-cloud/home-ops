@@ -30,7 +30,6 @@ spec:
                   ls -la .
 
                   VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
-                  echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
                   
                   ls -la /export
                   ls -la .

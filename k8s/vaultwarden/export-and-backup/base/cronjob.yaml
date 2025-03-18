@@ -73,7 +73,9 @@ spec:
                     jq empty "$VAULTWARDEN_EXPORT_JSON"
                     exit 1
                   fi
-          # (Base version may or may not include the backup container)
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
           containers: []
           volumes:
             - name: vaultwarden-export-volume
