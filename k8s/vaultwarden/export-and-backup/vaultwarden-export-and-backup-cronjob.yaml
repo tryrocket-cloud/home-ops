@@ -108,7 +108,7 @@ spec:
               imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_EXPORT_JSON
-                  value: /export/vaultwarden-export.json
+                  value: export/vaultwarden-export.json
                 - name: HOSTNAME
                   value: tryrocket.cloud
               envFrom:
