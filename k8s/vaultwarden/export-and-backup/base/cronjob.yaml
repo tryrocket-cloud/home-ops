@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vaultwarden-export-backup
+spec:
+  suspend: false
+  schedule: "0 22 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          initContainers:
+            - name: get-vaultwarden-version
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  ping -c 1 vaultwarden.tryrocket.cloud
+                  nslookup vaultwarden.tryrocket.cloud
+
+                  HTTP_STATUS=$(curl --verbose --write-out "%{http_code}" --output /tmp/vaultwarden_config.json https://vaultwarden.tryrocket.cloud/api/config)
+                  if [ "$HTTP_STATUS" -ne 200 ]; then
+                    echo "Error: Failed to fetch Vaultwarden config, HTTP status: $HTTP_STATUS"
+                    exit 1
+                  fi
+
+                  jq --raw-output '.version' /tmp/vaultwarden_config.json > /export/vaultwarden.env
+                  if [ $? -ne 0 ]; then
+                    echo "Error: Failed to extract .version using jq"
+                    exit 1
+                  fi
+                  if [ ! -f /export/vaultwarden.env ]; then
+                    echo "Error: /export/vaultwarden.env file does not exist"
+                    exit 1
+                  fi
+                  if [ ! -s /export/vaultwarden.env ]; then
+                    echo "Error: /export/vaultwarden.env is empty"
+                    exit 1
+                  fi
+                  cat /export/vaultwarden.env
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
+            - name: export-vaultwarden-user-vault
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: NODE_NO_WARNINGS
+                  value: "1"
+                - name: VAULTWARDEN_EXPORT_JSON
+                  value: /export/vaultwarden-export.json
+              envFrom:
+                - secretRef:
+                    name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  bw config server https://vaultwarden.tryrocket.cloud
+                  export BW_SESSION=$(bw login "$username" "$password" --raw)
+                  bw sync
+                  bw export --format json --output "$VAULTWARDEN_EXPORT_JSON"
+                  bw logout
+                  [ ! -f "$VAULTWARDEN_EXPORT_JSON" ] && exit 1
+                  [ ! -s "$VAULTWARDEN_EXPORT_JSON" ] && exit 1
+                  jq empty "$VAULTWARDEN_EXPORT_JSON" > /dev/null 2>&1
+                  if [ $? -ne 0 ]; then
+                    jq empty "$VAULTWARDEN_EXPORT_JSON"
+                    exit 1
+                  fi
+          # (Base version may or may not include the backup container)
+          containers: []
+          volumes:
+            - name: vaultwarden-export-volume
+              emptyDir: {}
