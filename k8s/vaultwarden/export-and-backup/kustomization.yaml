@@ -13,8 +13,8 @@ resources:
   - s3-external-secret.yaml
 
   # targets
-  - targets/truenas.tryrocket.cloud/objectstorage-bucket-external-secret
-  - targets/truenas.tryrocket.cloud/objectstorage-user-external-secret
+  - targets/truenas.tryrocket.cloud/objectstorage-bucket-external-secret.yaml
+  - targets/truenas.tryrocket.cloud/objectstorage-user-external-secret.yaml
 
 configMapGenerator:
   - name: ansible-playbook-config
