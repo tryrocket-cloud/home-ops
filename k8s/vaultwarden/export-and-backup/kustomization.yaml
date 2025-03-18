@@ -14,6 +14,7 @@ resources:
 
   # targets
   #- targets/truenas.tryrocket.cloud/
+  - overlays/truenas.tryrocket.cloud
 
 configMapGenerator:
   - name: ansible-playbook-config
