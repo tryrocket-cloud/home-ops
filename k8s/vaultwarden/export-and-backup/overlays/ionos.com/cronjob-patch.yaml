@@ -3,6 +3,8 @@ kind: CronJob
 metadata:
   name: vaultwarden-export-backup
 spec:
+  suspend: false
+  schedule: "0 22 * * *"
   jobTemplate:
     spec:
       template:
