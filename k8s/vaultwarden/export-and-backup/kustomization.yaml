@@ -13,7 +13,7 @@ resources:
   - s3-external-secret.yaml
 
   # targets
-  - targets/truenas.tryrocket.cloud/
+  #- targets/truenas.tryrocket.cloud/
 
 configMapGenerator:
   - name: ansible-playbook-config

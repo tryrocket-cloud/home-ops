@@ -103,30 +103,7 @@ spec:
                 mountPath: /export
 
           containers:
-            - name: truenas-tryrocket-cloud-objectstorage-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
-              imagePullPolicy: Always
-              env:
-                - name: VAULTWARDEN_EXPORT_JSON
-                  value: export/vaultwarden-export.json
-                - name: HOSTNAME
-                  value: tryrocket.cloud
-              envFrom:
-                - secretRef:
-                    name: truenas-tryrocket-cloud-objectstorage-bucket
-                - secretRef:
-                    name: truenas-tryrocket-cloud-objectstorage-user
-              command:
-                - /bin/sh
-                - -c
-                - |
-                  VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
-                  echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
-                  aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup/$VAULTWARDEN_EXPORT_WITH_DATE_JSON
-              volumeMounts:
-                - name: vaultwarden-export-volume
-                  mountPath: /export
-                  readOnly: true
+
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
               image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
               imagePullPolicy: Always
