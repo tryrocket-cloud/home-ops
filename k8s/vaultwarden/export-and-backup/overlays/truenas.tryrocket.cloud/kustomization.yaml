@@ -5,6 +5,7 @@ namePrefix: truenas-tryrocket-cloud-
 
 resources:
   - ../../base
+  
   - objectstorage-bucket-external-secret.yaml
   - objectstorage-user-external-secret.yaml
 
