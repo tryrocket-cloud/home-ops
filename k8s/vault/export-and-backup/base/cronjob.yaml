@@ -33,5 +33,5 @@ spec:
                   mountPath: /export
           containers: []
           volumes:
-            - name: export-volume
+            - name: vault-export-volume
               emptyDir: {}
