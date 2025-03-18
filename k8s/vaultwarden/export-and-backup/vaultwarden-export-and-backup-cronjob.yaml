@@ -122,8 +122,8 @@ spec:
                 - |
                   AWS_ACCESS_KEY_ID=your_access_key
                   AWS_SECRET_ACCESS_KEY=your_secret_key
-                  AWS_DEFAULT_REGION=us-east-1
-                  aws --endpoint-url http://192.168.178.75:9000 s3 cp $VAULTWARDEN_EXPORT_JSON s3://tryrocket.cloud/vaultwarden/$VAULTWARDEN_EXPORT_JSON
+
+                  aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup/$VAULTWARDEN_EXPORT_JSON
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
