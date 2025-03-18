@@ -54,7 +54,7 @@ spec:
                   #cat /etc/environment
                   #cat ~/.config/kopia/repository.config
               volumeMounts:
-                - name: export-volume
+                - name: vault-export-volume
                   mountPath: /export
                   readOnly: true
             - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
@@ -103,6 +103,6 @@ spec:
                     restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
                     #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
               volumeMounts:
-                - name: export-volume
+                - name: vault-export-volume
                   mountPath: /export
                   readOnly: true
