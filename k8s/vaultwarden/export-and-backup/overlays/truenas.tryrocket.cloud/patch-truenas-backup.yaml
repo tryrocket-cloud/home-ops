@@ -26,6 +26,7 @@ spec:
               command: ["/bin/sh", "-c"]
               args:
                 - |
+                  ls -la /export
                   VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
                   echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
                   aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup$VAULTWARDEN_EXPORT_WITH_DATE_JSON # TODO: missing / in path
