@@ -11,7 +11,10 @@ resources:
   - ionos.com-restic-external-secret.yaml
 
   - s3-external-secret.yaml
-  - truenas-tryrocket-cloud-objectstorage-bucket-external-secret
+
+  # targets
+  - targets/truenas.tryrocket.cloud/objectstorage-bucket-external-secret
+  - targets/truenas.tryrocket.cloud/objectstorage-user-external-secret
 
 configMapGenerator:
   - name: ansible-playbook-config
