@@ -29,6 +29,8 @@ spec:
                     name: ionos-com-s3-credentials
                 - secretRef:
                     name: ionos-com-kopia-repository-configuration
+                - secretRef:
+                    name: truenas-tryrocket-cloud-healthchecks-kopia-configuration
               command:
                 - /bin/sh
                 - -c
@@ -49,7 +51,7 @@ spec:
 
                   # Perform Kopia consistency check
                   kopia snapshot verify --verify-files-percent 33
-                  #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+                  curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
 
                   #cat /etc/environment
                   #cat ~/.config/kopia/repository.config
@@ -74,6 +76,8 @@ spec:
                     name: ionos-com-s3-credentials
                 - secretRef:
                     name: ionos-com-restic-repository-configuration
+                - secretRef:
+                    name: truenas-tryrocket-cloud-healthchecks-restic-configuration # remove restic from naming
               command:
                   - /bin/sh
                   - -c
@@ -101,7 +105,7 @@ spec:
 
                     # Prune old backups
                     restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
-                    #curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+                    curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
