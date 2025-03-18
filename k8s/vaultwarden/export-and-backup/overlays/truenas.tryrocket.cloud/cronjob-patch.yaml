@@ -30,7 +30,7 @@ spec:
                   echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
                   aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup$VAULTWARDEN_EXPORT_WITH_DATE_JSON # TODO: missing / in path
 
-                  curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+                  curl -fsS -m 10 --retry 5 $HC_PING_URL
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export

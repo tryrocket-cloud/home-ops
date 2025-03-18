@@ -51,7 +51,7 @@ spec:
 
                   # Perform Kopia consistency check
                   kopia snapshot verify --verify-files-percent 33
-                  curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+                  curl -fsS -m 10 --retry 5 $HC_PING_URL
 
                   #cat /etc/environment
                   #cat ~/.config/kopia/repository.config
@@ -105,7 +105,7 @@ spec:
 
                     # Prune old backups
                     restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
-                    curl -fsS -m 10 --retry 5 $HC_PING_URL/$?
+                    curl -fsS -m 10 --retry 5 $HC_PING_URL
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
