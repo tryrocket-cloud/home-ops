@@ -120,8 +120,8 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  EXPORT_WITH_DATE="${EXPORT%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${EXPORT##*.}"
-                  echo $EXPORT_WITH_DATE
+                  VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
+                  echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
                   aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup/$VAULTWARDEN_EXPORT_JSON
               volumeMounts:
                 - name: vaultwarden-export-volume
