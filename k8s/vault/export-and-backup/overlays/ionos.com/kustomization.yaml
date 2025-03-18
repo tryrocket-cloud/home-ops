@@ -12,6 +12,8 @@ resources:
   - kopia-repository-configuration-external-secret.yaml
   - restic-repository-configuration-external-secret.yaml
 
+  - healthchecks-configuration-external-secret.yaml
+
 patches:
   - target:
       kind: CronJob

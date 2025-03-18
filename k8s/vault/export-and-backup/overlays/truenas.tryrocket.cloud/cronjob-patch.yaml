@@ -21,12 +21,16 @@ spec:
                     name: truenas-tryrocket-cloud-s3-bucket-configuration
                 - secretRef:
                     name: truenas-tryrocket-cloud-s3-credentials
+                - secretRef:
+                    name: truenas-tryrocket-cloud-healthchecks-configuration
               command: ["/bin/sh", "-c"]
               args:
                 - |
                   VAULT_EXPORT_WITH_DATE_JSON="${VAULT_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULT_EXPORT_JSON##*.}"
 
                   aws --endpoint-url $ENDPOINT s3 cp $VAULT_EXPORT_JSON s3://$BUCKET/vault/backup$VAULT_EXPORT_WITH_DATE_JSON # TODO: missing / in path
+
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
               volumeMounts:
                 - name: vault-export-volume
                   mountPath: /export
