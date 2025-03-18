@@ -9,6 +9,8 @@ resources:
   - s3-bucket-configuration-external-secret.yaml
   - s3-credentials-external-secret.yaml
 
+  - healthchecks-configuration-external-secret.yaml
+
 patches:
   - target:
       kind: CronJob
