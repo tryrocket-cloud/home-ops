@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vaultwarden-export-backup
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: truenas-tryrocket-cloud-objectstorage-backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              imagePullPolicy: Always
+              env:
+                - name: VAULTWARDEN_EXPORT_JSON
+                  value: /export/vaultwarden-export.json
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: truenas-tryrocket-cloud-s3-bucket-configuration
+                - secretRef:
+                    name: truenas-tryrocket-cloud-s3-credentials
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  VAULTWARDEN_EXPORT_WITH_DATE_JSON="${VAULTWARDEN_EXPORT_JSON%.*}-$(date +'%Y-%m-%d_%H-%M-%S').${VAULTWARDEN_EXPORT_JSON##*.}"
+                  echo $VAULTWARDEN_EXPORT_WITH_DATE_JSON
+                  aws --endpoint-url $ENDPOINT s3 cp $VAULTWARDEN_EXPORT_JSON s3://$BUCKET/vaultwarden/backup/$VAULTWARDEN_EXPORT_WITH_DATE_JSON
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
+                  readOnly: true
