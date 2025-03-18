@@ -29,7 +29,7 @@ spec:
                 - secretRef:
                     name: vault-token-secret
               volumeMounts:
-                - name: export-volume
+                - name: vault-export-volume
                   mountPath: /export
           containers: []
           volumes:
