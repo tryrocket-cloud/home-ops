@@ -73,6 +73,7 @@ spec:
                     jq empty "$VAULTWARDEN_EXPORT_JSON"
                     exit 1
                   fi
+                  ls -la /export
           # (Base version may or may not include the backup container)
           containers: []
           volumes:
