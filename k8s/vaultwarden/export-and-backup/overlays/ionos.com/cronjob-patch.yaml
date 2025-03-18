@@ -30,7 +30,7 @@ spec:
                 - secretRef:
                     name: ionos-com-kopia-repository-configuration
                 - secretRef:
-                    name: ionos-com-kopia-healthchecks-configuration
+                    name: ionos-com-healthchecks-configuration
               command:
                 - /bin/sh
                 - -c
@@ -51,7 +51,7 @@ spec:
 
                   # Perform Kopia consistency check
                   kopia snapshot verify --verify-files-percent 33
-                  curl -fsS -m 10 --retry 5 $HC_PING_URL
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$VAULTWARDEN_EXPORT_BACKUP_IONOS_COM_KOPIA_HC_UUID
 
                   #cat /etc/environment
                   #cat ~/.config/kopia/repository.config
@@ -77,7 +77,7 @@ spec:
                 - secretRef:
                     name: ionos-com-restic-repository-configuration
                 - secretRef:
-                    name: ionos-com-restic-healthchecks-configuration
+                    name: ionos-com-healthchecks-configuration
               command:
                   - /bin/sh
                   - -c
@@ -105,7 +105,7 @@ spec:
 
                     # Prune old backups
                     restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
-                    curl -fsS -m 10 --retry 5 $HC_PING_URL
+                    curl -fsS -m 10 --retry 5 https://hc-ping.com/$VAULTWARDEN_EXPORT_BACKUP_IONOS_COM_RESTIC_HC_UUID
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
