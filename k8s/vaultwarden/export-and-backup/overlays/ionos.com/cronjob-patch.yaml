@@ -51,7 +51,7 @@ spec:
 
                   # Perform Kopia consistency check
                   kopia snapshot verify --verify-files-percent 33
-                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$VAULTWARDEN_EXPORT_BACKUP_IONOS_COM_KOPIA_HC_UUID
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$KOPIA_HC_UUID
 
                   #cat /etc/environment
                   #cat ~/.config/kopia/repository.config
@@ -105,7 +105,7 @@ spec:
 
                     # Prune old backups
                     restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
-                    curl -fsS -m 10 --retry 5 https://hc-ping.com/$VAULTWARDEN_EXPORT_BACKUP_IONOS_COM_RESTIC_HC_UUID
+                    curl -fsS -m 10 --retry 5 https://hc-ping.com/$RESTIC_HC_UUID
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
