@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namePrefix: ionos-com-
+
+resources:
+  - ../../base
+  
+  - s3-bucket-configuration-external-secret.yaml
+  - s3-credentials-external-secret.yaml
+
+  - kopia-repository-configuration-external-secret.yaml
+  - restic-repository-configuration-external-secret.yaml
+
+patches:
+  - target:
+      kind: CronJob
+      name: vault-export-backup
+    path: cronjob-patch.yaml
