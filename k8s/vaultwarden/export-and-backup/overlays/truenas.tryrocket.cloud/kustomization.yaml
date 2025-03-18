@@ -13,4 +13,4 @@ patches:
   - target:
       kind: CronJob
       name: vaultwarden-export-backup
-    patch: cronjob-patch.yaml
+    path: cronjob-patch.yaml
