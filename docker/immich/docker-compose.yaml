@@ -1,0 +1,199 @@
+services:
+  machine-learning:
+    cap_drop:
+      - ALL
+    environment:
+      IMMICH_LOG_LEVEL: log
+      IMMICH_PORT: "32002"
+      MACHINE_LEARNING_CACHE_FOLDER: /mlcache
+      NODE_ENV: production
+      NVIDIA_VISIBLE_DEVICES: void
+      TRANSFORMERS_CACHE: /mlcache
+      TZ: Europe/Berlin
+      UMASK: "002"
+      UMASK_SET: "002"
+    healthcheck:
+      interval: 10s
+      retries: 30
+      start_period: 10s
+      test: python3 /usr/src/app/healthcheck.py
+      timeout: 5s
+    image: ghcr.io/immich-app/immich-machine-learning:v1.112.1
+    platform: linux/amd64
+    privileged: false
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    stdin_open: false
+    tty: false
+    volumes:
+      - read_only: false
+        target: /mlcache
+        type: volume
+        volume:
+          nocopy: false
+
+  pgvecto:
+    cap_drop:
+      - ALL
+    environment:
+      NVIDIA_VISIBLE_DEVICES: void
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      TZ: Europe/Berlin
+      UMASK: "002"
+      UMASK_SET: "002"
+    healthcheck:
+      interval: 10s
+      retries: 30
+      start_period: 10s
+      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
+      timeout: 5s
+    image: tensorchord/pgvecto-rs:pg15-v0.2.0
+    platform: linux/amd64
+    privileged: false
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    stdin_open: false
+    tty: false
+    user: "3000:3000"
+    volumes:
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/postgres-data-manual-2025-03-19_11-52-clone
+        target: /var/lib/postgresql/data
+        type: bind
+
+  redis:
+    cap_drop:
+      - ALL
+    environment:
+      ALLOW_EMPTY_PASSWORD: no
+      NVIDIA_VISIBLE_DEVICES: void
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT_NUMBER: "6379"
+      TZ: Europe/Berlin
+      UMASK: "002"
+      UMASK_SET: "002"
+    healthcheck:
+      interval: 10s
+      retries: 30
+      start_period: 10s
+      test: redis-cli -h 127.0.0.1 -p 6379 -a $$REDIS_PASSWORD ping | grep -q PONG
+      timeout: 5s
+    image: bitnami/redis:7.4.2
+    platform: linux/amd64
+    privileged: false
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    stdin_open: false
+    tty: false
+    user: "1001:0"
+    volumes:
+      - read_only: false
+        source: redis-data
+        target: /bitnami/redis/data
+        type: volume
+        volume:
+          nocopy: false
+
+  server:
+    cap_drop:
+      - ALL
+    depends_on:
+      machine-learning:
+        condition: service_healthy
+      pgvecto:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DB_DATABASE_NAME: ${POSTGRES_DB}
+      DB_HOSTNAME: pgvecto
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_PORT: "5432"
+      DB_USERNAME: ${POSTGRES_USERNAME}
+      IMMICH_LOG_LEVEL: log
+      IMMICH_MACHINE_LEARNING_ENABLED: "true"
+      IMMICH_MACHINE_LEARNING_URL: http://machine-learning:32002
+      IMMICH_PORT: "30041"
+      NODE_ENV: production
+      NVIDIA_VISIBLE_DEVICES: void
+      REDIS_DBINDEX: "0"
+      REDIS_HOSTNAME: redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT: "6379"
+      TZ: Europe/Berlin
+      UMASK: "002"
+      UMASK_SET: "002"
+    healthcheck:
+      interval: 10s
+      retries: 30
+      start_period: 10s
+      test: /usr/src/app/bin/immich-healthcheck
+      timeout: 5s
+    image: ghcr.io/immich-app/immich-server:v1.112.1
+    platform: linux/amd64
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: 30041
+        target: 30041
+    privileged: false
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    stdin_open: false
+    tty: false
+    volumes:
+      # - bind:
+      #     create_host_path: false
+      #     propagation: rprivate
+      #   read_only: false
+      #   source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/backups
+      #   target: /usr/src/app/upload/backups
+      #   type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/encoded-video
+        target: /usr/src/app/upload/encoded-video
+        type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/library
+        target: /usr/src/app/upload/library
+        type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/profile
+        target: /usr/src/app/upload/profile
+        type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/thumbs
+        target: /usr/src/app/upload/thumbs
+        type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/upload
+        target: /usr/src/app/upload/upload
+        type: bind
+
+volumes:
+  redis-data: {}
