@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  caddy:
+    image: ghcr.io/tryrocket-cloud/tryrocket-cloud:caddy
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  immich_default:
+    external: true

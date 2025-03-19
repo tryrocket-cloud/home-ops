@@ -1,0 +1,7 @@
+{
+    acme_dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+}
+
+immich.tryrocket.cloud {
+    reverse_proxy immich-server:30041
+}
