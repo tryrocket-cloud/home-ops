@@ -38,14 +38,6 @@ services:
         enabled: true
       tags:
         - Home
-    - title: NAS
-      description: Synology DS223
-      link: https://nas.home.local/
-      icon:
-        name: mdi:nas
-        wrap: true
-      status:
-        enabled: true
     - title: Opengist
       description: Self-hosted pastebin powered by Git
       link: https://opengist.tryrocket.cloud
@@ -92,7 +84,7 @@ services:
         color: '#000000'
       status:
         enabled: true
-  NAS:
+  TrueNAS:
     - title: TrueNAS
       description: Admin Dashboard
       link: https://truenas.tryrocket.cloud
@@ -136,6 +128,15 @@ services:
         name: simple-icons:paperlessngx
         wrap: true
         color: '#17541F'
+      status:
+        enabled: false
+    - title: Minio
+      description: High Performance Object Storage
+      link: https://minio.tryrocket.cloud
+      icon:
+        name: simple-icons:minio
+        wrap: true
+        color: '#C72E49'
       status:
         enabled: false
   Infrastructure:
