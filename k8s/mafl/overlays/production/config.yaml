@@ -113,7 +113,7 @@ services:
       status:
         enabled: false
     - title: Immich
-      description: Photo and Video backup
+      description: Photo and Video management solution
       link: https://immich.tryrocket.cloud
       icon:
         name: simple-icons:immich
