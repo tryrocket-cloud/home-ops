@@ -140,7 +140,7 @@ services:
       status:
         enabled: false
     - title: Portainer
-      description: docker
+      description: Docker and Kubernetes management
       link: https://portainer.tryrocket.cloud
       icon:
         name: simple-icons:portainer
