@@ -139,7 +139,6 @@ services:
         color: '#C72E49'
       status:
         enabled: false
-  Infrastructure:
     - title: Portainer
       description: docker
       link: https://portainer.tryrocket.cloud
@@ -149,6 +148,7 @@ services:
         color: '#13BEF9'
       status:
         enabled: true
+  Infrastructure:
     - title: AdGuard Home
       description: Ad Blocker
       link: https://adguardhome.tryrocket.cloud
