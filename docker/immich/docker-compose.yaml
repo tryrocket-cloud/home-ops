@@ -141,6 +141,11 @@ services:
       timeout: 5s
     image: ghcr.io/immich-app/immich-server:v1.112.1
     platform: linux/amd64
+    ports:
+      - mode: ingress
+        protocol: tcp
+        published: 30041
+        target: 30041
     privileged: false
     restart: unless-stopped
     security_opt:
