@@ -12,4 +12,6 @@ ingress:
       paths:
         - path: "/"
   tls:
-    - portainer-tryrocket-cloud-production-tls
+    - secretName: portainer-tryrocket-cloud-production-tls
+      hosts:
+        - portainer.tryrocket.cloud
