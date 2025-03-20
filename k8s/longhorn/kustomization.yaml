@@ -3,5 +3,6 @@ kind: Kustomization
 
 resources:
   - ingress.yaml
+  - s3-longhorn-credential-external-secret.yaml
 
 namespace: longhorn-system
