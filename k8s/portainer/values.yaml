@@ -1,8 +1,8 @@
 # https://portainer.github.io/k8s/charts/portainer/
 # https://github.com/portainer/k8s/blob/master/charts/portainer/values.yaml
 
-# service:
-  # type: ClusterIP
+service:
+  type: ClusterIP
 
 # ingress:
 #   enabled: true
