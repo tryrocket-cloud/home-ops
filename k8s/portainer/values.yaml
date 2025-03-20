@@ -1,23 +1,23 @@
 # https://portainer.github.io/k8s/charts/portainer/
 # https://github.com/portainer/k8s/blob/master/charts/portainer/values.yaml
 
-service:
-  type: ClusterIP
+# service:
+  # type: ClusterIP
 
-ingress:
-  enabled: true
-  ingressClassName: traefik
-  annotations:
-    cert-manager.io/cluster-issuer: 'letsencrypt-production'
-    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
-  hosts:
-    - host: portainer.tryrocket.cloud
-      paths:
-        - path: "/"
-  tls:
-    - secretName: portainer-tryrocket-cloud-production-tls
-      hosts:
-        - portainer.tryrocket.cloud
+# ingress:
+#   enabled: true
+#   ingressClassName: traefik
+#   annotations:
+#     cert-manager.io/cluster-issuer: 'letsencrypt-production'
+#     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+#   hosts:
+#     - host: portainer.tryrocket.cloud
+#       paths:
+#         - path: "/"
+#   tls:
+#     - secretName: portainer-tryrocket-cloud-production-tls
+#       hosts:
+#         - portainer.tryrocket.cloud
 
 persistence:
   enabled: true
