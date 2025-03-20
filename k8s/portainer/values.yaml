@@ -1,0 +1,11 @@
+# https://portainer.github.io/k8s/charts/portainer/
+
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+  hosts:
+    host: portainer.tryrocket.cloud
+  tls: portainer-tryrocket-cloud-production-tls
