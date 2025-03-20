@@ -15,3 +15,10 @@ ingress:
     - secretName: portainer-tryrocket-cloud-production-tls
       hosts:
         - portainer.tryrocket.cloud
+
+persistence:
+  enabled: true
+  size: 1Gi
+  annotations: {}
+  storageClass: longhorn-retain
+  existingClaim:
