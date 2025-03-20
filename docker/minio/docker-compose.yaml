@@ -3,7 +3,8 @@ version: '3.7'
 services:
   minio:
     image: quay.io/minio/minio:RELEASE.2025-03-12T18-04-18Z
-    command: server /data --console-address ":9002" 
+    command: server /data --console-address ":9002"
+    restart: unless-stopped
     ports:
       - "9000:9000"
       - "9002:9001"
