@@ -139,15 +139,7 @@ services:
         color: '#C72E49'
       status:
         enabled: false
-    - title: Portainer
-      description: Docker and Kubernetes management
-      link: https://portainer.tryrocket.cloud
-      icon:
-        name: simple-icons:portainer
-        wrap: true
-        color: '#13BEF9'
-      status:
-        enabled: true
+
   Infrastructure:
     - title: AdGuard Home
       description: Ad Blocker
@@ -220,6 +212,15 @@ services:
       link: https://longhorn.tryrocket.cloud
       icon:
         url: https://longhorn.io/img/logos/longhorn-icon-color.png
+      status:
+        enabled: true
+    - title: Portainer
+      description: Docker and Kubernetes management
+      link: https://portainer.tryrocket.cloud
+      icon:
+        name: simple-icons:portainer
+        wrap: true
+        color: '#13BEF9'
       status:
         enabled: true
 tags:
