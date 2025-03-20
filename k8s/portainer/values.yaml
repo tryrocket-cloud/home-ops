@@ -7,5 +7,6 @@ ingress:
     cert-manager.io/cluster-issuer: 'letsencrypt-production'
     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
   hosts:
-    host: portainer.tryrocket.cloud
-  tls: portainer-tryrocket-cloud-production-tls
+    - host: portainer.tryrocket.cloud
+  tls:
+    - portainer-tryrocket-cloud-production-tls
