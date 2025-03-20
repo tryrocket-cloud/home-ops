@@ -1,9 +1,12 @@
 # https://portainer.github.io/k8s/charts/portainer/
 # https://github.com/portainer/k8s/blob/master/charts/portainer/values.yaml
 
+service:
+  type: ClusterIP
+
 ingress:
   enabled: true
-  ingressClassName: "traefik"
+  ingressClassName: traefik
   annotations:
     cert-manager.io/cluster-issuer: 'letsencrypt-production'
     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
