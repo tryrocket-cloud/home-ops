@@ -18,7 +18,7 @@ services:
       start_period: 10s
       test: python3 /usr/src/app/healthcheck.py
       timeout: 5s
-    image: ghcr.io/immich-app/immich-machine-learning:v1.113.1
+    image: ghcr.io/immich-app/immich-machine-learning:v1.115.0
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -139,7 +139,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.113.1
+    image: ghcr.io/immich-app/immich-server:v1.115.0
     platform: linux/amd64
     ports:
       - mode: ingress
