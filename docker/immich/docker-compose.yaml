@@ -10,7 +10,7 @@ services:
       NVIDIA_VISIBLE_DEVICES: void
       TRANSFORMERS_CACHE: /mlcache
       TZ: Europe/Berlin
-      UMASK: "002"q
+      UMASK: "002"
       UMASK_SET: "002"
     healthcheck:
       interval: 10s
