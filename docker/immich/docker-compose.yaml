@@ -139,7 +139,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.119.0
+    image: ghcr.io/immich-app/immich-server:v1.129.0@sha256:7122354defac839a7ecf541395907c21805f6a2b60b67ee476e66b162f1a355d
     platform: linux/amd64
     ports:
       - mode: ingress
