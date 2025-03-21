@@ -65,7 +65,7 @@ services:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/postgres-data-manual-2025-03-19_11-52-clone
+        source: /mnt/tank/apps/immich/postgres-data
         target: /var/lib/postgresql/data
         type: bind
 
@@ -164,35 +164,35 @@ services:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/encoded-video
+        source: /mnt/tank/apps/immich/data/encoded-video
         target: /usr/src/app/upload/encoded-video
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/library
+        source: /mnt/tank/apps/immich/data/library
         target: /usr/src/app/upload/library
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/profile
+        source: /mnt/tank/apps/immich/data/profile
         target: /usr/src/app/upload/profile
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/thumbs
+        source: /mnt/tank/apps/immich/data/thumbs
         target: /usr/src/app/upload/thumbs
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/upload
+        source: /mnt/tank/apps/immich/data/upload
         target: /usr/src/app/upload/upload
         type: bind
 
