@@ -120,7 +120,7 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_PORT: "5432"
       DB_USERNAME: ${POSTGRES_USER}
-      IMMICH_LOG_LEVEL: log
+      IMMICH_LOG_LEVEL: debug
       IMMICH_MACHINE_LEARNING_ENABLED: "true"
       IMMICH_MACHINE_LEARNING_URL: http://machine-learning:32002
       IMMICH_PORT: "30041"
@@ -154,13 +154,13 @@ services:
     tty: false
     user: "3000:3000"
     volumes:
-      # - bind:
-      #     create_host_path: false
-      #     propagation: rprivate
-      #   read_only: false
-      #   source: /mnt/tank/immich/immich-data-manual-2025-03-19_11-52-clone/backups
-      #   target: /usr/src/app/upload/backups
-      #   type: bind
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/apps/immich/data/immich-data/backups
+        target: /usr/src/app/upload/backups
+        type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
