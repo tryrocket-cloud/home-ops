@@ -120,7 +120,7 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_PORT: "5432"
       DB_USERNAME: ${POSTGRES_USER}
-      IMMICH_LOG_LEVEL: debug
+      IMMICH_LOG_LEVEL: log
       IMMICH_MACHINE_LEARNING_ENABLED: "true"
       IMMICH_MACHINE_LEARNING_URL: http://machine-learning:32002
       IMMICH_PORT: "30041"
