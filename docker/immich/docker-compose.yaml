@@ -18,7 +18,7 @@ services:
       start_period: 10s
       test: python3 /usr/src/app/healthcheck.py
       timeout: 5s
-    image: ghcr.io/immich-app/immich-machine-learning:v1.129.0
+    image: ghcr.io/immich-app/immich-machine-learning:v1.129.0@sha256:072b5eec074476726c38994ca80edc8d19e14859d49b0f1b6aaa04b0ce415f0c
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -51,7 +51,7 @@ services:
       start_period: 10s
       test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
       timeout: 5s
-    image: tensorchord/pgvecto-rs:pg15-v0.2.0
+    image: tensorchord/pgvecto-rs:pg15-v0.2.0@sha256:104a26ad4d0446c54a46d3a694c6193ef018c5ad4f9d9faf7765ab09cb9ffe06
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -86,7 +86,7 @@ services:
       start_period: 10s
       test: redis-cli -h 127.0.0.1 -p 6379 -a $$REDIS_PASSWORD ping | grep -q PONG
       timeout: 5s
-    image: bitnami/redis:7.4.2
+    image: bitnami/redis:7.4.2@sha256:6a5b1d0b594272835139b5200579228b82e052b03266835667947a6b76b2a92e
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -139,7 +139,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.129.0
+    image: ghcr.io/immich-app/immich-server:v1.129.0@sha256:7122354defac839a7ecf541395907c21805f6a2b60b67ee476e66b162f1a355d
     platform: linux/amd64
     ports:
       - mode: ingress
