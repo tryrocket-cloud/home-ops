@@ -65,7 +65,7 @@ services:
           create_host_path: false
           propagation: rprivate
         read_only: false
-        source: /mnt/tank/apps/immich/postgres-data
+        source: /mnt/tank/apps/immich/postgres-data/postgres-data
         target: /var/lib/postgresql/data
         type: bind
 
