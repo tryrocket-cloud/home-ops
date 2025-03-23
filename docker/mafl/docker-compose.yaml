@@ -6,7 +6,4 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      # - ./data/config.yml:/app/data/config.yml
-      - ./home-ops/docker/mafl/data/config.yml:/app/data/config.yml
-
-       
+      - /home/dietpi/portainer/data/compose/3/docker/mafl/data:/app/data
