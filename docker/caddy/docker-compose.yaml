@@ -17,3 +17,5 @@ services:
 networks:
   mafl_default:
     external: true
+  semaphoreui_default:
+    external: true
