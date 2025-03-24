@@ -1,7 +1,6 @@
 - name: Gracefully shut down the server
   hosts: k3s
   become: true
-  gather_facts: true
 
   tasks:
     - name: Ensure server is powered off
