@@ -2,8 +2,6 @@ services:
   semaphore:
     image: semaphoreui/semaphore:latest
     container_name: semaphore
-    ports:
-      - 3000:3000
     environment:
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_ADMIN: ${SEMAPHORE_ADMIN}
