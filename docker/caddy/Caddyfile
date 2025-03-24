@@ -8,3 +8,6 @@ tryrocket.cloud {
 semaphoreui.tryrocket.cloud {
     reverse_proxy semaphore:3000
 }
+upsnap.tryrocket.cloud {
+    reverse_proxy upsnap:8090
+}
