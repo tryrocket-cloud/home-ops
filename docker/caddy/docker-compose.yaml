@@ -11,6 +11,8 @@ services:
       - ./config:/config
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    networks:
+      - mafl_default
 
 networks:
   mafl_default:
