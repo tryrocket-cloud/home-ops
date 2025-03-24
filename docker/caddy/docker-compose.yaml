@@ -12,11 +12,8 @@ services:
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
     networks:
-      - caddy_default
       - mafl_default
 
 networks:
-  caddy_default:
-    external: false
   mafl_default:
     external: true
