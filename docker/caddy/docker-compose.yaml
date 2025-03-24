@@ -15,8 +15,3 @@ services:
       - mafl_default
       - semaphoreui_default
 
-networks:
-  mafl_default:
-    external: true
-  semaphoreui_default:
-    external: true
