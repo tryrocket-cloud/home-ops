@@ -4,6 +4,4 @@
 
   tasks:
     - name: Ensure server is powered off
-      ansible.builtin.shutdown:
-        delay: 0
-        msg: "Server is shutting down via Ansible"
+      community.general.shutdown:
