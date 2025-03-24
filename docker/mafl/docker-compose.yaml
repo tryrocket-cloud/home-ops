@@ -3,7 +3,5 @@ services:
     image: hywax/mafl
     container_name: mafl
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     volumes:
-      - /home/dietpi/portainer/data/compose/3/docker/mafl/data:/app/data
+      - /home/dietpi/portainer/data/compose/3/docker/mafl/config.yml:/app/data/config.yml
