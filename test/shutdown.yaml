@@ -6,3 +6,6 @@
   tasks:
     - name: Ensure server is powered off
       community.general.shutdown:
+        msg: "Shutting down the server"
+        time: 60
+        
