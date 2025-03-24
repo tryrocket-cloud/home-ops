@@ -1,0 +1,9 @@
+- name: Gracefully shut down the server
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Ensure server is powered off
+      ansible.builtin.shutdown:
+        delay: 0
+        msg: "Server is shutting down via Ansible"
