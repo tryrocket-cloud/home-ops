@@ -1,6 +1,6 @@
 services:
   caddy:
-    image: ghcr.io/tryrocket-cloud/tryrocket-cloud:caddy
+    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
     container_name: caddy
     restart: unless-stopped
     ports:
