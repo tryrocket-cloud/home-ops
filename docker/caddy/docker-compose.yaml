@@ -17,6 +17,6 @@ services:
 
 networks:
   caddy_default:
-    external: true
+    external: false
   mafl_default:
     external: true
