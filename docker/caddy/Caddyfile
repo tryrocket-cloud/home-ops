@@ -5,3 +5,6 @@
 tryrocket.cloud {
     reverse_proxy mafl:3000
 }
+semaphoreui.tryrocket.cloud {
+    reverse_proxy semaphore:3000
+}
