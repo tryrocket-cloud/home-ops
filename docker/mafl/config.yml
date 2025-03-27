@@ -84,6 +84,27 @@ services:
         color: '#000000'
       status:
         enabled: true
+
+  Raspberry Pi 4:
+    - title: Portainer
+      description: Docker and Kubernetes management
+      link: https://portainer.tryrocket.cloud
+      icon:
+        name: simple-icons:portainer
+        wrap: true
+        color: '#13BEF9'
+      status:
+        enabled: true
+    - title: UpSnap
+      description: A simple wake on lan web app
+      link: https://upsnap.tryrocket.cloud
+      status:
+        enabled: true
+    - title: Semaphore
+      description: Modern UI and powerful API for Ansible, Terraform, OpenTofu, PowerShell
+      link: https://semaphoreui.tryrocket.cloud
+      status:
+        enabled: true
   TrueNAS:
     - title: TrueNAS
       description: Admin Dashboard
@@ -223,16 +244,7 @@ services:
         color: '#13BEF9'
       status:
         enabled: true
-    - title: UpSnap
-      description: A simple wake on lan web app
-      link: https://upsnap.tryrocket.cloud
-      status:
-        enabled: true
-    - title: Semaphore
-      description: Modern UI and powerful API for Ansible, Terraform, OpenTofu, PowerShell
-      link: https://semaphoreui.tryrocket.cloud
-      status:
-        enabled: true
+
 tags:
   - name: Home
     color: green
