@@ -1,0 +1,19 @@
+- name: Start Portainer stack via API
+  uri:
+    url: "http://{{ portainer_api }}/api/stacks/{{ stack_id }}/start?endpointId={{ endpointId }}"
+    method: POST
+    headers:
+      X-API-Key: "{{ portainer_api_key }}"
+    status_code: 200
+
+- name: Wait until containers are started
+  become: true
+  community.docker.docker_container_info:
+    name: "{{ item }}"
+  register: container
+  until: container.exists
+  retries: 12
+  delay: 5
+  loop: "{{ containers }}"
+  loop_control:
+    label: "{{ item }}"

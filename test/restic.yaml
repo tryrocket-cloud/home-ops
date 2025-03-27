@@ -1,0 +1,70 @@
+---
+# restic.yaml
+# Expected variables:
+#   restic_cmd    - Path to the restic binary
+#   use_host      - Host parameter for restic backup
+#   paths         - A list of paths to include in the backup
+#   restic_tags   - A dictionary of key/value pairs to pass as --tag options
+
+- block:
+    - name: Extract restic version
+      command: "{{ restic_cmd }} version"
+      register: restic_version_output
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Set restic version fact
+      set_fact:
+        restic_version_tag: "{{ restic_version_output.stdout | regex_search('restic\\s+([0-9.]+)', '\\1') }}"
+      when: restic_version_output.rc == 0
+
+    - name: Merge restic_version_tag into restic_tags
+      set_fact:
+        restic_tags: "{{ restic_tags | default({}) | combine({'restic_version': restic_version_tag}) }}"
+
+    - name: Run Restic backup
+      shell: >
+        {{ restic_cmd }} backup --host {{ use_host }}
+        {%- for key, value in restic_tags.items() %}
+          --tag {{ key }}:{{ value }}
+        {%- endfor %}
+        {%- for p in paths %}
+          {{ p }}
+        {%- endfor %}
+      args:
+        executable: /bin/bash
+      register: restic_backup_output
+
+    - name: Display Restic backup output
+      debug:
+        msg: "{{ restic_backup_output.stdout_lines }}"
+
+    - name: Run Restic check (subset 1/10)
+      shell: >
+        {{ restic_cmd }} check --read-data-subset 1/10
+      args:
+        executable: /bin/bash
+      register: restic_check_output
+
+    - name: Display Restic check output
+      debug:
+        msg: "{{ restic_check_output.stdout_lines }}"
+
+    - name: Forget old snapshots and prune with Restic
+      shell: >
+        {{ restic_cmd }} forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
+      args:
+        executable: /bin/bash
+      register: restic_prune_output
+
+    - name: Display Restic prune output
+      debug:
+        msg: "{{ restic_prune_output.stdout_lines }}"
+  environment:
+    RESTIC_REPOSITORY: "{{ lookup('env', 'RESTIC_REPOSITORY') }}"
+    RESTIC_PASSWORD: "{{ lookup('env', 'RESTIC_PASSWORD') }}"
+    RESTIC_CACHE_DIR: "{{ use_cache_dir }}"
+
+    AWS_ACCESS_KEY_ID: "{{ lookup('env', 'AWS_ACCESS_KEY_ID') }}"
+    AWS_SECRET_ACCESS_KEY: "{{ lookup('env', 'AWS_SECRET_ACCESS_KEY') }}"
+    
