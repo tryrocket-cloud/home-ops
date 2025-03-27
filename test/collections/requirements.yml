@@ -1,2 +1,5 @@
 collections:
   - community.general
+  - arensb.truenas
+  - community.healthchecksio
+  - community.docker
