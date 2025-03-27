@@ -95,7 +95,7 @@ services:
     stdin_open: false
     tty: false
     user: "1001:0"
-    volumes:
+    volumes:    
       - read_only: false
         source: redis-data
         target: /bitnami/redis/data
