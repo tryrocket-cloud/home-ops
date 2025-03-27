@@ -1,0 +1,17 @@
+---
+- name: Stop TrueNAS machine
+  hosts: localhost
+  gather_facts: no
+  vars:
+    truenas_api: "{{ lookup('env', 'TRUENAS_API') | default('https://truenas.tryrocket.cloud', true) }}"
+    truenas_api_key: "{{ lookup('env', 'TRUENAS_API_KEY') }}"
+  tasks:
+    - name: Send shutdown request to TrueNAS
+      uri:
+        url: "{{ truenas_api }}/api/v2.0/system/shutdown"
+        method: POST
+        headers:
+          accept: "application/json"
+          Authorization: "Bearer {{ truenas_api_key }}"
+        validate_certs: no
+        status_code: 200
