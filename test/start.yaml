@@ -1,0 +1,11 @@
+---
+- name: Start TrueNAS by sending a Wake-on-LAN packet
+  hosts: localhost
+  gather_facts: no
+  vars:
+    truenas_mac_address: "{{ use_mac_address }}"
+
+  tasks:
+    - name: Send Wake-on-LAN packet
+      community.general.wakeonlan:
+        mac: "{{ truenas_mac_address }}"
