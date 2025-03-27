@@ -15,5 +15,5 @@ upsnap.tryrocket.cloud {
     reverse_proxy 192.168.178.120:8090
 }
 minio.tryrocket.cloud {
-    reverse_proxy minio-minio-1:9000
+    reverse_proxy 192.168.178.75:9000
 }
