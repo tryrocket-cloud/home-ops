@@ -21,82 +21,85 @@
     immich_api: "{{ lookup('env', 'IMMICH_API_BASE_URL') | default('https://immich.tryrocket.cloud', true) }}"
 
   tasks:
-    - name: Install restic
-      include_tasks: install-restic.yaml
-      vars:
-        bin_path: "{{ working_dir }}/bin"
-        setup_restic_version: "{{ use_restic_version }}"
-
-    - name: Get Immich version
-      block:
-        - name: Retrieve current running Immich version from API
-          delegate_to: localhost
-          uri:
-            url: "{{ immich_api }}/api/server/version"
-            method: GET
-            return_content: yes
-          register: immich_api_response
-
-        - name: Display Immich API response
-          debug:
-            var: "{{ immich_api_response.json.major }}.{{ immich_api_response.json.minor }}.{{ immich_api_response.json.patch }}"
-
-        - name: Set Immich version fact from API response
-          set_fact:
-            immich_version: "{{ immich_api_response.json.major }}.{{ immich_api_response.json.minor }}.{{ immich_api_response.json.patch }}"
-
-    - name: Create database backup
-      block:
-        - name: Cleantmp up old dump file if it exists
-          become: true
-          ansible.builtin.file:
-            path: "{{ db_dump }}"
-            state: absent
-
-        - name: Run pg_dumpall from Docker and compress output
-          become: true
-          shell: |
-            docker exec -t immich_postgres pg_dumpall --clean --if-exists --username=postgres | gzip > "{{ db_dump }}"
-          args:
-            executable: /bin/bash
-
-        - name: Stat the temporary dump file "{{ db_dump }}"
-          stat:
-            path: "{{ db_dump }}"
-          register: dump_file_stat
-
-        - name: Assert dump file was created successfully
-          assert:
-            that:
-              - dump_file_stat.stat.exists
-            fail_msg: "Dump file {{ db_dump }} was not created."
-
-    - name: Stop Portainer stack
-      include_tasks: stop-portainer-stack.yaml
-
-    - name: Backup
-      block:
-        - name: Run Restic backup
-          include_tasks: restic.yaml
+    - block:
+        - name: Install restic
+          include_tasks: install-restic.yaml
           vars:
-            use_host: "truenas.tryrocket.cloud"
-            use_cache_dir: "{{ working_dir }}/.cache/restic"
-            paths:
-              - /mnt/tank/apps/immich/data/immich-data
-              - "{{ db_dump }}"
-            restic_tags:
-              immich_version: "{{ immich_version }}"
-              backup_type: "full"
-              environment: "production"
+            bin_path: "{{ working_dir }}/bin"
+            setup_restic_version: "{{ use_restic_version }}"
 
-        # TODO: add kopia
+        - name: Get Immich version
+          block:
+            - name: Retrieve current running Immich version from API
+              delegate_to: localhost
+              uri:
+                url: "{{ immich_api }}/api/server/version"
+                method: GET
+                return_content: yes
+              register: immich_api_response
 
-    - name: Start Portainer stack
-      include_tasks: start-portainer-stack.yaml
+            - name: Display Immich API response
+              debug:
+                var: "{{ immich_api_response.json.major }}.{{ immich_api_response.json.minor }}.{{ immich_api_response.json.patch }}"
 
-    - name: Send a success signal to healthchecks.io
-      community.healthchecksio.ping:
-        state: present
-        uuid: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_CHECK_UUID') }}"
-        api_key: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_API_KEY') }}"
-        signal: success
+            - name: Set Immich version fact from API response
+              set_fact:
+                immich_version: "{{ immich_api_response.json.major }}.{{ immich_api_response.json.minor }}.{{ immich_api_response.json.patch }}"
+
+        - name: Create database backup
+          block:
+            - name: Cleantmp up old dump file if it exists
+              become: true
+              ansible.builtin.file:
+                path: "{{ db_dump }}"
+                state: absent
+
+            - name: Run pg_dumpall from Docker and compress output
+              become: true
+              shell: |
+                docker exec -t immich_postgres pg_dumpall --clean --if-exists --username=postgres | gzip > "{{ db_dump }}"
+              args:
+                executable: /bin/bash
+
+            - name: Stat the temporary dump file "{{ db_dump }}"
+              stat:
+                path: "{{ db_dump }}"
+              register: dump_file_stat
+
+            - name: Assert dump file was created successfully
+              assert:
+                that:
+                  - dump_file_stat.stat.exists
+                fail_msg: "Dump file {{ db_dump }} was not created."
+
+        - name: Stop Portainer stack
+          include_tasks: stop-portainer-stack.yaml
+
+        - name: Backup
+          block:
+            - name: Run Restic backup
+              include_tasks: restic.yaml
+              vars:
+                use_host: "truenas.tryrocket.cloud"
+                use_cache_dir: "{{ working_dir }}/.cache/restic"
+                paths:
+                  - /mnt/tank/apps/immich/data/immich-data
+                  - "{{ db_dump }}"
+                restic_tags:
+                  immich_version: "{{ immich_version }}"
+                  backup_type: "full"
+                  environment: "production"
+
+            # TODO: add kopia
+
+        - include_tasks: healthchecksio.yaml
+          vars:
+            signal: "success"
+
+      rescue:
+        - include_tasks: healthchecksio.yaml
+          vars:
+            signal: "failure"
+      always:
+        - name: Start Portainer stack
+          include_tasks: start-portainer-stack.yaml
