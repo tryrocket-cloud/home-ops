@@ -14,9 +14,12 @@ services:
     networks:
       - mafl_default
       - semaphoreui_default
+      - portainer_default
 
 networks:
   mafl_default:
     external: true
   semaphoreui_default:
+    external: true
+  portainer_default:
     external: true
