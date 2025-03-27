@@ -84,7 +84,25 @@ services:
         color: '#000000'
       status:
         enabled: true
-
+    - title: Immich
+      description: Photo and Video management solution
+      link: https://immich.tryrocket.cloud
+      icon:
+        name: simple-icons:immich
+        wrap: true
+        color: '#4250AF'
+      status:
+        enabled: true
+    - title: Paperless
+      description: Document Management
+      link: https://paperless.tryrocket.cloud
+      icon:
+        name: simple-icons:paperlessngx
+        wrap: true
+        color: '#17541F'
+      status:
+        enabled: true
+        
   Raspberry Pi 4:
     - title: Portainer
       description: Docker and Kubernetes management
@@ -133,24 +151,6 @@ services:
         color: '#00AB44'
       status:
         enabled: false
-    - title: Immich
-      description: Photo and Video management solution
-      link: https://immich.tryrocket.cloud
-      icon:
-        name: simple-icons:immich
-        wrap: true
-        color: '#4250AF'
-      status:
-        enabled: true
-    - title: Paperless
-      description: Document Management
-      link: https://paperless.tryrocket.cloud
-      icon:
-        name: simple-icons:paperlessngx
-        wrap: true
-        color: '#17541F'
-      status:
-        enabled: true
     - title: Minio
       description: High Performance Object Storage
       link: https://minio.tryrocket.cloud
