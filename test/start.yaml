@@ -6,6 +6,11 @@
     truenas_mac_address: "{{ use_mac_address }}"
 
   tasks:
-    - name: Send Wake-on-LAN packet
+    - name: Send Wake-on-LAN packet port 7
       community.general.wakeonlan:
         mac: "{{ truenas_mac_address }}"
+        port: 7
+    - name: Send Wake-on-LAN packet on port 9
+      community.general.wakeonlan:
+        mac: "{{ truenas_mac_address }}"
+        port: 9
