@@ -1,10 +1,17 @@
 services:
   semaphore:
-    image: semaphoreui/semaphore:latest
+    image: semaphoreui/semaphore:v2.13.1
     container_name: semaphore
     environment:
+      TZ: Europe/Berlin
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_ADMIN: ${SEMAPHORE_ADMIN}
       SEMAPHORE_ADMIN_PASSWORD: ${SEMAPHORE_ADMIN_PASSWORD}
       SEMAPHORE_ADMIN_NAME: ${SEMAPHORE_ADMIN_NAME}
       SEMAPHORE_ADMIN_EMAIL: ${SEMAPHORE_ADMIN_EMAIL}
+      SEMAPHORE_SLACK_ALERT: "True"
+      SEMAPHORE_SLACK_URL: ${SEMAPHORE_SLACK_URL}
+      SEMAPHORE_ACCESS_KEY_ENCRYPTION: ${SEMAPHORE_ACCESS_KEY_ENCRYPTION}
+    volumes:
+        - ./semaphore/data:/var/lib/semaphore
+        - ./semaphore/config:/etc/semaphore
