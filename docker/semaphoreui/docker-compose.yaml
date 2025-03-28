@@ -13,5 +13,5 @@ services:
       SEMAPHORE_SLACK_URL: ${SEMAPHORE_SLACK_URL}
       SEMAPHORE_ACCESS_KEY_ENCRYPTION: ${SEMAPHORE_ACCESS_KEY_ENCRYPTION}
     volumes:
-        - ./semaphore/data:/var/lib/semaphore
-        - ./semaphore/config:/etc/semaphore
+      - ./semaphore/data:/var/lib/semaphore
+      - ./semaphore/config:/etc/semaphore
