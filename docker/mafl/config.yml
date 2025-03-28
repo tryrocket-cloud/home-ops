@@ -20,13 +20,6 @@ services:
         color: '#0033FF'
       status:
         enabled: true
-    - title: Subscription manager
-      description: Track subscriptions and manage expenses
-      link: https://subscription-manager.tryrocket.cloud
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/subscription-manager.webp
-      status:
-        enabled: true
     - title: Home Assistant
       description: Home automation
       link: https://home-assistant.home.local/
@@ -63,7 +56,9 @@ services:
       description: Git with a cup of tea!
       link: https://gitea.tryrocket.cloud
       icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/gitea.webp
+        name: simple-icons:gitea
+        wrap: true
+        color: '#609926'
       status:
         enabled: true
     - title: Vaultwarden
@@ -222,14 +217,18 @@ services:
       description: GitOps for Kubernetes
       link: https://argocd.tryrocket.cloud
       icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/argo-cd.webp
+        name: simple-icons:argo
+        wrap: true
+        color: '#EF7B4D'
       status:
         enabled: true
     - title: Traefik
       description: Cloud Native Edge Router
       link: https://traefik.tryrocket.cloud/dashboard/
       icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/svg/traefik.svg
+        name: simple-icons:traefikproxy
+        wrap: true
+        color: '#24A1C1'
       status:
         enabled: true
     - title: Longhorn
