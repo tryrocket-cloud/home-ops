@@ -28,7 +28,7 @@ dietpi.tryrocket.cloud {
             mode require_and_verify
             #trusted_ca_cert_file 
             trust_pool file {
-				pem_file /home/dietpi/portainer/data/compose/7/docker/caddy/ca.crt
+				pem_file /etc/ca.crt
 			}
         }
     }
