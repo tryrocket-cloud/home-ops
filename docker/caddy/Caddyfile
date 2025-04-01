@@ -20,3 +20,6 @@ minio.tryrocket.cloud {
 immich.tryrocket.cloud {
     reverse_proxy 192.168.178.75:30041
 }
+dietpi.tryrocket.cloud {
+    reverse_proxy mafl:3000
+}
