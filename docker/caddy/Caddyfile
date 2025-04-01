@@ -22,4 +22,11 @@ immich.tryrocket.cloud {
 }
 dietpi.tryrocket.cloud {
     reverse_proxy mafl:3000
+
+    tls {
+        client_auth {
+            mode require_and_verify
+            trusted_ca_cert_file /home/dietpi/portainer/data/compose/7/docker/caddy/ca.crt
+        }
+    }
 }
