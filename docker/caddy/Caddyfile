@@ -26,7 +26,10 @@ dietpi.tryrocket.cloud {
     tls {
         client_auth {
             mode require_and_verify
-            trusted_ca_cert_file /home/dietpi/portainer/data/compose/7/docker/caddy/ca.crt
+            #trusted_ca_cert_file 
+            trust_pool file {
+				pem_file /home/dietpi/portainer/data/compose/7/docker/caddy/ca.crt
+			}
         }
     }
 }
