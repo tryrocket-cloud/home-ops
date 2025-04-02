@@ -33,8 +33,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./toolkit/Dockerfile
+          context: ./toolkit/
+          file: Dockerfile
           platforms: linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}:toolkit
