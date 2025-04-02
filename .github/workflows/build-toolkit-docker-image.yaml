@@ -34,6 +34,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: toolkit/
-          platforms: linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}:toolkit
