@@ -1,0 +1,12 @@
+help:
+    @just --list
+
+build:
+    @docker buildx build --platform linux/amd64 -t tryrocket.cloud/backup:latest . --load
+
+run args:
+    @docker run --rm \
+        --platform linux/amd64 \
+        -v $(pwd)/.cache/restic:/root/.cache/restic \
+        --env-file .env \
+        tryrocket.cloud/backup:latest {{args}}
