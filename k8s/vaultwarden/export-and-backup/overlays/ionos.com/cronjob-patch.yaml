@@ -80,8 +80,7 @@ spec:
                     name: ionos-com-restic-repository-configuration
                 - secretRef:
                     name: ionos-com-healthchecks-configuration
-              command: ["/bin/sh", "-c"]
-              args: ["backup vaultwarden export"]
+              args: ["backup", "vaultwarden", "export"]
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
