@@ -1,0 +1,13 @@
+help:
+	@just --list
+
+version:
+	@just --version
+	@restic version
+	@bw --version
+	@ansible --version
+	@medusa version
+
+# Backup application
+backup app type:
+    ansible-playbook /ansible/backup-{{app}}-{{type}}.yaml
