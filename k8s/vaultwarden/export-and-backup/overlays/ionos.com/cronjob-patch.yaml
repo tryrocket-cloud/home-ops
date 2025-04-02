@@ -9,6 +9,9 @@ spec:
     spec:
       template:
         spec:
+
+
+
           containers:
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
               image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
@@ -59,6 +62,34 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
                   readOnly: true
+
+            - name: test-restic-backup
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              imagePullPolicy: Always
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vaultwarden/restic
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              envFrom:
+                - secretRef:
+                    name: ionos-com-s3-bucket-configuration
+                - secretRef:
+                    name: ionos-com-s3-credentials
+                - secretRef:
+                    name: ionos-com-restic-repository-configuration
+                - secretRef:
+                    name: ionos-com-healthchecks-configuration
+              command:
+                  - /bin/sh
+                  - -c
+                  - |
+                    backup vaultwarden export
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
+                  readOnly: true
+
             - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
               image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
               imagePullPolicy: Always
