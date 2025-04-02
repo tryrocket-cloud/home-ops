@@ -52,6 +52,16 @@
             VAULT_ADDR: "{{ vault_api }}"
             VAULT_TOKEN: "{{ vault_token }}"
 
+        - name: Check if the export.json exists
+          stat:
+            path: "{{ vault_export_json }}"
+          register: file_check
+
+        - name: Fail if export.json does not exist
+          fail:
+            msg: "The required file {{ vault_export_json }} does not exist!"
+          when: not file_check.stat.exists
+
         - name: Get medusa CLI version
           shell: medusa version
           register: medusa_version_result
