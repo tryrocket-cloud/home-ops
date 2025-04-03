@@ -1,4 +1,4 @@
-name: Build Backup Docker Image
+name: Build Toolkit Docker Image
 
 on:
   push:
