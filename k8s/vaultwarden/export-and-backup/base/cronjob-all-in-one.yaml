@@ -24,11 +24,11 @@ spec:
                 - secretRef:
                     name: all-in-one
               args: ["backup", "vaultwarden", "export"]
-              volumeMounts:
-                - name: support-volume
-                  mountPath: /cache/ionos.com/vaultwarden/restic
-                  readOnly: true
-          volumes:
-            - name: support-volume
-              persistentVolumeClaim:
-                claimName: support-volume-claim
+          #     volumeMounts:
+          #       - name: support-volume
+          #         mountPath: /cache/ionos.com/vaultwarden/restic
+          #         readOnly: true
+          # volumes:
+          #   - name: support-volume
+          #     persistentVolumeClaim:
+          #       claimName: support-volume-claim
