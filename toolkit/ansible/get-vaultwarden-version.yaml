@@ -1,0 +1,29 @@
+- name: Get Vaultwarden version
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    vaultwarden_api: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_API') | default('https://vaultwarden.tryrocket.cloud', true) }}"
+
+  tasks:
+    - name: Get Vaultwarden config via API
+      uri:
+        url: "{{ vaultwarden_api }}/api/config"
+        method: GET
+        return_content: yes
+      register: vaultwarden_api_response
+      failed_when: vaultwarden_api_response.status != 200
+
+    - name: Extract Vaultwarden version from API response
+      set_fact:
+        vaultwarden_version: "{{ vaultwarden_api_response.json.version }}"
+      failed_when: vaultwarden_api_response.json.version is not defined
+
+    - name: Get Bitwarden CLI version
+      shell: bw --version
+      register: bw_version_result
+      changed_when: false
+
+    - name: Set Bitwarden CLI version fact
+      set_fact:
+        bw_cli_version: "{{ bw_version_result.stdout | trim }}"

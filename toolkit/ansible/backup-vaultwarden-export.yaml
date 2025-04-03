@@ -1,0 +1,4 @@
+- import_playbook: /ansible/export-vaultwarden-data.yaml
+- import_playbook: /ansible/get-vaultwarden-version.yaml
+- import_playbook: /ansible/backup-vaultwarden-export-restic.yaml
+- import_playbook: /ansible/backup-vaultwarden-export-kopia.yaml

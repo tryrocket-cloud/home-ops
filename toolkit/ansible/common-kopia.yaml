@@ -1,0 +1,20 @@
+- name: Kopia repository connect
+  shell: kopia repository connect s3 \
+    --bucket={{ bucket }} \
+    --prefix={{ prefix }} \
+    --region={{ region }} \
+    --endpoint={{ endpoint }}
+  environment: "{{ kopia_env }}"
+  register: kopia_connect_result
+
+- name: Perform Kopia backup
+  shell: kopia snapshot create "{{ export_json }}" \
+    --description="Daily export" \
+    --tags="hostname:{{ lookup('ansible.builtin.env', 'HOSTNAME') }} vaultwarden_version:{{ vaultwarden_version }} backup_type:export environment:{{ backup_environment | default('production') }}"
+  environment: "{{ kopia_env }}"
+  register: kopia_backup_result
+
+- name: Perform Kopia consistency check
+  shell: kopia snapshot verify --verify-files-percent 33
+  environment: "{{ kopia_env }}"
+  register: kopia_verify_result

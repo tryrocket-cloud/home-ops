@@ -1,17 +1,7 @@
-- name: Check if export file exists
-  stat:
-    path: "{{ export_json }}"
-  register: file_check
-
-- name: Fail if export file does not exist
-  fail:
-    msg: "The required file {{ export_json }} does not exist!"
-  when: not file_check.stat.exists
-
 - name: Run Restic backup
   shell: |
     restic backup --host {{ lookup('ansible.builtin.env', 'HOST') | default(ansible_hostname, true) }} \
-      --tag backup_type:{{ backup_type }} \
+      --tag backup_type:export \
       --tag environment:{{ backup_environment | default('production') }} \
       {% if version_tag is defined %}--tag version:{{ version_tag }} {% endif %}\
       "{{ export_json }}"

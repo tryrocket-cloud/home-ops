@@ -4,6 +4,9 @@ help:
 build:
     @docker buildx build --platform linux/amd64 -t tryrocket.cloud/backup:latest . --load
 
+version:
+	@docker run --rm --platform linux/amd64 tryrocket.cloud/backup:latest version
+
 backup env_file target:
 	@docker run --rm \
 	  --platform linux/amd64 \

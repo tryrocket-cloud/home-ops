@@ -4,6 +4,7 @@ help:
 version:
 	@just --version
 	@restic version
+	@kopia --version
 	@bw --version
 	@ansible --version
 	@medusa version
@@ -13,7 +14,7 @@ backup tool app type:
     ansible-playbook /ansible/backup-{{tool}}-{{app}}-{{type}}.yaml
 
 backup-vaultwarden:
-	ansible-playbook /ansible/backup-restic-vaultwarden-export.yaml
+	ansible-playbook /ansible/backup-vaultwarden-export.yaml
 
 backup-vault:
-	ansible-playbook /ansible/backup-restic-vault-export.yaml
+	ansible-playbook /ansible/backup-vault-export-restic.yaml

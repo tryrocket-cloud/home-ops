@@ -1,0 +1,56 @@
+- name: Export Vaultwarden data
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    working_dir: "{{ ansible_env.HOME }}"
+    
+    vaultwarden_api: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_API') | default('https://vaultwarden.tryrocket.cloud', true) }}"
+    vaultwarden_username: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_USERNAME') }}"
+    vaultwarden_password: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_PASSWORD') }}"
+
+  pre_tasks:
+    - name: Ensure working directory exists
+      file:
+        path: "{{ working_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Set export_json fact
+      set_fact:
+        export_json: "{{ working_dir }}/export.json"
+
+  tasks:
+    - name: Configure Vaultwarden server
+      command: "bw config server {{ vaultwarden_api }}"
+
+    - name: Login to Vaultwarden
+      shell: "bw login {{ vaultwarden_username }} {{ vaultwarden_password }} --raw"
+      register: bw_login_result
+      changed_when: False
+
+    - name: Set BW_SESSION fact from login output
+      set_fact:
+        BW_SESSION: "{{ bw_login_result.stdout | trim }}"
+
+    - name: Export Vaultwarden data
+      shell: "bw export --format json --output {{ export_json }}"
+      environment:
+        BW_SESSION: "{{ BW_SESSION }}"
+      register: bw_export_result
+
+    - name: Logout from Bitwarden
+      shell: "bw logout"
+      environment:
+        BW_SESSION: "{{ BW_SESSION }}"
+      register: bw_logout_result
+
+    - name: Check if export file exists
+      stat:
+        path: "{{ export_json }}"
+      register: file_check
+
+    - name: Fail if export file does not exist
+      fail:
+        msg: "The required file {{ export_json }} does not exist!"
+      when: not file_check.stat.exists
