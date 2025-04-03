@@ -73,19 +73,7 @@ spec:
                   value: tryrocket.cloud
               envFrom:
                 - secretRef:
-                    name: ionos-com-s3-bucket-configuration
-                - secretRef:
-                    name: ionos-com-s3-credentials
-                - secretRef:
-                    name: ionos-com-restic-repository-configuration
-                - secretRef:
-                    name: ionos-com-healthchecks-configuration
-                - secretRef:
-                    name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret-test
-                - secretRef:
-                    name: ionos-com-restic-repository-configuration-test
-                - secretRef:
-                    name: ionos-com-healthchecks-configuration-test
+                    name: all-in-one
               args: ["backup", "vaultwarden", "export"]
               volumeMounts:
                 - name: vaultwarden-export-volume

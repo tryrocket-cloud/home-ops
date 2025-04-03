@@ -11,10 +11,10 @@ resources:
 
   - kopia-repository-configuration-external-secret.yaml
   - restic-repository-configuration-external-secret.yaml
-  - restic-repository-configuration-external-secret-test.yaml
 
   - healthchecks-configuration-external-secret.yaml
-  - healthchecks-configuration-external-secret-test.yaml
+
+  - all-in-one-external-secret.yaml
 
 patches:
   - target:

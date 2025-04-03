@@ -6,7 +6,6 @@ resources:
 
   # all user creds to use for export and backup
   - vaultwarden-users-external-secret.yaml
-  - vaultwarden-users-external-secret-test.yaml
   
   # - ionos.com-kopia-external-secret.yaml
   # - ionos.com-restic-external-secret.yaml
