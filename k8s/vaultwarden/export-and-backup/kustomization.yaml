@@ -13,5 +13,5 @@ resources:
   # - s3-external-secret.yaml
 
   # targets
-  - overlays/ionos.com
-  - overlays/truenas.tryrocket.cloud
+  # - overlays/ionos.com
+  # - overlays/truenas.tryrocket.cloud
