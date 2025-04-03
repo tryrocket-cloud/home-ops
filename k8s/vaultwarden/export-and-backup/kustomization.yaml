@@ -15,3 +15,4 @@ resources:
   # targets
   # - overlays/ionos.com
   # - overlays/truenas.tryrocket.cloud
+  - base
