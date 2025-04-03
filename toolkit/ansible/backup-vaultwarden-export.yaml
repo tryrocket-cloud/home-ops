@@ -10,7 +10,7 @@
     vaultwarden_username: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_USERNAME') }}"
     vaultwarden_password: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_PASSWORD') }}"
     
-    healthchecks_uuid: "{{ lookup('ansible.builtin.env', 'VAULTWARDEN_HEALTHCHECKSIO_CHECK_UUID') }}"
+    healthchecks_uuid: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_CHECK_UUID') }}"
     healthchecks_api_key: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_API_KEY') }}"
     
     restic_env:
