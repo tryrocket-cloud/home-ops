@@ -13,6 +13,13 @@ spec:
     spec:
       backoffLimit: 0
       template:
+        annotations:
+          vault.hashicorp.com/agent-inject: "true"
+          vault.hashicorp.com/agent-inject-secret-restic_env_list.yaml: "kv/data/restic_env_list"
+          vault.hashicorp.com/agent-inject-template-restic_env_list.yaml: |
+            {{ with secret "kv/data/restic_env_list" }}
+            {{ .Data.data | to_nice_yaml }}
+            {{ end }}
         spec:
           restartPolicy: Never
           containers:
