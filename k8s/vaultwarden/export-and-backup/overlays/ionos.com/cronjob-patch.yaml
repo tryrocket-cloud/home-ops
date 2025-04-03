@@ -82,6 +82,8 @@ spec:
                     name: ionos-com-healthchecks-configuration
                 - secretRef:
                     name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret-test
+                - secretRef:
+                    name: ionos-com-restic-repository-configuration-test
               args: ["backup", "vaultwarden", "export"]
               volumeMounts:
                 - name: vaultwarden-export-volume
