@@ -60,23 +60,6 @@ spec:
                   mountPath: /export
                   readOnly: true
 
-            - name: test-restic-backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
-              imagePullPolicy: Always
-              env:
-                - name: RESTIC_CACHE_DIR
-                  value: /cache/ionos.com/vaultwarden/restic
-                - name: HOSTNAME
-                  value: tryrocket.cloud
-              envFrom:
-                - secretRef:
-                    name: all-in-one
-              args: ["backup", "vaultwarden", "export"]
-              volumeMounts:
-                - name: vaultwarden-export-volume
-                  mountPath: /export
-                  readOnly: true
-
             # - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
             #   image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
             #   imagePullPolicy: Always
