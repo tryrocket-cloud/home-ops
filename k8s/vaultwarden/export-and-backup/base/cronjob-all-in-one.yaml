@@ -2,6 +2,13 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: backup-vaultwarden-export
+  annotations:
+  vault.hashicorp.com/agent-inject: "true"
+  vault.hashicorp.com/agent-inject-secret-restic_env_list.yaml: "kv/data/restic_env_list"
+  vault.hashicorp.com/agent-inject-template-restic_env_list.yaml: |
+    {{ with secret "kv/data/restic_env_list" }}
+    {{ .Data.data | to_nice_yaml }}
+    {{ end }}
 spec:
   suspend: false
   schedule: "0 22 * * *"
@@ -25,7 +32,7 @@ spec:
               envFrom:
                 - secretRef:
                     name: all-in-one
-              args: ["backup", "vaultwarden", "export"]
+              args: ["backup-vaultwarden"]
           #     volumeMounts:
           #       - name: support-volume
           #         mountPath: /cache/ionos.com/vaultwarden/restic
