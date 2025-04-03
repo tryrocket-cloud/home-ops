@@ -14,8 +14,6 @@ resources:
 
   - healthchecks-configuration-external-secret.yaml
 
-  - all-in-one-external-secret.yaml
-
 patches:
   - target:
       kind: CronJob

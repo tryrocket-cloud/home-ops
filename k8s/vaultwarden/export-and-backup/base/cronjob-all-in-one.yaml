@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: vaultwarden-export-backup
+spec:
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: test-restic-backup
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              imagePullPolicy: Always
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vaultwarden/restic
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              args: ["backup", "vaultwarden", "export"]
+              volumeMounts:
+                - name: support-volume
+                  mountPath: /cache/ionos.com/vaultwarden/restic
+                  readOnly: true
+          volumes:
+            - name: support-volume
+              persistentVolumeClaim:
+                claimName: support-volume-claim

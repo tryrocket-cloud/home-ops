@@ -3,3 +3,6 @@ kind: Kustomization
 
 resources:
   - cronjob.yaml
+
+  - cronjob-all-in-one.yaml
+  - all-in-one-external-secret.yaml
