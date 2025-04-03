@@ -22,6 +22,8 @@ spec:
               env:
                 - name: RESTIC_CACHE_DIR
                   value: /cache/ionos.com/vaultwarden/restic
+                - name: KOPIA_CACHE_DIRECTORY
+                  value: /cache/ionos.com/vaultwarden/restic
               envFrom:
                 - secretRef:
                     name: all-in-one
