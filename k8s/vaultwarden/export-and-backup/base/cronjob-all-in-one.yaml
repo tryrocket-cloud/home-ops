@@ -21,18 +21,18 @@ spec:
               imagePullPolicy: Always
               env:
                 - name: RESTIC_CACHE_DIR
-                  value: /cache/ionos.com/vaultwarden/restic
+                  value: /root/.cache/restic/vaultwarden
                 - name: KOPIA_CACHE_DIRECTORY
-                  value: /cache/ionos.com/vaultwarden/restic
+                  value: /root/.cache/kopia/vaultwarden
               envFrom:
                 - secretRef:
                     name: all-in-one
               args: ["backup-vaultwarden"]
-          #     volumeMounts:
-          #       - name: support-volume
-          #         mountPath: /cache/ionos.com/vaultwarden/restic
-          #         readOnly: true
-          # volumes:
-          #   - name: support-volume
-          #     persistentVolumeClaim:
-          #       claimName: support-volume-claim
+              volumeMounts:
+                - name: support-volume
+                  mountPath: /root/.cache
+                  readOnly: true
+          volumes:
+            - name: support-volume
+              persistentVolumeClaim:
+                claimName: vaultwarden-support-pvc
