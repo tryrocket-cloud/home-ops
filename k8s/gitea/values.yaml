@@ -1,5 +1,8 @@
 # https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
 
+image:
+  tag: '1.23.6'
+
 strategy:
   type: 'Recreate'
 
