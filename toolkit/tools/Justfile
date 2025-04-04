@@ -9,12 +9,8 @@ version:
 	@ansible --version
 	@medusa version
 
-# Backup application
-backup tool app type:
-    ansible-playbook /ansible/backup-{{tool}}-{{app}}-{{type}}.yaml
-
 backup-vaultwarden:
-	ansible-playbook /ansible/backup-vaultwarden-export.yaml
+	ansible-playbook /ansible/vaultwarden/backup-vaultwarden-export.yaml
 
 backup-vault:
 	ansible-playbook /ansible/backup-vault-export-restic.yaml

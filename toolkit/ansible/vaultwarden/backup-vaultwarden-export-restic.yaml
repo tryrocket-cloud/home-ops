@@ -1,25 +1,21 @@
-- name: Backup Vaultwarden export with kopia 
+- name: Backup Vaultwarden export with restic 
   hosts: localhost
   gather_facts: true
 
   vars:
     healthchecks_uuid: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_CHECK_UUID') }}"
     healthchecks_api_key: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_API_KEY') }}"
-      
-    prefix: "{{ lookup('ansible.builtin.env', 'PREFIX') }}"
-    endpoint: "{{ lookup('ansible.builtin.env', 'ENDPOINT') }}"
-    region: "{{ lookup('ansible.builtin.env', 'REGION') }}"
-    bucket: "{{ lookup('ansible.builtin.env', 'BUCKET') }}"
-
-    kopia_env:
+    
+    restic_env:
       AWS_ACCESS_KEY_ID: "{{ lookup('ansible.builtin.env', 'AWS_ACCESS_KEY_ID') }}"
       AWS_SECRET_ACCESS_KEY: "{{ lookup('ansible.builtin.env', 'AWS_SECRET_ACCESS_KEY') }}"
-      KOPIA_PASSWORD: "{{ lookup('ansible.builtin.env', 'KOPIA_PASSWORD') }}"
-      KOPIA_CHECK_FOR_UPDATES: false
+      RESTIC_REPOSITORY: "{{ lookup('ansible.builtin.env', 'RESTIC_REPOSITORY') }}"
+      RESTIC_PASSWORD: "{{ lookup('ansible.builtin.env', 'RESTIC_PASSWORD') }}"
+      RESTIC_CACHE_DIR: "{{ lookup('ansible.builtin.env', 'RESTIC_CACHE_DIR') }}"
 
   tasks:
     - block:
-        - include_tasks: common-kopia.yaml
+        - include_tasks: ../shared/restic.yaml
 
         - name: Signal success to healthchecks.io
           community.healthchecksio.ping:

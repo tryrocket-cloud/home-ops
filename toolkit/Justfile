@@ -10,7 +10,8 @@ version:
 backup env_file target:
 	@docker run --rm \
 	  --platform linux/amd64 \
-	  -v $(pwd)/.cache/restic:/root/.cache/restic \
+	  -v $(pwd)/.cache/restic/vaultwarden:/root/.cache/restic/vaultwarden \
+	  -v $(pwd)/.cache/kopia/vaultwarden:/root/.cache/kopia/vaultwarden \
 	  --env-file {{env_file}} \
 	  tryrocket.cloud/backup:latest {{target}}
 
