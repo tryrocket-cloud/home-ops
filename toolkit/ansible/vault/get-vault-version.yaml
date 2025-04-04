@@ -1,0 +1,20 @@
+- name: Get Vault version
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    vault_api: "{{ lookup('ansible.builtin.env', 'VAULT_API') | default('https://vault.tryrocket.cloud', true) }}"
+
+  tasks:
+    - name: Get HashiCorp Vault version
+      uri:
+        url: "{{ vault_api }/v1/sys/health"
+        method: GET
+        return_content: yes
+        status_code: [200]
+      register: vault_health
+
+    - name: Set vault version fact
+      set_fact:
+        vault_version: "{{ vault_health.json.version }}"
+      when: vault_health.json is defined and vault_health.json.version is defined

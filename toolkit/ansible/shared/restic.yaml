@@ -20,7 +20,7 @@
     restic backup --host {{ lookup('ansible.builtin.env', 'HOSTNAME') | default(ansible_hostname, true) }}
     --tag restic_version:"{{ restic_version }}"
     {{ extra_tags_string }}
-    "{{ export_json }}"
+    "{{ backup_paths | join(' ') }}"
   environment: "{{ restic_env }}"
   register: restic_backup_result
 

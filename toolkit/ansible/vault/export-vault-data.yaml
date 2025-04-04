@@ -1,0 +1,34 @@
+- name: Export Vaultwarden data
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    working_dir: "{{ ansible_env.HOME }}"
+
+  pre_tasks:
+    - name: Ensure working directory exists
+      file:
+        path: "{{ working_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Set export_yaml fact
+      set_fact:
+        export_yaml: "{{ working_dir }}/export.yaml"
+
+  tasks:
+    - name: Export Vault data
+      shell: "medusa export kv -o {{ export_yaml }}"
+      environment:
+        VAULT_ADDR: "{{ lookup('ansible.builtin.env', 'VAULT_API') | default('https://vault.tryrocket.cloud', true) }}"
+        VAULT_TOKEN: "{{ lookup('ansible.builtin.env', 'VAULT_TOKEN') }}"
+
+    - name: Check if export file exists
+      stat:
+        path: "{{ export_yaml }}"
+      register: file_check
+
+    - name: Fail if export file does not exist
+      fail:
+        msg: "The required file {{ export_yaml }} does not exist!"
+      when: not file_check.stat.exists

@@ -1,4 +1,4 @@
-- name: Backup Vaultwarden export with restic 
+- name: Backup Vault export with restic 
   hosts: localhost
   gather_facts: true
 
@@ -19,10 +19,9 @@
           vars:
             extra_backup_tags:
               environment: "{{ backup_environment | default('production') }}"
-              vaultwarden_version: "{{ vaultwarden_version }}"
-              bw_cli_version: "{{ bw_cli_version }}"
-            backup_paths:
-              - "{{ export_json }}"
+              vault_version: "{{ vault_version }}"
+              backup_paths:
+                - "{{ export_yaml }}"
 
         - name: Signal success to healthchecks.io
           community.healthchecksio.ping:
