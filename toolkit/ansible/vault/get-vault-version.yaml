@@ -8,7 +8,7 @@
   tasks:
     - name: Get HashiCorp Vault version
       uri:
-        url: "{{ vault_api }/v1/sys/health"
+        url: "{{ vault_api }}/v1/sys/health"
         method: GET
         return_content: yes
         status_code: [200]

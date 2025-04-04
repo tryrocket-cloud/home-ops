@@ -25,8 +25,8 @@
             extra_backup_tags:
               environment: "{{ backup_environment | default('production') }}"
               vault_version: "{{ vault_version }}"
-              backup_paths:
-                - "{{ export_yaml }}"
+            backup_paths:
+              - "{{ export_yaml }}"
 
         - name: Signal success to healthchecks.io
           community.healthchecksio.ping:
