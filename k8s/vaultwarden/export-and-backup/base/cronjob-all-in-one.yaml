@@ -31,7 +31,7 @@ spec:
               volumeMounts:
                 - name: support-volume
                   mountPath: /root/.cache
-                  readOnly: true
+                  readOnly: false
           volumes:
             - name: support-volume
               persistentVolumeClaim:
