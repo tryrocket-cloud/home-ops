@@ -2,17 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  # - vaultwarden-export-and-backup-cronjob.yaml
-
-  # all user creds to use for export and backup
-  - vaultwarden-users-external-secret.yaml
-  
-  # - ionos.com-kopia-external-secret.yaml
-  # - ionos.com-restic-external-secret.yaml
-
-  # - s3-external-secret.yaml
-
-  # targets
-  # - overlays/ionos.com
-  # - overlays/truenas.tryrocket.cloud
-  - base
+  - cronjob-all-in-one.yaml
+  - all-in-one-external-secret.yaml
+  - pvc.yaml
