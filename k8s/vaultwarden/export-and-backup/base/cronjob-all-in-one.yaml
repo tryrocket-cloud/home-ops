@@ -24,6 +24,8 @@ spec:
                   value: /root/.cache/restic/vaultwarden
                 - name: KOPIA_CACHE_DIRECTORY
                   value: /root/.cache/kopia/vaultwarden
+                - name: HOSTNAME
+                  value: tryrocket.cloud
               envFrom:
                 - secretRef:
                     name: all-in-one
