@@ -16,6 +16,11 @@
   tasks:
     - block:
         - include_tasks: ../shared/restic.yaml
+          vars:
+            extra_backup_tags:
+              environment: "{{ backup_environment | default('production') }}"
+              vaultwarden_version: "{{ vaultwarden_version }}"
+              bw_cli_version: "{{ bw_cli_version }}"
 
         - name: Signal success to healthchecks.io
           community.healthchecksio.ping:

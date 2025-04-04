@@ -9,6 +9,8 @@ version:
 	@ansible --version
 	@medusa version
 
+#ANSIBLE_STDOUT_CALLBACK=debug   -vvv
+
 backup-vaultwarden:
 	ansible-playbook /ansible/vaultwarden/backup-vaultwarden-export.yaml
 
