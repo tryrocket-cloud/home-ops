@@ -8,7 +8,7 @@ resources:
   # - ionos.com-kopia-repository-external-secret.yaml
   # - ionos.com-restic-repository-external-secret.yaml
 
-  - vault-token-external-secret.yaml
+  # - vault-token-external-secret.yaml
 
-  - overlays/ionos.com
-  - overlays/truenas.tryrocket.cloud
+  # - overlays/ionos.com
+  # - overlays/truenas.tryrocket.cloud
