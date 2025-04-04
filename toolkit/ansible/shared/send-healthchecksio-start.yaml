@@ -1,0 +1,15 @@
+- name: Send a start signal to healthchecks.io
+  hosts: localhost
+  gather_facts: true
+
+  vars:
+    healthchecksio_check_uuid: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_CHECK_UUID') }}"
+    healthchecksio_api_key: "{{ lookup('ansible.builtin.env', 'HEALTHCHECKSIO_API_KEY') }}"
+
+  tasks:
+    - name: Send a start signal
+      community.healthchecksio.ping:
+        state: present
+        uuid: "{{ healthchecksio_check_uuid }}"
+        signal: start
+        api_key: "{{ healthchecksio_api_key }}"
