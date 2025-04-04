@@ -9,7 +9,7 @@ spec:
   project: default
   sources:
     - repoURL: https://dl.gitea.com/charts/
-      targetRevision: v10.6.0
+      targetRevision: v11.0.1
       chart: gitea
       helm:
         valueFiles:

@@ -1,12 +1,7 @@
 # https://gitea.com/gitea/helm-chart/src/branch/main/values.yaml
 
-image:
-  tag: 1.23.5
-
-deployment:
-  env:
-    - name: TZ
-      value: Europe/Berlin
+strategy:
+  type: 'Recreate'
 
 ingress:
   enabled: true
@@ -24,46 +19,27 @@ ingress:
       hosts:
         - gitea.tryrocket.cloud
 
+deployment:
+  env:
+    - name: TZ
+      value: Europe/Berlin
+
 persistence:
-  enabled: true
-  create: true
-  mount: true
   claimName: gitea-pvc
   size: 4Gi
-  labels:
-    app: gitea
-  accessModes:
-    - ReadWriteOnce
   storageClass: longhorn-retain
-  # volumeName: gitea-pv
-
-redis-cluster:
-  enabled: false
-redis:
-  enabled: false
-postgresql:
-  enabled: false
-postgresql-ha:
-  enabled: false
-
-# image:
-#   rootless: false
-
-strategy:
-  type: 'Recreate'
 
 gitea:
   config:
     APP_NAME: 'Rocket Cloud'
     database:
       DB_TYPE: sqlite3
-    session:
-      PROVIDER: memory
-    cache:
-      ADAPTER: memory
-    queue:
-      TYPE: level
-# extraVolumes:
-#   - name: data
-#     persistentVolumeClaim:
-#       claimName: gitea-pvc
+
+redis-cluster:
+  enabled: false
+redis:
+  enabled: false
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: false
