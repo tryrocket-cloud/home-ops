@@ -17,7 +17,7 @@ spec:
           restartPolicy: Never
           initContainers:
             - name: export-hashicorp-vault
-              image: ghcr.io/jonasvinther/medusa:latest
+              image: ghcr.io/jonasvinther/medusa:latest@sha256:bc4696d3328bed5a0712318d643766e36c87d2ae836d14170d010df6abf0447d
               imagePullPolicy: IfNotPresent
               command: ["./medusa", "export", "$(VAULT_PATH)", "-o", "/export/vault-export.json"]
               env:
@@ -36,7 +36,7 @@ spec:
 
           containers:
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:6151ed41233af96202153ee5f856a1b88133a32ee20b4011c5c77c82bda4490a
               imagePullPolicy: Always
               env:
                 - name: EXPORT_JSON
@@ -85,7 +85,7 @@ spec:
                 # - name: backup-cache-volume
                 #   mountPath: /cache
             - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:6151ed41233af96202153ee5f856a1b88133a32ee20b4011c5c77c82bda4490a
               imagePullPolicy: Always
               env:
                 - name: EXPORT_JSON
