@@ -15,9 +15,7 @@ services:
       description: Self-hosted web UI for your self-hosted services
       link: https://chat.tryrocket.cloud
       icon:
-        name: simple-icons:openwebui
-        wrap: true
-        color: '#FF4F00'
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/open-webui.webp
       status:
         enabled: true
     - title: Answer
