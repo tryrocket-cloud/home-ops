@@ -11,6 +11,15 @@ grafana:
       - secretName: grafana-tryrocket-cloud-production-tls
         hosts:
           - grafana.tryrocket.cloud
+
+grafana:
+  dashboards:
+    default:
+      traefik-dashboard:
+        gnetId: 4475
+        revision: 1
+        datasource: Prometheus
+
 alertmanager:
   ingress:
     enabled: true
