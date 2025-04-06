@@ -43,7 +43,7 @@ metadata:
   name: traefik
   namespace: monitoring
   labels:
-    release: prometheus-stack-kube-prom-prometheus
+    release: prometheus-stack
 spec:
   selector:
     matchLabels:
