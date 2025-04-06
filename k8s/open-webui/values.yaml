@@ -1,11 +1,10 @@
 ingress:
   enabled: true
   class: "traefik"
-  annotations: {}
+  annotations:
     cert-manager.io/cluster-issuer: 'letsencrypt-production'
     traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
   host: chat.tryrocket.cloud
-  additionalHosts: []
   tls: true
   existingSecret: open-webui-tryrocket-cloud-production-tls
 
