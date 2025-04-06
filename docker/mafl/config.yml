@@ -38,20 +38,6 @@ services:
         url: https://raw.githubusercontent.com/thomiceli/opengist/master/public/opengist.svg
       status:
         enabled: true
-    - title: Memos
-      description: Open Source, Self-hosted, Your Notes, Your Way
-      link: https://memos.tryrocket.cloud
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/memos.webp
-      status:
-        enabled: true
-    - title: Linkding
-      description: Self-hosted bookmark manager
-      link: https://linkding.tryrocket.cloud
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/linkding.webp
-      status:
-        enabled: true
     - title: Gitea
       description: Git with a cup of tea!
       link: https://gitea.tryrocket.cloud
@@ -161,6 +147,15 @@ services:
         enabled: true
 
   Infrastructure:
+    - title: Grafana
+      description: Monitoring
+      link: https://grafana.tryrocket.cloud
+      icon:
+        name: simple-icons:grafana
+        wrap: true
+        color: '#F46800'
+      status:
+        enabled: true
     - title: AdGuard Home
       description: Ad Blocker
       link: https://adguardhome.tryrocket.cloud
