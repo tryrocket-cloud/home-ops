@@ -11,6 +11,15 @@ services:
       status:
         enabled: false
   Services:
+    - title: Open WebUI
+      description: Self-hosted web UI for your self-hosted services
+      link: https://chat.tryrocket.cloud
+      icon:
+        name: simple-icons:openwebui
+        wrap: true
+        color: '#FF4F00'
+      status:
+        enabled: true
     - title: Answer
       description: Q&A platform
       link: https://answer.tryrocket.cloud
