@@ -10,7 +10,6 @@ spec:
       chart: kube-prometheus-stack
       targetRevision: 70.4.1
       helm:
-        skipCrds: true
         valueFiles:
           - $values/k8s/prometheus-community/values.yaml
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
