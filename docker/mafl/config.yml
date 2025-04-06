@@ -194,15 +194,7 @@ services:
         color: '#FFEC6E'
       status:
         enabled: true
-    - title: GitHub
-      description: home-ops repository
-      link: https://github.com/tryrocket-cloud/home-ops.git
-      icon:
-        name: simple-icons:github
-        wrap: true
-        color: '#181717'
-      status:
-        enabled: false
+
     - title: MikroTik
       description: CRS326-24G-2S+RM
       link: http://192.168.178.205
@@ -244,7 +236,27 @@ services:
         url: https://longhorn.io/img/logos/longhorn-icon-color.png
       status:
         enabled: true
-
+  
+  Infrastructure (External):
+    - title: Healthchecks.io
+      description: Cron job monitoring
+      link: https://healthchecks.tryrocket.cloud
+      icon:
+        name: simple-icons:healthchecks
+        wrap: true
+        color: '#FF4F00'
+      status:
+        enabled: false
+    - title: GitHub
+      description: home-ops repository
+      link: https://github.com/tryrocket-cloud/home-ops.git
+      icon:
+        name: simple-icons:github
+        wrap: true
+        color: '#181717'
+      status:
+        enabled: false
+        
 tags:
   - name: Home
     color: green
