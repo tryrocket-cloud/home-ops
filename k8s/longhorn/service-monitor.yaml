@@ -1,8 +1,8 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: longhorn
-  namespace: monitoring
+  name: longhorn-metrics
+  namespace: longhorn-system
   labels:
     release: prometheus-stack
 spec:
@@ -14,4 +14,6 @@ spec:
       - longhorn-system
   endpoints:
     - port: manager
+      path: /metrics
       interval: 30s
+
