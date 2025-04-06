@@ -9,7 +9,6 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: traefik
-      app.kubernetes.io/name: traefik-dashboard
   namespaceSelector:
     matchNames:
       - kube-system
