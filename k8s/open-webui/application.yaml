@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-webui
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://helm.openwebui.com/
+      targetRevision: v6.1.0
+      chart: open-webui
+      helm:
+        valueFiles:
+          - $values/k8s/open-webui/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      path: k8s/open-webui
+      targetRevision: main
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: open-webui
+
+  info:
+    - name: 'ArtifactHub'
+      value: 'https://artifacthub.io/packages/helm/open-webui/open-webui'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
