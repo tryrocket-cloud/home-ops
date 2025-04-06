@@ -2,3 +2,10 @@ preUpgradeChecker:
   jobEnabled: false
 defaultSettings:
   supportSPDK: true
+metrics:
+  serviceMonitor:
+    enabled: true
+    additionalLabels:
+      release: prometheus-stack
+    interval: 30s
+    scrapeTimeout: 10s
