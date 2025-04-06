@@ -240,23 +240,22 @@ services:
   Infrastructure (External):
     - title: Healthchecks.io
       description: Cron job monitoring
-      link: https://healthchecks.tryrocket.cloud
+      link: https://healthchecks.io
       icon:
-        name: simple-icons:healthchecks
-        wrap: true
-        color: '#FF4F00'
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/healthchecks.webp
       status:
         enabled: false
     - title: GitHub
       description: home-ops repository
       link: https://github.com/tryrocket-cloud/home-ops.git
+
       icon:
         name: simple-icons:github
         wrap: true
         color: '#181717'
       status:
         enabled: false
-        
+
 tags:
   - name: Home
     color: green
