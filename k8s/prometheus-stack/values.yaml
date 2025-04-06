@@ -11,3 +11,16 @@ grafana:
       - secretName: grafana-tryrocket-cloud-production-tls
         hosts:
           - grafana.tryrocket.cloud
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    hosts:
+      - alertmanager.tryrocket.cloud
+    tls:
+      - secretName: alertmanager-tryrocket-cloud-production-tls
+        hosts:
+          - alertmanager.tryrocket.cloud
