@@ -101,13 +101,6 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/upsnap.webp
       status:
         enabled: true
-    - title: Semaphore
-      description: Modern UI and powerful API for Ansible, Terraform, OpenTofu, PowerShell
-      link: https://semaphoreui.tryrocket.cloud
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/semaphore-ui.webp
-      status:
-        enabled: true
   TrueNAS:
     - title: TrueNAS
       description: Admin Dashboard
