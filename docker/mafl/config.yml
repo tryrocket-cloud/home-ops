@@ -139,7 +139,7 @@ services:
       status:
         enabled: true
 
-  Infrastructure:
+  Infrastructure (k8s):
     - title: Grafana
       description: Monitoring
       link: https://grafana.tryrocket.cloud
@@ -194,23 +194,6 @@ services:
         color: '#FFEC6E'
       status:
         enabled: true
-
-    - title: MikroTik
-      description: CRS326-24G-2S+RM
-      link: http://192.168.178.205
-      icon:
-        name: simple-icons:mikrotik
-        wrap: true
-        color: '#3dbcf3'
-      status:
-        enabled: false
-    - title: Fritz!Box
-      description: 6660 Cable
-      link: http://192.168.178.1
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/fritz.webp
-      status:
-        enabled: false
     - title: ArgoCD
       description: GitOps for Kubernetes
       link: https://argocd.tryrocket.cloud
@@ -236,7 +219,25 @@ services:
         url: https://longhorn.io/img/logos/longhorn-icon-color.png
       status:
         enabled: true
-  
+
+  Infrastructure (Device):
+    - title: Fritz!Box
+      description: 6660 Cable
+      link: http://192.168.178.1
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/fritz.webp
+      status:
+        enabled: false
+    - title: MikroTik
+      description: CRS326-24G-2S+RM
+      link: http://192.168.178.205
+      icon:
+        name: simple-icons:mikrotik
+        wrap: true
+        color: '#3dbcf3'
+      status:
+        enabled: false
+
   Infrastructure (External):
     - title: Healthchecks.io
       description: Cron job monitoring
