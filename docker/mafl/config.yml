@@ -156,6 +156,24 @@ services:
         color: '#F46800'
       status:
         enabled: true
+    - title: Alertmanager
+      description: Alerting
+      link: https://alertmanager.tryrocket.cloud
+      icon:
+        name: simple-icons:alertmanager
+        wrap: true
+        color: '#FF4F00'
+      status:
+        enabled: true
+    - title: Prometheus
+      description: Monitoring
+      link: https://prometheus.tryrocket.cloud
+      icon:
+        name: simple-icons:prometheus
+        wrap: true
+        color: '#E6522C'
+      status:
+        enabled: true
     - title: AdGuard Home
       description: Ad Blocker
       link: https://adguardhome.tryrocket.cloud
