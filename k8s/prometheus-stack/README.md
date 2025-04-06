@@ -1,3 +1,3 @@
-# prometheus-community
+# prometheus-stack
 
-    kubectl apply -f k8s/prometheus-community/application.yaml -n argocd
+    kubectl apply -f k8s/prometheus-stack/application.yaml -n argocd
