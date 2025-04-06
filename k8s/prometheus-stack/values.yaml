@@ -1,0 +1,13 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd,kube-system-basic-auth@kubernetescrd'
+    hosts:
+      - grafana.tryrocket.cloud
+    tls:
+      - secretName: grafana-tryrocket-cloud-production-tls
+        hosts:
+          - grafana.tryrocket.cloud
