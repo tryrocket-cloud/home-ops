@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prometheus-community
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: v70.4.1
+      chart: prometheus-community
+      helm:
+        valueFiles:
+          - $values/k8s/prometheus-community/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      path: k8s/prometheus-community
+      targetRevision: main
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vaultwarden
+
+  info:
+    - name: 'Example:'
+      value: 'https://example.com'
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true
