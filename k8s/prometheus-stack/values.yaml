@@ -24,3 +24,16 @@ alertmanager:
       - secretName: alertmanager-tryrocket-cloud-production-tls
         hosts:
           - alertmanager.tryrocket.cloud
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    hosts:
+      - prometheus.tryrocket.cloud
+    tls:
+      - secretName: prometheus-tryrocket-cloud-production-tls
+        hosts:
+          - prometheus.tryrocket.cloud
