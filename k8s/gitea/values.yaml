@@ -28,6 +28,8 @@ deployment:
       value: Europe/Berlin
     - name: GITEA__oauth2_client__UPDATE_AVATAR
       value: 'true'
+    - name: GITEA__oauth2_client__USERNAME
+      value: preferred_username
 
 persistence:
   claimName: gitea-pvc
