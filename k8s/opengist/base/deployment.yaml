@@ -25,6 +25,9 @@ spec:
               value: Europe/Berlin
             - name: OG_EXTERNAL_URL
               value: https://opengist.tryrocket.cloud
+          envFrom:
+            - secretRef:
+                name: oidc
           ports:
             - containerPort: 6157
             - containerPort: 2222
