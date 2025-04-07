@@ -26,6 +26,8 @@ deployment:
   env:
     - name: TZ
       value: Europe/Berlin
+    - name: UPDATE_AVATAR
+      value: 'true'
 
 persistence:
   claimName: gitea-pvc
