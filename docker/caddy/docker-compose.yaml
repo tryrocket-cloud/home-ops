@@ -7,7 +7,7 @@ services:
       - "443:443"
     volumes:
       - /home/dietpi/portainer/data/compose/7/docker/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /etc/ca.crt:/etc/ca.crt
+      # - /etc/ca.crt:/etc/ca.crt
       - ./data:/data
       - ./config:/config
     environment:
@@ -16,6 +16,7 @@ services:
       - mafl_default
       - semaphoreui_default
       - portainer_default
+      - pocket-id_default
 
 networks:
   mafl_default:
@@ -23,4 +24,6 @@ networks:
   semaphoreui_default:
     external: true
   portainer_default:
+    external: true
+  pocket-id_default:
     external: true
