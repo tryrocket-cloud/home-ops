@@ -2,7 +2,12 @@ services:
   pocket-id:
     image: ghcr.io/pocket-id/pocket-id
     restart: unless-stopped
-    env_file: .env
+    environment:
+      - PUBLIC_APP_URL=https://id.tryrocket.cloud
+      - TRUST_PROXY=true
+      - MAXMIND_LICENSE_KEY=
+      - PUID=1000
+      - PGID=1000
     ports:
       - 3000:80
     volumes:
