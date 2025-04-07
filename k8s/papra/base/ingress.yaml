@@ -20,5 +20,5 @@ spec:
                   name: http
   tls:
     - hosts:
-        - papra.tryrocket.cloud
-      secretName: papra-tryrocket-cloud-production-tls
+        - docs.tryrocket.cloud
+      secretName: docs-tryrocket-cloud-production-tls
