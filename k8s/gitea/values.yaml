@@ -30,6 +30,10 @@ deployment:
       value: 'true'
     - name: GITEA__oauth2_client__USERNAME
       value: preferred_username
+    - name: GITEA__oauth2_client__OPENID_CONNECT_SCOPES
+      value: 'openid profile email'
+    - name: GITEA__oauth2_client__REGISTER_EMAIL_CONFIRM
+      value: 'false'
 
 persistence:
   claimName: gitea-pvc
