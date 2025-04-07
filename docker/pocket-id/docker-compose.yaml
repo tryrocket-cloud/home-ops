@@ -1,7 +1,7 @@
 services:
-  pocket-id:
+  pocketid:
     image: ghcr.io/pocket-id/pocket-id
-    container_name: pocket-id
+    container_name: pocketid
     restart: unless-stopped
     environment:
       - PUBLIC_APP_URL=https://id.tryrocket.cloud
