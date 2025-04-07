@@ -16,7 +16,7 @@ services:
       - mafl_default
       - semaphoreui_default
       - portainer_default
-      - pocketid_default
+      - pocket-id_default
 
 networks:
   mafl_default:
@@ -25,5 +25,5 @@ networks:
     external: true
   portainer_default:
     external: true
-  pocketid_default:
+  pocket-id_default:
     external: true
