@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: papra
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: papra
+  template:
+    metadata:
+      labels:
+        app: papra
+    spec:
+      dnsPolicy: ClusterFirst
+      containers:
+        - name: papra
+          image: ghcr.io/papra-hq/papra:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Europe/Berlin
+
+          ports:
+            - name: http
+              containerPort: 1221
+              protocol: TCP
+          volumeMounts:
+            - name: papra-volume
+              mountPath: /papra
+      volumes:
+        - name: papra-volume
+          persistentVolumeClaim:
+            claimName: papra-pvc
