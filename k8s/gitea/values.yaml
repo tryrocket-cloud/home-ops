@@ -26,6 +26,8 @@ deployment:
   env:
     - name: TZ
       value: Europe/Berlin
+    - name: GITEA__default__APP_NAME
+      value: Rocket Cloud1
     - name: GITEA__server__ROOT_URL
       value: https://gitea.tryrocket.cloud
     - name: GITEA__server__DOMAIN
