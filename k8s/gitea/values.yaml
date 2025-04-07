@@ -26,7 +26,7 @@ deployment:
   env:
     - name: TZ
       value: Europe/Berlin
-    - name: UPDATE_AVATAR
+    - name: GITEA__oauth2_client__UPDATE_AVATAR
       value: 'true'
 
 persistence:
