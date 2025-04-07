@@ -21,11 +21,15 @@ ingress:
     - secretName: gitea-tryrocket-cloud-production-tls
       hosts:
         - gitea.tryrocket.cloud
-
+# https://docs.gitea.com/administration/config-cheat-sheet
 deployment:
   env:
     - name: TZ
       value: Europe/Berlin
+    - name: GITEA__server__ROOT_URL
+      value: https://gitea.tryrocket.cloud
+    - name: GITEA__server__DOMAIN
+      value: gitea.tryrocket.cloud
     - name: GITEA__oauth2_client__UPDATE_AVATAR
       value: 'true'
     - name: GITEA__oauth2_client__USERNAME
