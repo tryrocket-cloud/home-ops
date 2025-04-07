@@ -108,6 +108,13 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/upsnap.webp
       status:
         enabled: true
+    - title: Pocket ID
+      description: Self-hosted identity provider
+      link: https://id.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/pocket-id.webp
+      status:
+        enabled: true
   TrueNAS:
     - title: TrueNAS
       description: Admin Dashboard
