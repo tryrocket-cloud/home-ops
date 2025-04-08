@@ -20,7 +20,7 @@ spec:
       ref: values
 
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-      path: k8s/gitea
+      path: k8s/vaultwarden
       targetRevision: main
 
   destination:
