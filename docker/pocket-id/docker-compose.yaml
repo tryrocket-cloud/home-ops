@@ -9,6 +9,14 @@ services:
       - MAXMIND_LICENSE_KEY=
       - PUID=1000
       - PGID=1000
+      - SMTP_HOS=$SMTP_HOST
+      - SMTP_PORT=$SMTP_PORT
+      - SMTP_FROM=$SMTP_FROM
+      - SMTP_USER=$SMTP_USER
+      - SMTP_PASSWORD=$SMTP_PASSWORD
+      - SMTP_TLS=$SMTP_TLS
+      - SMTP_SKIP_CERT_VERIFY=$SMTP_SKIP_CERT_VERIFY
+      - EMAIL_ONE_TIME_ACCESS_ENABLED=${EMAIL_ONE_TIME_ACCESS_ENABLED}
     volumes:
       - "./data:/app/backend/data"
     healthcheck:
