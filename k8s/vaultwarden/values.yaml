@@ -36,8 +36,10 @@ adminToken:
 
 smtp:
   existingSecret: smtp
-  smtp.username.existingSecretKey: SMTP_USERNAME
-  smtp.password.existingSecretKey: SMTP_PASSWORD
+  username:
+    existingSecretKey: SMTP_USERNAME
+  password:
+    existingSecretKey: SMTP_PASSWORD
   host: mail.smtp2go.com
   security: "starttls"
   port: 2525
