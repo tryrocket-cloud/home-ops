@@ -24,7 +24,7 @@ spec:
             - name: TZ
               value: Europe/Berlin
             - name: CLIENT_BASE_URL
-              value: https://papra.tryrocket.cloud
+              value: https://docs.tryrocket.cloud
           ports:
             - name: http
               containerPort: 1221
