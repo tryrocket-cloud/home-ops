@@ -23,6 +23,8 @@ spec:
           env:
             - name: TZ
               value: Europe/Berlin
+            - name: OG_LOG_LEVEL
+              value: info
             - name: OG_EXTERNAL_URL
               value: https://opengist.tryrocket.cloud
           envFrom:
