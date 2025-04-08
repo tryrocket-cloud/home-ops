@@ -40,6 +40,24 @@ deployment:
       value: 'openid profile email'
     - name: GITEA__oauth2_client__REGISTER_EMAIL_CONFIRM
       value: 'false'
+    - name: GITEA__mailer__ENABLED
+      value: "true"
+    - name: GITEA__mailer__FROM
+      value: "gitea@tryrocket.cloud"
+    - name: GITEA__mailer__HOST
+      value: "mail.smtp2go.com:587"
+    - name: GITEA__mailer__IS_TLS_ENABLED
+      value: "true"
+    - name: GITEA__mailer__USER
+      valueFrom:
+        secretKeyRef:
+          name: smtp
+          key: SMTP_USERNAME
+    - name: GITEA__mailer__PASSWD
+      valueFrom:
+        secretKeyRef:
+          name: smtp
+          key: SMTP_PASSWORD
 
 persistence:
   claimName: gitea-pvc
