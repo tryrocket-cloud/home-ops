@@ -44,7 +44,7 @@ deployment:
       value: "true"
     - name: GITEA__mailer__FROM
       value: "gitea@tryrocket.cloud"
-    - name: GITEA__mailer__HOST
+    - name: GITEA__mailer__SMTP_ADDR
       value: "mail.smtp2go.com:587"
     - name: GITEA__mailer__IS_TLS_ENABLED
       value: "true"
