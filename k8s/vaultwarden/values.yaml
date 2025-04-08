@@ -33,3 +33,11 @@ ingress:
 adminToken:
   existingSecret: admin-token
   existingSecretKey: ADMIN_TOKEN
+
+smtp:
+  existingSecret: smtp
+  host: mail.smtp2go.com
+  security: "starttls"
+  port: 2525
+  from: vaultwarden@tryrocket.cloud
+  fromName: Vaultwarden
