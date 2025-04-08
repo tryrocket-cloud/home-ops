@@ -9,6 +9,7 @@ services:
       - MAXMIND_LICENSE_KEY=
       - PUID=1000
       - PGID=1000
+      - PUBLIC_UI_CONFIG_DISABLED=true
       - SMTP_HOST=$SMTP_HOST
       - SMTP_PORT=$SMTP_PORT
       - SMTP_FROM=$SMTP_FROM
