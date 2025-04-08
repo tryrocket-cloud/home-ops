@@ -263,11 +263,19 @@ services:
     - title: GitHub
       description: home-ops repository
       link: https://github.com/tryrocket-cloud/home-ops.git
-
       icon:
         name: simple-icons:github
         wrap: true
         color: '#181717'
+      status:
+        enabled: false
+    - title: smtp2go
+      description: SMTP relay
+      link: https://smtp2go.com
+      icon:
+        name: simple-icons:mailchimp
+        wrap: true
+        color: '#FFE01B'
       status:
         enabled: false
 
