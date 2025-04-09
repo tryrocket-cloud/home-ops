@@ -60,6 +60,8 @@ deployment:
         secretKeyRef:
           name: smtp
           key: SMTP_PASSWORD
+    - name: GITEA__server__DISABLE_SSH
+      value: "true"
 
 persistence:
   claimName: gitea-pvc
@@ -73,7 +75,7 @@ gitea:
       DB_TYPE: sqlite3
     server:
       START_SSH_SERVER: false
-      
+
   metrics:
     enabled: true
     serviceMonitor:
