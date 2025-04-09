@@ -27,6 +27,8 @@ spec:
               value: info
             - name: OG_EXTERNAL_URL
               value: https://opengist.tryrocket.cloud
+            - name: OG_SSH_GIT_ENABLED
+              value: "false"
           envFrom:
             - secretRef:
                 name: oidc
