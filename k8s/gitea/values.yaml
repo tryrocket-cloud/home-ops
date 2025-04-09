@@ -71,7 +71,9 @@ gitea:
     APP_NAME: 'Rocket Cloud'
     database:
       DB_TYPE: sqlite3
-
+    server:
+      START_SSH_SERVER: false
+      
   metrics:
     enabled: true
     serviceMonitor:
