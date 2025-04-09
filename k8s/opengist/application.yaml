@@ -8,20 +8,20 @@ metadata:
 spec:
   project: default
   sources:
-    # - repoURL: https://helm.opengist.io
-    #   targetRevision: v0.1.0
-    #   chart: opengist
-    #   helm:
-    #     valueFiles:
-    #       - $values/k8s/opengist/values.yaml
-
-    # - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-    #   targetRevision: main
-    #   ref: values
+    - repoURL: https://helm.opengist.io
+      targetRevision: v0.1.0
+      chart: opengist
+      helm:
+        valueFiles:
+          - $values/k8s/opengist/values.yaml
 
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
       targetRevision: main
-      path: 'k8s/opengist/overlays/production'
+      ref: values
+
+    # - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+    #   targetRevision: main
+    #   path: 'k8s/opengist/overlays/production'
 
   destination:
     server: https://kubernetes.default.svc

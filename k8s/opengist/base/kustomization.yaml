@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
+  - service-git-http.yaml
   - ingress.yaml
   - namespace.yaml
