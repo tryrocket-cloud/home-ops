@@ -5,8 +5,8 @@ namespace: opengist
 
 resources:
   - ../../base
-  # - pv.yaml
-  # - pvc.yaml
+  - pv.yaml
+  - pvc.yaml
   - oidc-external-secret.yaml
 
 # https://github.com/thomiceli/opengist/releases
