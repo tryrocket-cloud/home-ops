@@ -5,7 +5,7 @@ namespace: opengist
 
 resources:
   - ../../base
-  # - pv.yaml
+  - pv.yaml
   # - pvc.yaml
   - oidc-external-secret.yaml
 
