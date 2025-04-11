@@ -11,6 +11,13 @@ grafana:
       - secretName: grafana-tryrocket-cloud-production-tls
         hosts:
           - grafana.tryrocket.cloud
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: "longhorn-retain"
+    accessModes:
+      - ReadWriteOnce
+    size: 20Gi
 
 alertmanager:
   ingress:
