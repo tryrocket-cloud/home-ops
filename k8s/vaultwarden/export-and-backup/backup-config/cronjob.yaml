@@ -15,7 +15,7 @@ spec:
           restartPolicy: Never
           initContainers:
             - name: get-vaultwarden-version
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:c7ac5e2ff05bd720d86cfab9001d9006e7f88968f49e816fe72c81234a2d4dd3
               command: ["/bin/sh", "-c"]
               args:
                 - |
@@ -46,7 +46,7 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
             - name: export-vaultwarden-user-vault
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:c7ac5e2ff05bd720d86cfab9001d9006e7f88968f49e816fe72c81234a2d4dd3
               imagePullPolicy: Always
               env:
                 - name: NODE_NO_WARNINGS

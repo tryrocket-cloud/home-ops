@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:trixie-slim@sha256:24e4758c39b9531adc0a6a54ef3e59d90a4ead24bd23273a73a6711c4375385b
 
 RUN apt-get update && \
     apt-get install -y wget ca-certificates tar just restic ansible unzip && \
