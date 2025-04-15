@@ -200,7 +200,6 @@ services:
   backup:
     container_name: immich-backup
     image: ghcr.io/tryrocket-cloud/home-ops:immich
-    restart: no
     user: "3008:3008"
 
 volumes:
