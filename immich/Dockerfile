@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.21.3
 
 RUN apk add --no-cache bash curl restic docker dcron
 
@@ -11,5 +11,4 @@ RUN chmod +x /usr/local/bin/backup.sh
 COPY crontab.txt /etc/crontabs/root
 RUN touch /var/log/cron.log
 
-# Set the default entrypoint to your backup script.
 CMD ["crond", "-f"]
