@@ -201,6 +201,15 @@ services:
     container_name: immich-backup
     image: ghcr.io/tryrocket-cloud/home-ops:immich
     platform: linux/amd64
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      HC_UUID: ${HC_UUID}
+      HC_API_KEY: ${HC_API_KEY}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
+      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
+      TZ: Europe/Berlin
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /mnt/tank/apps/immich/data/immich-data/upload:/app/immich-data:ro
