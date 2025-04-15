@@ -199,10 +199,7 @@ services:
 
   backup:
     container_name: immich-backup
-    cap_drop:
-      - ALL
     image: ghcr.io/tryrocket-cloud/home-ops:immich
-    platform: linux/amd64
     restart: no
     user: "3008:3008"
 
