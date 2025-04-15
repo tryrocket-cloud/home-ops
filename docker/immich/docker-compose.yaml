@@ -103,11 +103,6 @@ services:
         volume:
           nocopy: false
 
-  backup:
-    container_name: immich-backup
-    image: ghcr.io/tryrocket-cloud/home-ops:immich
-    platform: linux/amd64
-
   server:
     container_name: immich-server
     cap_drop:
@@ -202,6 +197,13 @@ services:
         target: /usr/src/app/upload/upload
         type: bind
 
-
+  backup:
+    container_name: immich-backup
+    image: ghcr.io/tryrocket-cloud/home-ops:immich
+    platform: linux/amd64
+    user: "3008:3008"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      
 volumes:
   redis-data: {}
