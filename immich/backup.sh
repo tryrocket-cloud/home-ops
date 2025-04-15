@@ -14,7 +14,7 @@ HC_START="${HC_BASE}/start"
 HC_FAIL="${HC_BASE}/fail"
 HC_REPORT_SUCCESS="${HC_BASE}/0"
 
-DUMP_FILE="db_dump.sql.gz"
+DUMP_FILE="/app/db_dump.sql.gz"
 
 send_ping() {
     local url="$1"
@@ -44,8 +44,8 @@ docker stop immich-pgvecto-1
 
 pwd
 
-#restic backup immich-data "${DUMP_FILE}" \
-    --cache-dir .cache/restic \
+#restic backup /app/immich-data "${DUMP_FILE}" \
+    --cache-dir /app/.cache/restic \
     --host "${HOSTNAME}" \
     --tag environment=production
 #restic check --read-data-subset 1/10
