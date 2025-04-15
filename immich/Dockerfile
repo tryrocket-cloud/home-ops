@@ -1,10 +1,9 @@
-FROM debian:stable-slim
+FROM debian:trixie-slim
 
 RUN apt-get update && \
     apt-get install -y \
       bash \
       curl \
-      restic \
       docker.io \
       cron \
       vim \
