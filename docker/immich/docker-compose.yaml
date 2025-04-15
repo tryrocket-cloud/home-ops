@@ -201,9 +201,6 @@ services:
     container_name: immich-backup
     image: ghcr.io/tryrocket-cloud/home-ops:immich
     platform: linux/amd64
-    cap_add:
-      - SYS_ADMIN
-    privileged: true
     # volumes:
     #   - /var/run/docker.sock:/var/run/docker.sock
       
