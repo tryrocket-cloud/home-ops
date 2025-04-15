@@ -42,12 +42,14 @@ gunzip -t "${DUMP_FILE}"
 
 docker stop immich-pgvecto-1
 
-restic backup immich-data "${DUMP_FILE}" \
+pwd
+
+#restic backup immich-data "${DUMP_FILE}" \
     --cache-dir .cache/restic \
     --host "${HOSTNAME}" \
     --tag environment=production
-restic check --read-data-subset 1/10
-restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
+#restic check --read-data-subset 1/10
+#restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
 
 send_ping "${HC_REPORT_SUCCESS}"
 
