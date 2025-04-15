@@ -202,6 +202,7 @@ services:
     image: ghcr.io/tryrocket-cloud/home-ops:immich
     platform: linux/amd64
     environment:
+      HOSTNAME: truenas.tryrocket.cloud
       POSTGRES_USER: ${POSTGRES_USER}
       HC_UUID: ${HC_UUID}
       HC_API_KEY: ${HC_API_KEY}
