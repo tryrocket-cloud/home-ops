@@ -197,9 +197,9 @@ services:
         target: /usr/src/app/upload/upload
         type: bind
 
-  backup:
-    container_name: immich-backup
-    image: ghcr.io/tryrocket-cloud/home-ops:immich
+  # backup:
+  #   container_name: immich-backup
+  #   image: ghcr.io/tryrocket-cloud/home-ops:immich
 
 volumes:
   redis-data: {}
