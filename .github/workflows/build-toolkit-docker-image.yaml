@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'toolkit/Dockerfile'
+      - 'immich/Dockerfile'
   workflow_dispatch:
   schedule:
     - cron: '30 23 * * 6'
@@ -36,3 +37,10 @@ jobs:
           context: toolkit/
           push: true
           tags: ghcr.io/${{ github.repository }}:toolkit
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: immich/
+          push: true
+          tags: ghcr.io/${{ github.repository }}:immich
