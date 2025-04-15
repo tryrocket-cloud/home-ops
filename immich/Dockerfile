@@ -7,6 +7,7 @@ RUN apt-get update && \
       restic \
       docker.io \
       cron \
+      vim \
       python3 && \
     rm -rf /var/lib/apt/lists/*
 
