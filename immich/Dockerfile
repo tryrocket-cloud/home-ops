@@ -1,13 +1,15 @@
 FROM alpine:latest
 
-RUN apk add --no-cache bash curl restic docker
+RUN apk add --no-cache bash curl restic docker dcron
 
 WORKDIR /app
 
-COPY backup.sh /app/backup.sh
+COPY backup.sh /usr/local/bin/backup.sh
 
-# Make sure the backup script is executable.
-RUN chmod +x /app/backup.sh
+RUN chmod +x /usr/local/bin/backup.sh
+
+COPY crontab.txt /etc/crontabs/root
+RUN touch /var/log/cron.log
 
 # Set the default entrypoint to your backup script.
-ENTRYPOINT ["/app/backup.sh"]
+CMD ["crond", "-f"]
