@@ -213,7 +213,7 @@ services:
       TZ: Europe/Berlin
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/tank/apps/immich/data/immich-data:/app/immich-data:ro
+      - /mnt/tank/apps/immich/data:/app/immich-data:ro
       
 volumes:
   redis-data: {}
