@@ -4,8 +4,7 @@ RUN apk add --no-cache bash curl restic docker dcron
 
 WORKDIR /app
 
-COPY backup.sh /usr/local/bin/backup.sh
-
+COPY backup1.sh /usr/local/bin/backup.sh
 RUN chmod +x /usr/local/bin/backup.sh
 
 COPY crontab.txt /etc/crontabs/root
