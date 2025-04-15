@@ -10,4 +10,5 @@ RUN chmod +x /usr/local/bin/backup.sh
 COPY crontab.txt /etc/crontabs/root
 RUN touch /var/log/cron.log
 
-CMD ["crond", "-f"]
+# CMD ["crond", "-f"]
+CMD ["echo", "-f"]
