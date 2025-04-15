@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache bash curl restic
+RUN apk add --no-cache bash curl restic docker
 
 WORKDIR /app
 
