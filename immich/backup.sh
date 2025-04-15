@@ -3,10 +3,11 @@ set -e
 
 echo "Starting backup procedure..."
 
-docker stop immich
+docker ps
+# docker stop immich
 
-sleep 60
+# sleep 60
 
-docker start immich
+# docker start immich
 
 echo "Backup completed successfully."
