@@ -16,9 +16,6 @@ WORKDIR /app
 COPY backup.sh /usr/local/bin/backup.sh
 RUN chmod +x /usr/local/bin/backup.sh
 
-COPY backup1.sh /usr/local/bin/backup1.sh
-RUN chmod +x /usr/local/bin/backup1.sh
-
 COPY crontab.txt /etc/cron.d/backup
 RUN chmod 0644 /etc/cron.d/backup && \
     touch /var/log/cron.log
