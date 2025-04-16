@@ -45,9 +45,9 @@ docker stop immich-pgvecto-1
 pwd
 
 #restic backup /app/immich-data "${DUMP_FILE}" \
-    --cache-dir /app/.cache/restic \
-    --host "${HOSTNAME}" \
-    --tag environment=production
+    # --cache-dir /app/.cache/restic \
+    # --host "${HOSTNAME}" \
+    # --tag environment=production
 #restic check --read-data-subset 1/10
 #restic forget --keep-daily 30 --keep-monthly 3 --keep-yearly 1 --prune
 
