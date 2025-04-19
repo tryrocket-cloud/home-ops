@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:6bb017d0f610aea5ff2855682a4db9610ebbc4c727bd10ac410a45ac06627174
               imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_EXPORT_JSON
