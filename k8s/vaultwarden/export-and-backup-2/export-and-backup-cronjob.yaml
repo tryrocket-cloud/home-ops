@@ -37,16 +37,11 @@ spec:
 
                   apk add --no-cache curl jq
 
-                  ping -c1 -W2 "${VAULTWARDEN_HOST}" >/dev/null
+                  curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config \
+                    | jq -r '.version // error("no version in API response")' \
+                    | > /export/vaultwarden.env
 
-                  version=$(curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config | jq -r '.version // empty')
-                  if [ -z "$version" ]; then
-                    echo "ERROR: no .version in API response" >&2
-                    exit 1
-                  fi
-
-                  echo "VAULTWARDEN_VERSION=${version}" > /export/vaultwarden.env
-                  echo "Fetched Vaultwarden version: $version"
+                  cat /export/vaultwarden.env
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
