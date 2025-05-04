@@ -76,19 +76,19 @@ spec:
                   bw --version
 
                   bw config server https://${VAULTWARDEN_HOST}
-                  export BW_SESSION=$(bw login --raw ${VAULTWARDEN_USERNAME} ${VAULTWARDEN_PASSWORD})
+                  export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
                   bw sync
                   bw export \
                     --format encrypted_json \
-                    --password ${VAULTWARDEN_PASSWORD} \
-                    --output /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json
+                    --password "${VAULTWARDEN_PASSWORD}" \
+                    --output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-encrypted_json.json
                   bw export \
                     --format json \
-                    --output /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
+                    --output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-plain.json
                   bw logout
 
-                  [ -s /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-                  [ -s /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
@@ -111,28 +111,25 @@ spec:
 
                   apk add --no-cache curl tar gzip ca-certificates
 
-                  # curl -fsSL https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz \
-                  #   | tar xz -C /usr/local/bin --strip-components=1 age-v${AGE_VERSION}-linux-amd64/age
-
-                  curl -fsSL https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+                  curl -fsSL "https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz" \
                   | tar xz -C /usr/local/bin --strip-components=1
                   chmod +x /usr/local/bin/age /usr/local/bin/age-keygen
 
                   age --version
 
-                  PLAIN=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
-                  CIPHER=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
+                  PLAIN=/export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-plain.json
+                  CIPHER=/export/vaultwarden-export-"${VAULTWARDEN_USER_ID}".age
 
-                  [ -s ${PLAIN} ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
+                  [ -s "${PLAIN}" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
 
-                  age --recipient ${AGE_RECIPIENT }--output ${CIPHER} ${PLAIN}
+                  age --recipient "${AGE_RECIPIENT}" --output "${CIPHER}" "${PLAIN}"
 
-                  [ -s ${CIPHER} ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
+                  [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
 
-                  cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
-                  cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
+                  cat "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
+                  cat "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
 
-                  if head -c18 /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age | grep -q '^age-encryption\.org/v1'; then
+                  if head -c18 "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age" | grep -q '^age-encryption\.org/v1'; then
                     echo "Looks like valid age format."
                   else
                     echo "Not a valid age file."
