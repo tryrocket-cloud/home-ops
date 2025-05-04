@@ -140,9 +140,12 @@ spec:
                 - |
                   set -euxo pipefail
 
+                  env
+
                   aws s3api put-public-access-block \
                     --bucket $BUCKET \
                     --public-access-block-configuration \
+                    --endpoint-url $AWS_ENDPOINT_URL \
                       BlockPublicAcls=false,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
             - name: configure-s3-public-access-block
@@ -154,7 +157,7 @@ spec:
               args:
                 - |
                   set -euxo pipefail
-                  
+
                   aws s3api put-public-access-block \
                     --bucket $BUCKET \
                     --public-access-block-configuration \
