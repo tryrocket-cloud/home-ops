@@ -40,7 +40,50 @@ spec:
                   curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config \
                     | jq -r '.version // error("no version in API response")' \
                     > /export/vaultwarden.env
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
 
+            - name: export-vaultwarden-vault-for-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9
+              image: alpine
+              env:
+                - name: VAULTWARDEN_HOST
+                  value: vaultwarden.tryrocket.cloud
+                - name: VAULTWARDEN_EXPORT_JSON
+                  value: /export/vaultwarden-export-33843b46-db47-43f3-a28b-adc0ec3e8bc9.json
+                - name: EXPORT_PASSWORD
+                  value: test
+                - name: BW_CLI_VERSION
+                  value: 2025.4.0
+              envFrom:
+                - secretRef:
+                    name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret
+                - secretRef:
+                    name: EXPORT_PASSWORD
+              command: ["/bin/sh", "-c"]
+              args:
+                - |
+                  set -euxo pipefail
+
+                  apk add --no-cache unzip
+
+                  # install bw
+                  curl -sSL --fail https://github.com/bitwarden/cli/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
+                  unzip -q /tmp/bw.zip -d /usr/local/bin
+                  chmod +x /usr/local/bin/bw
+                  rm /tmp/bw.zip
+                  bw --version
+
+                  # export 
+                  bw config server "https://${VAULTWARDEN_HOST}"
+                  export BW_SESSION=$(bw login --raw "$username" "$password")
+                  bw sync
+                  bw export --format encrypted_json --password "$EXPORT_PASSWORD" --output "$VAULTWARDEN_EXPORT_JSON"
+                  bw logout
+
+                  [ -s "$VAULTWARDEN_EXPORT_JSON" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+
+                  cat $VAULTWARDEN_EXPORT_JSON
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
