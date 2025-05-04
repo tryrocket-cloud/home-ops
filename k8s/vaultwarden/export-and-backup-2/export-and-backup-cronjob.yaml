@@ -117,8 +117,8 @@ spec:
 
                   age --version
 
-                  PLAIN=/export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-plain.json
-                  CIPHER=/export/vaultwarden-export-"${VAULTWARDEN_USER_ID}".age
+                  PLAIN="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
+                  CIPHER="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
 
                   [ -s "${PLAIN}" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
 
