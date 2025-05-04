@@ -45,45 +45,57 @@ spec:
                   mountPath: /export
 
             - name: export-vaultwarden-33843b46-db47-43f3-a28b-adc0ec3e8bc9
-              image: debian
+              image: debian:bookworm-slim
+              imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_EXPORT_JSON
                   value: /export/vaultwarden-export-33843b46-db47-43f3-a28b-adc0ec3e8bc9.json
-                - name: EXPORT_PASSWORD # TODO
+                - name: EXPORT_PASSWORD      # TODO: change to your real passphrase
                   value: test
                 - name: BW_CLI_VERSION
                   value: 2025.4.0
               envFrom:
                 - secretRef:
                     name: all-in-one
-              command: ["/bin/sh", "-c"]
+              command: ["/bin/sh","-c"]
               args:
                 - |
                   set -euxo pipefail
 
-                  apk add --no-cache unzip
+                  # install dependencies
+                  apt-get update
+                  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+                    curl unzip ca-certificates \
+                  && rm -rf /var/lib/apt/lists/*
 
-                  # install bw
-                  curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
-                  unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
+                  # download & install bw
+                  DOWNLOAD_URL="https://github.com/bitwarden/cli/releases/download/v${BW_CLI_VERSION}/bw-linux-64bit.zip"
+                  curl -fsSL "$DOWNLOAD_URL" -o /tmp/bw.zip
+                  unzip -qo /tmp/bw.zip -d /usr/local/bin
                   chmod +x /usr/local/bin/bw
-                  
+                  rm /tmp/bw.zip
+
+                  # verify install
                   which bw
-                  /usr/local/bin/bw --version
                   bw --version
 
-                  # export 
+                  # perform the encrypted export
                   bw config server "https://${VAULTWARDEN_HOST}"
                   export BW_SESSION=$(bw login --raw "$username" "$password")
                   bw sync
-                  bw export --format encrypted_json --password "$EXPORT_PASSWORD" --output "$VAULTWARDEN_EXPORT_JSON"
+                  bw export \
+                    --format encrypted_json \
+                    --password "$EXPORT_PASSWORD" \
+                    --output "$VAULTWARDEN_EXPORT_JSON"
                   bw logout
 
-                  [ -s "$VAULTWARDEN_EXPORT_JSON" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  # ensure we got a file
+                  [ -s "$VAULTWARDEN_EXPORT_JSON" ] \
+                    || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
 
-                  cat $VAULTWARDEN_EXPORT_JSON
+                  cat "$VAULTWARDEN_EXPORT_JSON"
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
