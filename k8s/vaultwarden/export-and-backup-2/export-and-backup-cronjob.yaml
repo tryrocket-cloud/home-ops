@@ -21,7 +21,7 @@ spec:
               image: alpine:3.16
               env:
                 - name: VAULTWARDEN_HOST
-                  value: https://vaultwarden.tryrocket.cloud
+                  value: vaultwarden.tryrocket.cloud
               command:
                 - sh
                 - -c
@@ -30,7 +30,7 @@ spec:
 
                   ping -c1 -W2 "${VAULTWARDEN_HOST}" >/dev/null
 
-                  version=$(curl -sSf -m10 "${VAULTWARDEN_HOST}"/api/config | jq -r '.version // empty')
+                  version=$(curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config | jq -r '.version // empty')
                   if [ -z "$version" ]; then
                     echo "ERROR: no .version in API response" >&2
                     exit 1
