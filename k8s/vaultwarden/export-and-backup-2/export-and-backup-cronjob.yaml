@@ -46,7 +46,6 @@ spec:
 
             - name: export-2967ac9f-f0e5-4881-8be5-9d08371a167a
               image: debian:bookworm-slim
-              imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
@@ -130,6 +129,32 @@ spec:
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
+
+            - name: configure-s3-public-access
+              image: amazon/aws-cli:2
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  aws s3api put-public-access-block \
+                    --bucket $BUCKET \
+                    --public-access-block-configuration \
+                      BlockPublicAcls=false,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+
+            - name: configure-s3-public-access-block
+              image: amazon/aws-cli:2
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  aws s3api put-public-access-block \
+                    --bucket $BUCKET \
+                    --public-access-block-configuration \
+                      BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
 
           containers:
