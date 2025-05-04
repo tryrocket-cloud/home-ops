@@ -130,6 +130,15 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
+            - name: get-my-ipv6
+              image: curlimages/curl:8.4.0
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -euxo pipefail
+
+                  curl -6 -s https://api6.ipify.org
+
             - name: configure-s3-public-access
               image: public.ecr.aws/aws-cli/aws-cli:latest
               envFrom:
