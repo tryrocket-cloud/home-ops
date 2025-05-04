@@ -136,8 +136,9 @@ spec:
               args:
                 - |
                   set -euxo pipefail
-
-                  curl -6 -s https://api6.ipify.org
+                  IPV6=$(curl -6 -s https://api6.ipify.org)
+                  [ -n "$IPV6" ] || { echo "Failed to get IPv6" >&2; exit 1; }
+                  echo "EXTERNAL_IPV6=$IPV6"
 
             - name: configure-s3-public-access
               image: public.ecr.aws/aws-cli/aws-cli:latest
