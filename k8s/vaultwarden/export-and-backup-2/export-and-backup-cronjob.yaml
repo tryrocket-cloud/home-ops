@@ -67,9 +67,11 @@ spec:
 
                   # install bw
                   curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
-                  unzip -q /tmp/bw.zip -d /usr/local/bin
+                  unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
-                  rm /tmp/bw.zip
+                  
+                  which bw
+                  /usr/local/bin/bw --version
                   bw --version
 
                   # export 
