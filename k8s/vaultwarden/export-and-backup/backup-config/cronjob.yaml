@@ -19,6 +19,59 @@ spec:
               command: ["/bin/sh", "-c"]
               args:
                 - |
+                  #!/usr/bin/env bash
+                  set -euo pipefail
+
+                  # Configuration
+                  HOST="vaultwarden.tryrocket.cloud"
+                  API_URL="https://${HOST}/api/config"
+                  OUTPUT_FILE="/export/vaultwarden.env"
+
+                  # Helpers
+                  log()   { echo >&2 "[INFO]  $*"; }
+                  error() { echo >&2 "[ERROR] $*"; exit 1; }
+
+                  check_host() {
+                    log "Checking DNS and connectivity for ${HOST}..."
+                    if ! ping -c1 -W2 "${HOST}" &>/dev/null; then
+                      error "Host ${HOST} unreachable via ICMP"
+                    fi
+                    if ! nslookup "${HOST}" &>/dev/null; then
+                      error "DNS lookup failed for ${HOST}"
+                    fi
+                  }
+
+                  fetch_version() {
+                    log "Fetching config from ${API_URL}..."
+                    # -sS silent but show errors, -f fail on HTTP >=400, -m10 timeout
+                    version=$(curl -sSf -m10 "${API_URL}" \
+                      | jq -r '.version // empty') || error "Failed to retrieve or parse JSON"
+                    
+                    [[ -n "$version" ]] || error "No .version field in response"
+                    echo "$version"
+                  }
+
+                  write_env() {
+                    local ver="$1"
+                    log "Writing version to ${OUTPUT_FILE}..."
+                    {
+                      echo "VAULTWARDEN_VERSION=${ver}"
+                    } > "${OUTPUT_FILE}.tmp"
+                    mv "${OUTPUT_FILE}.tmp" "${OUTPUT_FILE}"
+                    chmod 644 "${OUTPUT_FILE}"
+                  }
+
+                  main() {
+                    check_host
+                    ver=$(fetch_version)
+                    write_env "$ver"
+                    log "Vaultwarden version is ${ver}"
+                  }
+
+                  main "$@"
+
+
+
                   ping -c 1 vaultwarden.tryrocket.cloud
                   nslookup vaultwarden.tryrocket.cloud
 

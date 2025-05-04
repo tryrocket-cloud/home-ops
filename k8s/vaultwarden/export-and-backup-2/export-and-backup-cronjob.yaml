@@ -15,25 +15,41 @@ spec:
       template:
         spec:
           restartPolicy: Never
-          containers:
-            - name: test-restic-backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
-              imagePullPolicy: Always
+
+          initContainers:
+            - name: get-vaultwarden-version
+              image: alpine:3.16
               env:
-                - name: RESTIC_CACHE_DIR
-                  value: /root/.cache/restic/vaultwarden
-                - name: KOPIA_CACHE_DIRECTORY
-                  value: /root/.cache/kopia/vaultwarden
-                - name: HOSTNAME
-                  value: tryrocket.cloud
-              envFrom:
-                - secretRef:
-                    name: all-in-one
-              args: ["backup-vaultwarden"]
-              volumeMounts:
-                - name: support-volume
-                  mountPath: /root/.cache
-                  readOnly: false
+                - name: VAULTWARDEN_HOST
+                  value: https://vaultwarden.tryrocket.cloud
+              command:
+                - sh
+                - -c
+                - |
+                  set -euo pipefail
+
+                  ping -c1 -W2 "${VAULTWARDEN_HOST}" >/dev/null
+
+                  version=$(curl -sSf -m10 "${VAULTWARDEN_HOST}"/api/config | jq -r '.version // empty')
+                  if [ -z "$version" ]; then
+                    echo "ERROR: no .version in API response" >&2
+                    exit 1
+                  fi
+
+                  echo "VAULTWARDEN_VERSION=${version}" > /export/vaultwarden.env
+                  echo "Fetched Vaultwarden version: $version"
+
+          containers:
+            - name: test
+              image: alpine:3.16
+              env:
+                - name: VAULTWARDEN_HOST
+                  value: https://vaultwarden.tryrocket.cloud
+              command:
+                - sh
+                - -c
+                - |
+                  echo test
           volumes:
             - name: support-volume
               persistentVolumeClaim:
