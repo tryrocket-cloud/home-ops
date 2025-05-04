@@ -71,12 +71,10 @@ spec:
                   && rm -rf /var/lib/apt/lists/*
 
                   # download & install bw
-                  DOWNLOAD_URL="https://github.com/bitwarden/cli/releases/download/v${BW_CLI_VERSION}/bw-linux-64bit.zip"
-                  curl -fsSL "$DOWNLOAD_URL" -o /tmp/bw.zip
-                  unzip -qo /tmp/bw.zip -d /usr/local/bin
+                  curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
+                  unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
-                  rm /tmp/bw.zip
-
+                  
                   # verify install
                   which bw
                   bw --version
