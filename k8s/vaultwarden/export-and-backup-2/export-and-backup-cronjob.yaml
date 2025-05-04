@@ -28,7 +28,7 @@ spec:
                 - |
                   set -euo pipefail
 
-                  apk add --no-cache curl jq bind-tools
+                  # apk add --no-cache curl jq bind-tools
 
                   ping -c1 -W2 "${VAULTWARDEN_HOST}" >/dev/null
 
