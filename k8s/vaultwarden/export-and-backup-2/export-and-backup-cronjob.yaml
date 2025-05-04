@@ -131,26 +131,30 @@ spec:
                   mountPath: /export
 
             - name: configure-s3-public-access
-              image: amazon/aws-cli:2
+              image: public.ecr.aws/aws-cli/aws-cli:latest
               envFrom:
                 - secretRef:
                     name: all-in-one
               command: ["/bin/sh","-c"]
               args:
                 - |
+                  set -euxo pipefail
+
                   aws s3api put-public-access-block \
                     --bucket $BUCKET \
                     --public-access-block-configuration \
                       BlockPublicAcls=false,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
             - name: configure-s3-public-access-block
-              image: amazon/aws-cli:2
+              image: public.ecr.aws/aws-cli/aws-cli:latest
               envFrom:
                 - secretRef:
                     name: all-in-one
               command: ["/bin/sh","-c"]
               args:
                 - |
+                  set -euxo pipefail
+                  
                   aws s3api put-public-access-block \
                     --bucket $BUCKET \
                     --public-access-block-configuration \
