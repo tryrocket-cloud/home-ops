@@ -88,9 +88,6 @@ spec:
 
                   [ -s "/export/vaultwarden-export-"$VAULTWARDEN_USER_ID"-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
                   [ -s "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-
-                  cat "/export/vaultwarden-export-"$VAULTWARDEN_USER_ID"-encrypted_json.json"
-                  cat "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json"
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
