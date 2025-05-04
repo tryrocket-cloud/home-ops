@@ -126,9 +126,9 @@ spec:
 
                   [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
 
-                  head -c18 "${CIPHER}"
+                  cat "${CIPHER}"
 
-                  if head -c18 "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age" | grep -q '^age-encryption\.org/v1'; then
+                  if head -c18 "${CIPHER}" | grep -q '^age-encryption\.org/v1'; then
                     echo "Looks like valid age format."
                   else
                     echo "Not a valid age file."
