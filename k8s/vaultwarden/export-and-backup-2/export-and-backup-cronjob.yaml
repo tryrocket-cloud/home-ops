@@ -126,14 +126,7 @@ spec:
 
                   [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
 
-                  cat "${CIPHER}"
-
-                  if head -c18 "${CIPHER}" | grep -q '^age-encryption\.org/v1'; then
-                    echo "Looks like valid age format."
-                  else
-                    echo "Not a valid age file."
-                    exit 1
-                  fi
+                  head -c21 "${CIPHER}" | grep -q '^age-encryption\.org/v2'
 
               volumeMounts:
                 - name: vaultwarden-export-volume
