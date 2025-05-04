@@ -132,6 +132,13 @@ spec:
                   cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
                   cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
 
+                  if head -c18 /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age | grep -q '^age-encryption\.org/v1'; then
+                    echo "Looks like valid age format."
+                  else
+                    echo "Not a valid age file."
+                    exit 1
+                  fi
+
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
