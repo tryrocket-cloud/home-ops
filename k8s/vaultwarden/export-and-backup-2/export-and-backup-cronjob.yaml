@@ -44,14 +44,14 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
-            - name: export-vaultwarden-33843b46-db47-43f3-a28b-adc0ec3e8bc9
+            - name: export-vaultwarden-2967ac9f-f0e5-4881-8be5-9d08371a167a
               image: debian:bookworm-slim
               imagePullPolicy: Always
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_USER_ID
-                  value: 33843b46-db47-43f3-a28b-adc0ec3e8bc9
+                  value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
                 - name: VAULTWARDEN_EXPORT_JSON
                   value: 
                 - name: BW_CLI_VERSION
