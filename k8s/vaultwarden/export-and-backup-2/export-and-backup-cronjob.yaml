@@ -122,6 +122,8 @@ spec:
 
                   [ -s "${PLAIN}" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
 
+                  cat "${PLAIN}"
+
                   age --recipient "${AGE_RECIPIENT}" --output "${CIPHER}" "${PLAIN}"
 
                   [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
