@@ -18,7 +18,7 @@ spec:
 
           initContainers:
             - name: get-vaultwarden-version
-              image: alpine:3.18
+              image: alpine/curl
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
