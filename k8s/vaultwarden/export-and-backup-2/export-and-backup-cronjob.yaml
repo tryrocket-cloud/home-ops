@@ -84,7 +84,7 @@ spec:
                   bw export \
                     --format json \
                     --password "$VAULTWARDEN_PASSWORD" \
-                    --output "/export/vaultwarden-export-$VAULTWARDEN_USER_ID-encrypted_age.json"
+                    --output "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json"
                   bw logout
 
                   [ -s "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
