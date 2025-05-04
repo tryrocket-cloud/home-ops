@@ -16,6 +16,10 @@ spec:
         spec:
           restartPolicy: Never
 
+          volumes:
+            - name: vaultwarden-export-volume
+              emptyDir: {}
+
           initContainers:
             - name: get-vaultwarden-version
               image: alpine/curl
@@ -40,6 +44,9 @@ spec:
 
                   echo "VAULTWARDEN_VERSION=${version}" > /export/vaultwarden.env
                   echo "Fetched Vaultwarden version: $version"
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
 
           containers:
             - name: test
