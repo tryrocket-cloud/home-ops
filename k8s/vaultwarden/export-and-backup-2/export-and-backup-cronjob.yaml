@@ -51,15 +51,13 @@ spec:
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_EXPORT_JSON
                   value: /export/vaultwarden-export-33843b46-db47-43f3-a28b-adc0ec3e8bc9.json
-                - name: EXPORT_PASSWORD
+                - name: EXPORT_PASSWORD # TODO
                   value: test
                 - name: BW_CLI_VERSION
                   value: 2025.4.0
               envFrom:
                 - secretRef:
                     name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret
-                - secretRef:
-                    name: EXPORT_PASSWORD
               command: ["/bin/sh", "-c"]
               args:
                 - |
