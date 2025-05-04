@@ -45,7 +45,7 @@ spec:
                   mountPath: /export
 
             - name: export-vaultwarden-33843b46-db47-43f3-a28b-adc0ec3e8bc9
-              image: alpine
+              image: alpine/curl
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
