@@ -140,6 +140,7 @@ spec:
                   echo '$(status.podIPs)' > /etc/podinfo/podIPs
                   # extract just IPv6 lines
                   grep ':' /etc/podinfo/podIPs > /etc/podinfo/ipv6.list || true
+                  cat /etc/podinfo/ipv6.list
 
             - name: get-my-ipv6
               image: curlimages/curl:8.4.0
