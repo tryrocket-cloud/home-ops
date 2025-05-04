@@ -7,3 +7,4 @@ resources:
   - data-vaultwarden-0-pvc.yaml
 
   - export-and-backup/
+  - export-and-backup-2/
