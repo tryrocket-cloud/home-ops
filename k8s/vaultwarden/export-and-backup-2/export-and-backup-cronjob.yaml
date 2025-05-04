@@ -111,8 +111,12 @@ spec:
 
                   apk add --no-cache curl tar gzip ca-certificates
 
+                  # curl -fsSL https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+                  #   | tar xz -C /usr/local/bin --strip-components=1 age-v${AGE_VERSION}-linux-amd64/age
+
                   curl -fsSL https://github.com/FiloSottile/age/releases/latest/download/age-v${AGE_VERSION}-linux-amd64.tar.gz \
-                    | tar xz -C /usr/local/bin --strip-components=1 age-v${AGE_VERSION}-linux-amd64/age
+                  | tar xz -C /usr/local/bin --strip-components=1
+                  chmod +x /usr/local/bin/age /usr/local/bin/age-keygen
 
                   age --version
 
