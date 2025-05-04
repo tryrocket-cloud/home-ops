@@ -2,6 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - all-in-one-cronjob.yaml
-  - all-in-one-external-secret.yaml
-  - pvc.yaml
+  - export-and-backup-cronjob.yaml
+  # - all-in-one-external-secret.yaml
+  # - backup-support-pvc.yaml
