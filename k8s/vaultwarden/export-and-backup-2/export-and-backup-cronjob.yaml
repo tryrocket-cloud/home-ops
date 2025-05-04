@@ -130,18 +130,6 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
-            - name: dump-pod-ips
-              image: busybox:1.36
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  # write all assigned IPs to a file
-                  mkdir -p /etc/podinfo
-                  echo '$(status.podIPs)' > /etc/podinfo/podIPs
-                  # extract just IPv6 lines
-                  grep ':' /etc/podinfo/podIPs > /etc/podinfo/ipv6.list || true
-                  cat /etc/podinfo/ipv6.list
-
             - name: get-my-ipv6
               image: curlimages/curl:8.4.0
               command: ["/bin/sh","-c"]
