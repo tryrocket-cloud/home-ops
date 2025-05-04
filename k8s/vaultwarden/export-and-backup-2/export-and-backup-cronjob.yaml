@@ -107,7 +107,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euxo pipefail
+                  set -euo pipefail
 
                   apk add --no-cache curl tar gzip ca-certificates
 
@@ -125,7 +125,6 @@ spec:
                   age --recipient "${AGE_RECIPIENT}" --output "${CIPHER}" "${PLAIN}"
 
                   [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
-
                   head -c21 "${CIPHER}" | grep -q '^age-encryption\.org/v1'
 
               volumeMounts:
