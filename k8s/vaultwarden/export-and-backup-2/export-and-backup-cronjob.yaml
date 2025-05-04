@@ -83,7 +83,6 @@ spec:
                     --output "/export/vaultwarden-export-"$VAULTWARDEN_USER_ID"-encrypted_json.json"
                   bw export \
                     --format json \
-                    --password "$VAULTWARDEN_PASSWORD" \
                     --output "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json"
                   bw logout
 
