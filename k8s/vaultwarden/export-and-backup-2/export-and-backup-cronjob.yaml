@@ -37,7 +37,7 @@ spec:
 
                   apk add --no-cache curl jq
 
-                  curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config \
+                  curl -sSf -m10 https://${VAULTWARDEN_HOST}/api/config \
                     | jq -r '.version // error("no version in API response")' \
                     > /export/vaultwarden.env
               volumeMounts:
@@ -69,28 +69,69 @@ spec:
                     curl unzip ca-certificates \
                   && rm -rf /var/lib/apt/lists/*
 
-                  curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
+                  curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-${BW_CLI_VERSION}.zip -o /tmp/bw.zip
                   unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
+                  
                   bw --version
 
-                  bw config server "https://${VAULTWARDEN_HOST}"
-                  export BW_SESSION=$(bw login --raw "$VAULTWARDEN_USERNAME" "$VAULTWARDEN_PASSWORD")
+                  bw config server https://${VAULTWARDEN_HOST}
+                  export BW_SESSION=$(bw login --raw ${VAULTWARDEN_USERNAME} ${VAULTWARDEN_PASSWORD})
                   bw sync
                   bw export \
                     --format encrypted_json \
-                    --password "$VAULTWARDEN_PASSWORD" \
-                    --output "/export/vaultwarden-export-"$VAULTWARDEN_USER_ID"-encrypted_json.json"
+                    --password ${VAULTWARDEN_PASSWORD} \
+                    --output /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json
                   bw export \
                     --format json \
-                    --output "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json"
+                    --output /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
                   bw logout
 
-                  [ -s "/export/vaultwarden-export-"$VAULTWARDEN_USER_ID"-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-                  [ -s "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  [ -s /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  [ -s /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
+
+            - name: encrypt-with-age
+              image: alpine:3.18
+              env:
+                - name: VAULTWARDEN_USER_ID
+                  value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
+                - name: AGE_VERSION
+                  value: 1.2.1
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -euxo pipefail
+
+                  apk add --no-cache curl tar gzip ca-certificates
+
+                  curl -fsSL https://github.com/FiloSottile/age/releases/download/age-v${AGE_VERSION}-linux-amd64.tar.gz \
+                    | tar xz -C /usr/local/bin --strip-components=1 age-v${AGE_VERSION}-linux-amd64/age
+
+                  age --version
+
+                  PLAIN=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
+                  CIPHER=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
+
+                  [ -s "$PLAIN" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
+
+                  age --recipient "$AGE_RECIPIENT" --output "$CIPHER" "$PLAIN"
+
+                  [ -s "$CIPHERT" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
+
+                  cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
+                  cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
+
+              volumeMounts:
+                - name: vaultwarden-export-volume
+                  mountPath: /export
+
 
           containers:
             - name: test
