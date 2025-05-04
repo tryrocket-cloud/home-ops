@@ -19,6 +19,9 @@ spec:
           volumes:
             - name: vaultwarden-export-volume
               emptyDir: {}
+            - name: support-volume
+              persistentVolumeClaim:
+                claimName: vaultwarden-support-pvc
 
           initContainers:
             - name: get-vaultwarden-version
@@ -59,7 +62,4 @@ spec:
                 - -c
                 - |
                   echo test
-          volumes:
-            - name: support-volume
-              persistentVolumeClaim:
-                claimName: vaultwarden-support-pvc
+
