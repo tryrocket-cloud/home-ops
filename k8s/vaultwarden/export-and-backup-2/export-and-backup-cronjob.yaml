@@ -40,8 +40,6 @@ spec:
                   curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config \
                     | jq -r '.version // error("no version in API response")' \
                     > /export/vaultwarden.env
-
-                  cat /export/vaultwarden.env
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
