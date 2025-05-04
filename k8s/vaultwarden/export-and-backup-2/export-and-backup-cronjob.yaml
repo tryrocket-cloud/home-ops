@@ -38,8 +38,7 @@ spec:
                   apk add --no-cache curl jq
 
                   curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config \
-                    | jq -r '.version // error("no version in API response")' \
-                    | > /export/vaultwarden.env
+                    | jq -r '.version // error("no version in API response")' > /export/vaultwarden.env
 
                   cat /export/vaultwarden.env
               volumeMounts:
