@@ -57,7 +57,7 @@ spec:
                   value: 2025.4.0
               envFrom:
                 - secretRef:
-                    name: vaultwarden-user-33843b46-db47-43f3-a28b-adc0ec3e8bc9-secret
+                    name: all-in-one
               command: ["/bin/sh", "-c"]
               args:
                 - |
