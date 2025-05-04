@@ -44,7 +44,7 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
-            - name: export-vaultwarden-2967ac9f-f0e5-4881-8be5-9d08371a167a
+            - name: export-2967ac9f-f0e5-4881-8be5-9d08371a167a
               image: debian:bookworm-slim
               imagePullPolicy: Always
               env:
