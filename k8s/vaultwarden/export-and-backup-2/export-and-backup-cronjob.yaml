@@ -28,6 +28,8 @@ spec:
                 - |
                   set -euo pipefail
 
+                  apk add --no-cache curl jq bind-tools
+
                   ping -c1 -W2 "${VAULTWARDEN_HOST}" >/dev/null
 
                   version=$(curl -sSf -m10 https://"${VAULTWARDEN_HOST}"/api/config | jq -r '.version // empty')
