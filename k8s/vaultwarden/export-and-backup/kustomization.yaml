@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - all-in-one-cronjob.yaml
-  - all-in-one-external-secret.yaml
+  # - all-in-one-external-secret.yaml
   - pvc.yaml

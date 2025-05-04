@@ -123,11 +123,11 @@ spec:
                   PLAIN=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
                   CIPHER=/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
 
-                  [ -s "$PLAIN" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
+                  [ -s ${PLAIN} ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
 
-                  age --recipient "$AGE_RECIPIENT" --output "$CIPHER" "$PLAIN"
+                  age --recipient ${AGE_RECIPIENT }--output ${CIPHER} ${PLAIN}
 
-                  [ -s "$CIPHERT" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
+                  [ -s ${CIPHER} ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
 
                   cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json
                   cat /export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age
