@@ -62,7 +62,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euxo pipefail
+                  set -euxo
 
                   # install dependencies
                   apt-get update
