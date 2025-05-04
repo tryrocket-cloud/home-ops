@@ -79,7 +79,7 @@ spec:
                   bw sync
                   bw export \
                     --format encrypted_json \
-                    --password "$EXPORT_PASSWORD" \
+                    --password "$VAULTWARDEN_PASSWORD" \
                     --output "/export/vaultwarden-export-$VAULTWARDEN_USER_ID.json"
                   bw logout
 
