@@ -62,24 +62,18 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euxo
+                  set -euo
 
-                  # install dependencies
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
                     curl unzip ca-certificates \
                   && rm -rf /var/lib/apt/lists/*
 
-                  # download & install bw
                   curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-"$BW_CLI_VERSION".zip -o /tmp/bw.zip
                   unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
-                  
-                  # verify install
-                  which bw
                   bw --version
 
-                  # perform the encrypted export
                   bw config server "https://${VAULTWARDEN_HOST}"
                   export BW_SESSION=$(bw login --raw "$VAULTWARDEN_USERNAME" "$VAULTWARDEN_PASSWORD")
                   bw sync
@@ -89,11 +83,7 @@ spec:
                     --output "$VAULTWARDEN_EXPORT_JSON"
                   bw logout
 
-                  # ensure we got a file
-                  [ -s "$VAULTWARDEN_EXPORT_JSON" ] \
-                    || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-
-                  cat "$VAULTWARDEN_EXPORT_JSON"
+                  [ -s "$VAULTWARDEN_EXPORT_JSON" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
