@@ -81,7 +81,7 @@ spec:
 
                   # perform the encrypted export
                   bw config server "https://${VAULTWARDEN_HOST}"
-                  export BW_SESSION=$(bw login --raw "$username" "$password")
+                  export BW_SESSION=$(bw login --raw "$VAULTWARDEN_USERNAME" "$VAULTWARDEN_PASSWORD")
                   bw sync
                   bw export \
                     --format encrypted_json \
