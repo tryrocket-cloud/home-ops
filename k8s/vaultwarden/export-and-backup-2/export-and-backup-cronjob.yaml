@@ -168,7 +168,7 @@ spec:
 
                   aws s3api put-public-access-block \
                     --bucket "${BUCKET}" \
-                    --endpoint-url "${AWS_ENDPOINT_URL}"
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --public-access-block-configuration file:///public-access-block-restic.json
 
               envFrom:
@@ -199,7 +199,7 @@ spec:
 
                   aws s3api put-public-access-block \
                     --bucket "${BUCKET}" \
-                    --endpoint-url "${AWS_ENDPOINT_URL}"
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --public-access-block-configuration file:///public-access-block-deny-all.json
 
               envFrom:
