@@ -203,8 +203,6 @@ spec:
                 - |
                   set -euox pipefail
 
-                  env
-
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
 
