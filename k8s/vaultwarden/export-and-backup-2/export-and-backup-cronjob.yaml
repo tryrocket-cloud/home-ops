@@ -149,7 +149,7 @@ spec:
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --policy file://restic-policy.json
+                    --policy file:///restic-policy.json
               envFrom:
                 - secretRef:
                     name: all-in-one
