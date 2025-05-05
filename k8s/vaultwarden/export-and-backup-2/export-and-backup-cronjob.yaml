@@ -192,7 +192,7 @@ spec:
               image: restic/restic:0.18.0
               envFrom:
                 - secretRef:
-                    name: all-in-one
+                    name: restic
               env:
                 - name: RESTIC_CACHE_DIR
                   value: /cache/ionos.com/vaultwarden/restic
@@ -201,12 +201,10 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euxo pipefail
+                  set -eu pipefail
 
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
-
-                  env
 
                   restic backup \
                     --host $HOSTNAME \
