@@ -147,7 +147,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euo
+                  set -eu
 
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
@@ -168,7 +168,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euo
+                  set -eu
 
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
