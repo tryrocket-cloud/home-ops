@@ -61,9 +61,12 @@ spec:
 
                   apk add --no-cache curl jq
 
-                  echo "export VAULTWARDEN_VERSION=$(curl -sSf -m10 https://${VAULTWARDEN_HOST}/api/config \
-                    | jq -r '.version // error(\"no version in API response\")')" 
-                    >> /export/vaultwarden.env
+                  VW_VERSION=$(
+                    curl -sSf -m10 "https://${VAULTWARDEN_HOST}/api/config" \
+                      | jq -r '.version // error("no version in API response")'
+                  )
+
+                  echo "export VAULTWARDEN_VERSION=${VW_VERSION}" >> /export/vaultwarden.env
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
