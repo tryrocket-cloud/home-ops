@@ -24,7 +24,7 @@ spec:
                 claimName: vaultwarden-support-pvc
             - name: restic-policy
               secret:
-                secretName: restic-policy
+                secretName: all-in-one
                 items:
                   - key: policy-restic.json
                     path: policy-restic.json
