@@ -192,16 +192,15 @@ spec:
                 - |
                   set -eu
 
-                  aws s3api put-bucket-policy \
-                    --bucket "${BUCKET}" \
-                    --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --policy file:///deny-all-policy.json
-
                   aws s3api put-public-access-block \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --public-access-block-configuration file:///public-access-block-deny-all.json
 
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy file:///deny-all-policy.json
               envFrom:
                 - secretRef:
                     name: all-in-one
