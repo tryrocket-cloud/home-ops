@@ -141,15 +141,15 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euo pipefail
+                  set -euo
 
-                  ls -la /
-                  ls -la /restic-policy.json
+                  env
 
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --policy file:///restic-policy.json
+
               envFrom:
                 - secretRef:
                     name: all-in-one
