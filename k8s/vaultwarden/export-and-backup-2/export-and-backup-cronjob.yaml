@@ -208,7 +208,7 @@ spec:
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
 
-                  restic backup \
+                  restic --verbose=2 backup \
                     --host $HOSTNAME \
                     --tag restic_version:$RESTIC_VERSION \
                     --tag bw_cli_version:$BW_CLI_VERSION \
