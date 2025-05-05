@@ -48,6 +48,17 @@ spec:
                     path: public-access-block-deny-all.json
 
           initContainers:
+            - name: healthcheck-start
+              image: curlimages/curl
+              envFrom:
+                - secretRef:
+                    name: healthchecksio
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -eu pipefail
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/start
+
             - name: get-vaultwarden-version
               image: alpine/curl
               env:
@@ -201,7 +212,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euox pipefail
+                  set -eu
 
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
@@ -223,6 +234,17 @@ spec:
                   readOnly: false
                 - name: vaultwarden-export-volume
                   mountPath: /export
+
+            - name: healthcheck-ping
+              image: curlimages/curl
+              envFrom:
+                - secretRef:
+                    name: healthchecksio
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -eu pipefail
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
 
             - name: configure-s3-access-block
               image: public.ecr.aws/aws-cli/aws-cli:latest
