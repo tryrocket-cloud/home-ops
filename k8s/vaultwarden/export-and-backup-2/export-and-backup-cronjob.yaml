@@ -189,7 +189,7 @@ spec:
                   readOnly: true
 
             - name: restic
-              image: restic/restic:0.17.3
+              image: restic/restic:0.18.0
               envFrom:
                 - secretRef:
                     name: restic
