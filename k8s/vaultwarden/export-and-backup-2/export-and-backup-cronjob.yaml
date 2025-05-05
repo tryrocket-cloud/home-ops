@@ -61,9 +61,9 @@ spec:
 
                   apk add --no-cache curl jq
 
-                  curl -sSf -m10 https://${VAULTWARDEN_HOST}/api/config \
-                    | jq -r '.version // error("no version in API response")' \
-                    > /export/vaultwarden.env
+                  echo "export VAULTWARDEN_VERSION=$(curl -sSf -m10 https://${VAULTWARDEN_HOST}/api/config \
+                    | jq -r '.version // error(\"no version in API response\")')" \
+                    >> /export/vaultwarden.env
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
@@ -96,7 +96,7 @@ spec:
                   unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
                   
-                  bw --version
+                  echo "export BW_CLI_VERSION=$(bw --version)" >> /export/vaultwarden.env
 
                   bw config server https://${VAULTWARDEN_HOST}
                   export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
@@ -138,7 +138,7 @@ spec:
                   | tar xz -C /usr/local/bin --strip-components=1
                   chmod +x /usr/local/bin/age /usr/local/bin/age-keygen
 
-                  age --version
+                  echo "export AGE_VERSION=$(age --version)" >> /export/vaultwarden.env
 
                   PLAIN="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
                   CIPHER="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
@@ -150,6 +150,7 @@ spec:
                   [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
                   head -c21 "${CIPHER}" | grep -q '^age-encryption\.org/v1'
 
+                  rm "${PLAIN}"
               volumeMounts:
                 - name: vaultwarden-export-volume
                   mountPath: /export
@@ -184,6 +185,41 @@ spec:
                   subPath: public-access-block-restic.json
                   readOnly: true
 
+            - name: restic
+              image: restic/restic:0.18.0
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              env:
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vaultwarden/restic
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -euxo pipefail
+
+                  source /export/vaultwarden.env
+                  export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
+
+                  restic backup \
+                    --host $HOSTNAME \
+                    --tag restic_version:$RESTIC_VERSION \
+                    --tag bw_cli_version:$BW_CLI_VERSION \
+                    --tag vaultwarden_version:$VAULTWARDEN_VERSION \
+                    --tag age_version:$AGE_VERSION \
+                    --tag environment:production \
+                    /export
+                  restic check --read-data
+                  restic forget --keep-last 180 --prune
+
+              volumeMounts:
+                - name: support-volume
+                  mountPath: /cache
+                  readOnly: false
+                - name: vaultwarden-export-volume
+                  mountPath: /export
 
             - name: configure-s3-access-block
               image: public.ecr.aws/aws-cli/aws-cli:latest
