@@ -146,8 +146,8 @@ spec:
               args:
                 - |
                   set -euxo pipefail
-                  IPV6=$(curl -6 -s https://api6.ipify.org)
-                  [ -n "$IPV6" ] || { echo "Failed to get IPv6" >&2; exit 1; }
+                  IPV6=$(curl -s https://api.ipify.org)
+                  [ -n "$IPV6" ] || { echo "Failed to get IP" >&2; exit 1; }
                   echo "EXTERNAL_IPV6=$IPV6"
 
             - name: configure-s3-public-access
