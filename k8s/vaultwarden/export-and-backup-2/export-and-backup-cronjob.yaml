@@ -22,6 +22,12 @@ spec:
             - name: support-volume
               persistentVolumeClaim:
                 claimName: vaultwarden-support-pvc
+            - name: restic-policy
+              secret:
+                secretName: restic-policy
+                items:
+                  - key: policy-restic.json
+                    path: policy-restic.json
 
           initContainers:
             - name: get-vaultwarden-version
@@ -130,59 +136,25 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
-            - name: dump-ipv6-addrs
-              image: busybox:1.36
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  echo "=== All IPs ==="
-                  ip -o addr show dev eth0
-                  echo "--- IPv6 only ---"
-                  ip -o -6 addr show dev eth0
-
-            - name: get-my-ipv6
-              image: curlimages/curl:8.4.0
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  set -euxo pipefail
-                  IPV6=$(curl -s https://api.ipify.org)
-                  [ -n "$IPV6" ] || { echo "Failed to get IP" >&2; exit 1; }
-                  echo "EXTERNAL_IPV6=$IPV6"
-
-            - name: configure-s3-public-access
+            - name: configure-s3-restic-policy
               image: public.ecr.aws/aws-cli/aws-cli:latest
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -euo pipefail
+
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy file://restic-policy.json
               envFrom:
                 - secretRef:
                     name: all-in-one
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  set -euxo pipefail
-
-                  env
-
-                  aws s3api put-public-access-block \
-                    --bucket $BUCKET \
-                    --public-access-block-configuration \
-                    --endpoint-url $AWS_ENDPOINT_URL \
-                      BlockPublicAcls=false,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
-
-            - name: configure-s3-public-access-block
-              image: public.ecr.aws/aws-cli/aws-cli:latest
-              envFrom:
-                - secretRef:
-                    name: all-in-one
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  set -euxo pipefail
-
-                  aws s3api put-public-access-block \
-                    --bucket $BUCKET \
-                    --public-access-block-configuration \
-                      BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
-
+              volumeMounts:
+                - name: restic-policy
+                  mountPath: /policy-restic.json
+                  subPath: policy-restic.json
+                  readOnly: true
 
           containers:
             - name: test
