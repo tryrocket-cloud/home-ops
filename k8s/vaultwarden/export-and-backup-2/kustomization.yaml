@@ -5,5 +5,6 @@ resources:
   - export-and-backup-cronjob.yaml
   - all-in-one-external-secret.yaml
   - restic-external-secret.yaml
+  - healthckecksio-external-secret.yaml
   # - backup-support-pvc.yaml
 
