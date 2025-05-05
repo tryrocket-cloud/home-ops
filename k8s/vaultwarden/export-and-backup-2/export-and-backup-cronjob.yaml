@@ -143,11 +143,8 @@ spec:
                 - |
                   set -euo pipefail
 
-
                   ls -la /
-                  ls -la restic-policy.json
                   ls -la /restic-policy.json
-
 
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
