@@ -88,9 +88,7 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -euox
-
-                  env
+                  set -euo
 
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -203,7 +201,9 @@ spec:
               command: ["/bin/sh","-c"]
               args:
                 - |
-                  set -eu pipefail
+                  set -euox pipefail
+
+                  env
 
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
