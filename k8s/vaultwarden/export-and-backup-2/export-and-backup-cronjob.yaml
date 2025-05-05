@@ -28,6 +28,12 @@ spec:
                 items:
                   - key: restic-policy.json
                     path: restic-policy.json
+            - name: deny-all-policy
+              secret:
+                secretName: all-in-one
+                items:
+                  - key: deny-all-policy.json
+                    path: deny-all-policy.json
 
           initContainers:
             - name: get-vaultwarden-version
@@ -143,8 +149,6 @@ spec:
                 - |
                   set -euo
 
-                  env
-
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
@@ -157,6 +161,27 @@ spec:
                 - name: restic-policy
                   mountPath: /restic-policy.json
                   subPath: restic-policy.json
+                  readOnly: true
+
+            - name: configure-s3-deny-all-policy
+              image: public.ecr.aws/aws-cli/aws-cli:latest
+              command: ["/bin/sh","-c"]
+              args:
+                - |
+                  set -euo
+
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy file:///deny-all-policy.json
+
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              volumeMounts:
+                - name: deny-all-policy
+                  mountPath: /deny-all-policy.json
+                  subPath: deny-all-policy.json
                   readOnly: true
 
           containers:
