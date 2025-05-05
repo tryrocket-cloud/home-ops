@@ -34,6 +34,18 @@ spec:
                 items:
                   - key: deny-all-policy.json
                     path: deny-all-policy.json
+            - name: public-access-block-restic
+              secret:
+                secretName: all-in-one
+                items:
+                  - key: public-access-block-restic.json
+                    path: public-access-block-restic.json
+            - name: public-access-block-deny-all
+              secret:
+                secretName: all-in-one
+                items:
+                  - key: public-access-block-deny-all.json
+                    path: public-access-block-deny-all.json
 
           initContainers:
             - name: get-vaultwarden-version
@@ -142,7 +154,7 @@ spec:
                 - name: vaultwarden-export-volume
                   mountPath: /export
 
-            - name: configure-s3-restic-policy
+            - name: configure-s3-access-allowance
               image: public.ecr.aws/aws-cli/aws-cli:latest
               command: ["/bin/sh","-c"]
               args:
@@ -154,6 +166,11 @@ spec:
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --policy file:///restic-policy.json
 
+                  aws s3api put-public-access-block \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}"
+                    --public-access-block-configuration file:///public-access-block-restic.json
+
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -162,8 +179,13 @@ spec:
                   mountPath: /restic-policy.json
                   subPath: restic-policy.json
                   readOnly: true
+                - name: public-access-block-restic
+                  mountPath: /public-access-block-restic.json
+                  subPath: public-access-block-restic.json
+                  readOnly: true
 
-            - name: configure-s3-deny-all-policy
+
+            - name: configure-s3-access-block
               image: public.ecr.aws/aws-cli/aws-cli:latest
               command: ["/bin/sh","-c"]
               args:
@@ -175,6 +197,11 @@ spec:
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --policy file:///deny-all-policy.json
 
+                  aws s3api put-public-access-block \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}"
+                    --public-access-block-configuration file:///public-access-block-deny-all.json
+
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -182,6 +209,10 @@ spec:
                 - name: deny-all-policy
                   mountPath: /deny-all-policy.json
                   subPath: deny-all-policy.json
+                  readOnly: true
+                - name: public-access-block-deny-all
+                  mountPath: /public-access-block-deny-all.json
+                  subPath: public-access-block-deny-all.json
                   readOnly: true
 
           containers:
