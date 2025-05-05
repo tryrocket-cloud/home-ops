@@ -158,8 +158,8 @@ spec:
                     name: all-in-one
               volumeMounts:
                 - name: restic-policy
-                  mountPath: /policy-restic.json
-                  subPath: policy-restic.json
+                  mountPath: /restic-policy.json
+                  subPath: restic-policy.json
                   readOnly: true
 
           containers:
