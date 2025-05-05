@@ -26,8 +26,8 @@ spec:
               secret:
                 secretName: all-in-one
                 items:
-                  - key: policy-restic.json
-                    path: policy-restic.json
+                  - key: restic-policy.json
+                    path: restic-policy.json
 
           initContainers:
             - name: get-vaultwarden-version
