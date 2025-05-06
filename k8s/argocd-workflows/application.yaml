@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-workflows
+  namespace: argocd
+  labels:
+    app.kubernetes.io/managed-by: argocd
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/argoproj/argo-helm.git
+      targetRevision: main
+      path: charts/argo-workflows
+      helm:
+        valueFiles:
+          - $values/k8s/argocd-workflows/values.yaml
+
+    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd-workflows
+
+  info:
+    - name: Homepage
+      value: https://argoproj.github.io/workflows/
+    - name: GitHub
+      value: https://github.com/argoproj/argo-helm
+    - name: Helm Chart
+      value: https://github.com/argoproj/argo-helm/tree/main/charts/argo-workflows
+    - name: Helm Chart values
+      value: https://github.com/argoproj/argo-helm/blob/main/charts/argo-workflows/values.yaml
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true

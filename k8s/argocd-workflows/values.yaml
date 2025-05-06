@@ -1,0 +1,15 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-workflows/values.yaml
+
+server:
+  ingress:
+    enabled: true
+    annotations: 
+      cert-manager.io/cluster-issuer: 'letsencrypt-production'
+      traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+    ingressClassName: traefik
+    hosts:
+      - argocd-workflows.tryrocket.cloud
+    tls: []
+      - secretName: argocd-workflows-tryrocket-cloud-production-tls
+        hosts:
+          - argocd-workflows.tryrocket.cloud
