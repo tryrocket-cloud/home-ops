@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-workflows
+  name: argo-workflows
   namespace: argocd
   labels:
     app.kubernetes.io/managed-by: argocd
@@ -13,7 +13,7 @@ spec:
       path: charts/argo-workflows
       helm:
         valueFiles:
-          - $values/k8s/argocd-workflows/values.yaml
+          - $values/k8s/argo-workflows/values.yaml
 
     - repoURL: https://github.com/tryrocket-cloud/home-ops.git
       targetRevision: main
@@ -21,7 +21,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd-workflows
+    namespace: argo-workflows
 
   info:
     - name: Homepage

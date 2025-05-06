@@ -10,8 +10,8 @@ server:
       traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
     ingressClassName: traefik
     hosts:
-      - argocd-workflows.tryrocket.cloud
+      - argo-workflows.tryrocket.cloud
     tls:
-      - secretName: argocd-workflows-tryrocket-cloud-production-tls
+      - secretName: argo-workflows-tryrocket-cloud-production-tls
         hosts:
-          - argocd-workflows.tryrocket.cloud
+          - argo-workflows.tryrocket.cloud
