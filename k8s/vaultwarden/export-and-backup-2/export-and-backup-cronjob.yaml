@@ -276,6 +276,6 @@ spec:
                   curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
 
           containers:
-            - name: app
+            - name: teardown
               image: alpine
-              command: ["sh","-c","backup done!"]
+              command: ["sh","-c","echo backup done!"]
