@@ -9,7 +9,7 @@ server:
     ingressClassName: traefik
     hosts:
       - argocd-workflows.tryrocket.cloud
-    tls: []
+    tls:
       - secretName: argocd-workflows-tryrocket-cloud-production-tls
         hosts:
           - argocd-workflows.tryrocket.cloud
