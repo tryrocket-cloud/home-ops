@@ -217,7 +217,7 @@ spec:
                   source /export/vaultwarden.env
                   export RESTIC_VERSION=$(restic version | awk 'NR==1{print $2}')
 
-                  restic --verbose=2 backup \
+                  restic backup \
                     --host $HOSTNAME \
                     --tag restic_version:$RESTIC_VERSION \
                     --tag bw_cli_version:$BW_CLI_VERSION \
@@ -234,17 +234,6 @@ spec:
                   readOnly: false
                 - name: vaultwarden-export-volume
                   mountPath: /export
-
-            - name: healthcheck-ping
-              image: curlimages/curl
-              envFrom:
-                - secretRef:
-                    name: healthchecksio
-              command: ["/bin/sh","-c"]
-              args:
-                - |
-                  set -eu pipefail
-                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
 
             - name: configure-s3-access-block
               image: public.ecr.aws/aws-cli/aws-cli:latest
@@ -275,15 +264,18 @@ spec:
                   subPath: public-access-block-deny-all.json
                   readOnly: true
 
-          containers:
-            - name: test
-              image: alpine:3.16
-              env:
-                - name: VAULTWARDEN_HOST
-                  value: https://vaultwarden.tryrocket.cloud
-              command:
-                - sh
-                - -c
+            - name: healthcheck-ping
+              image: curlimages/curl
+              envFrom:
+                - secretRef:
+                    name: healthchecksio
+              command: ["/bin/sh","-c"]
+              args:
                 - |
-                  echo test
+                  set -eu pipefail
+                  curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID
 
+          containers:
+            - name: app
+              image: alpine
+              command: ["sh","-c","backup done!"]
