@@ -70,6 +70,8 @@ spec:
                 - |
                   set -euo pipefail
 
+                    
+
                   apk add --no-cache curl jq
 
                   VW_VERSION=$(
@@ -106,7 +108,7 @@ spec:
                     curl unzip ca-certificates \
                   && rm -rf /var/lib/apt/lists/*
 
-                  curl -sSL --fail https://github.com/bitwarden/clients/releases/latest/download/bw-linux-${BW_CLI_VERSION}.zip -o /tmp/bw.zip
+                  curl -sSL --fail https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip -o /tmp/bw.zip
                   unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
                   chmod +x /usr/local/bin/bw
                   
