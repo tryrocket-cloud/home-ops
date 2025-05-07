@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: backup-vaultwarden-export
 spec:
-  suspend: false
+  suspend: true
   schedule: "0 22 * * *"
   concurrencyPolicy: Forbid
   startingDeadlineSeconds: 600
