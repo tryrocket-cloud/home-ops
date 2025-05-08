@@ -104,13 +104,13 @@ spec:
                 - |
                   set -euo
 
-                  ping -c 3 "${VAULTWARDEN_HOST}"
-                  ping -c 3 dl-cdn.alpinelinux.org
-
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
                     iputils-ping curl unzip ca-certificates \
                   && rm -rf /var/lib/apt/lists/*
+
+                  ping -c 3 "${VAULTWARDEN_HOST}"
+                  ping -c 3 dl-cdn.alpinelinux.org
 
                   curl -sSL --fail https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip -o /tmp/bw.zip
                   unzip -q /tmp/bw.zip -d /usr/local/bin && rm /tmp/bw.zip
