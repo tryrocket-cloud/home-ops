@@ -176,6 +176,8 @@ spec:
                   # Optionally, check version
                   resticprofile version
 
+
+                  stat --format=%F /etc/resticprofile/profiles.yaml
                   resticprofile run vaultwarden
 
                   # curl -fsSL \

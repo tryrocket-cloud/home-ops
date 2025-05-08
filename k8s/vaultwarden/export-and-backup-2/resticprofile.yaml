@@ -19,7 +19,7 @@ profiles:
         read-data: true
     forget:
       options:
-        keep-last: 180
+        keep-within: "180d"
         prune: true
     env:
       - AWS_ACCESS_KEY_ID
