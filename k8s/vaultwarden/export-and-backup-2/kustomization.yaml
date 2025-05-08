@@ -9,8 +9,3 @@ resources:
   # - backup-support-pvc.yaml
 
   - export-and-backup-cronjob-3.yaml
-
-configMapGenerator:
-  - name: resticprofile-config
-    files:
-      - resticprofile.yaml
