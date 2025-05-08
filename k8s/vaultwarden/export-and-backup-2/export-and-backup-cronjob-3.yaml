@@ -117,12 +117,17 @@ spec:
                   bw config server https://${VAULTWARDEN_HOST}
                   export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
                   bw sync
-                  bw export --format encrypted_json \
-                            --password "${VAULTWARDEN_PASSWORD}" \
-                            --output /export/vw-${VAULTWARDEN_USER_ID}.age
-                  bw export --format json \
-                            --output /export/vw-${VAULTWARDEN_USER_ID}.json
+                  bw export \
+                    --format encrypted_json \
+                    --password "${VAULTWARDEN_PASSWORD}" \
+                    --output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-encrypted_json.json
+                  bw export \
+                    --format json \
+                    --output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-plain.json
                   bw logout
+
+                  [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
+                  [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
 
                   #–– 3) encrypt with age ––
                   curl -fsSL \
@@ -130,10 +135,17 @@ spec:
                     | tar xz -C /usr/local/bin --strip-components=1
                   chmod +x /usr/local/bin/age
 
-                  age --recipient "${AGE_RECIPIENT}" \
-                      --output /export/vw-${VAULTWARDEN_USER_ID}.age \
-                      /export/vw-${VAULTWARDEN_USER_ID}.json
-                  rm /export/vw-${VAULTWARDEN_USER_ID}.json
+                  PLAIN="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
+                  CIPHER="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
+
+                  [ -s "${PLAIN}" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
+
+                  age --recipient "${AGE_RECIPIENT}" --output "${CIPHER}" "${PLAIN}"
+
+                  [ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
+                  head -c21 "${CIPHER}" | grep -q '^age-encryption\.org/v1'
+
+                  rm "${PLAIN}"
 
                   #–– 4) configure S3 for restic ––
                   aws s3api put-bucket-policy \
