@@ -1,19 +1,20 @@
 # resticprofile.yaml
 vaultwarden:
-  repository: ${RESTIC_REPOSITORY}
-  password: ${RESTIC_PASSWORD}
+  repository: "{{ .Env.RESTIC_REPOSITORY }}/{{ .Env.BUCKET }}"
+  password: "{{ .Env.RESTIC_PASSWORD }}"
   option:
     - "s3.connections=3"
+
   backup:
     source:
       - /export
     options:
-      host: ${HOSTNAME}
+      host: "{{ .Env.HOSTNAME }}"
       tag:
-        - restic_version:${RESTIC_VERSION}
-        - bw_cli_version:${BW_CLI_VERSION}
-        - vaultwarden_version:${VW_VERSION}
-        - age_version:${AGE_VERSION}
+        - restic_version:"{{ .Env.RESTIC_VERSION }}"
+        - bw_cli_version:"{{ .Env.BW_CLI_VERSION }}"
+        - vaultwarden_version:"{{ .Env.VW_VERSION }}"
+        - age_version:"{{ .Env.AGE_VERSION }}"
         - environment:production
   check:
     options:
@@ -23,13 +24,6 @@ vaultwarden:
       keep-within: "180d"
       prune: true
   env:
-    - AWS_ACCESS_KEY_ID
-    - AWS_SECRET_ACCESS_KEY
-    - AWS_DEFAULT_REGION
-    - RESTIC_REPOSITORY
-    - RESTIC_PASSWORD_FILE
-    - HOSTNAME
-    - RESTIC_VERSION
-    - BW_CLI_VERSION
-    - VW_VERSION
-    - AGE_VERSION
+    - AWS_ACCESS_KEY_ID: "{{ .Env.AWS_ACCESS_KEY_ID }}"
+    - AWS_SECRET_ACCESS_KEY: "{{ .Env.AWS_SECRET_ACCESS_KEY }}"
+    - AWS_DEFAULT_REGION: "{{ .Env.AWS_DEFAULT_REGION }}"
