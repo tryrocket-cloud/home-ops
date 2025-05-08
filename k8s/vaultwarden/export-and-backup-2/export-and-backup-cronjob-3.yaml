@@ -77,7 +77,7 @@ spec:
                   subPath: autorestic.yml
                 - name: resticprofile-config
                   mountPath: /etc/resticprofile/profiles.yaml
-                  subPath: resticprofile-config
+                  subPath: profiles.yaml
               command:
                 - /bin/bash
                 - -exo
