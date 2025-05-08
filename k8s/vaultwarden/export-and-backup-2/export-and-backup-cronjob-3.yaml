@@ -62,7 +62,7 @@ spec:
 
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
