@@ -171,7 +171,7 @@ spec:
 
                   resticprofile version
 
-                  resticprofile run vaultwarden
+                  resticprofile run --name vaultwarden
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \
