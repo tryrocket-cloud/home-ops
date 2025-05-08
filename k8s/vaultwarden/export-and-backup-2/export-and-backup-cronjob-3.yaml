@@ -51,6 +51,8 @@ spec:
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
                   value: /cache/ionos.com/vaultwarden/restic
+                - name: AUTORESTIC_VERSION
+                  value: "1.8.3"
               envFrom:
                 - secretRef:
                     name: all-in-one    # AWS creds, AGE_RECIPIENT, BW username/password
@@ -140,6 +142,16 @@ spec:
                     --public-access-block-configuration file:///policies/public-access-block-restic.json
 
                   #–– 5) restic backup & prune ––
+                  curl -fsSL \
+                    "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_Linux_x86_64.tar.gz" \
+                    -o /tmp/autorestic.tar.gz
+
+                  tar xzf /tmp/autorestic.tar.gz -C /usr/local/bin autorestic
+                  chmod +x /usr/local/bin/autorestic
+                  rm /tmp/autorestic.tar.gz
+
+                  autorestic --version
+
                   restic backup \
                     --host "${HOSTNAME}" \
                     --tag restic_version:$(restic version | awk 'NR==1{print $2}') \
