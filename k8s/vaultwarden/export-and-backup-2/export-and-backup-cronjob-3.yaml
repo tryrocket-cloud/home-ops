@@ -174,7 +174,7 @@ spec:
                   chmod +x /usr/local/bin/resticprofile
 
                   # Optionally, check version
-                  resticprofile --version
+                  resticprofile version
 
                   resticprofile run vaultwarden
 
