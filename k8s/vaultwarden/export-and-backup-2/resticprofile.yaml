@@ -2,8 +2,6 @@
 vaultwarden:
   repository: "{{ .Env.RESTIC_REPOSITORY }}/{{ .Env.BUCKET }}"
   password: "{{ .Env.RESTIC_PASSWORD }}"
-  option:
-    - "s3.connections=3"
 
   backup:
     source:
