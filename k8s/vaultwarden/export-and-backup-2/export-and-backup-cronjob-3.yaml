@@ -77,7 +77,7 @@ spec:
                   apt-get update \
                     && apt-get install -y --no-install-recommends \
                          curl jq unzip ca-certificates iputils-ping awscli \
-                         bash restic \
+                         bash restic bzip2 \
                     && rm -rf /var/lib/apt/lists/*
 
                   #–– healthcheck start ––
@@ -143,12 +143,12 @@ spec:
 
                   #–– 5) restic backup & prune ––
                   curl -fsSL \
-                    "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_Linux_x86_64.tar.gz" \
-                    -o /tmp/autorestic.tar.gz
+                    "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2" \
+                    -o /tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2
 
-                  tar xzf /tmp/autorestic.tar.gz -C /usr/local/bin autorestic
+                  bunzip2 "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2"
+                  mv "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64" /usr/local/bin/autorestic
                   chmod +x /usr/local/bin/autorestic
-                  rm /tmp/autorestic.tar.gz
 
                   autorestic --version
 
