@@ -70,8 +70,10 @@ spec:
                 - |
                   set -euo pipefail
 
-                  ping -c 3 "${VAULTWARDEN_HOST}"
-                  ping -c 3 dl-cdn.alpinelinux.org
+                  cat /etc/resolv.conf
+
+                  # ping -c 3 "${VAULTWARDEN_HOST}"
+                  # ping -c 3 dl-cdn.alpinelinux.org
 
                   apk add --no-cache curl jq
 
