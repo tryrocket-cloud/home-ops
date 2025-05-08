@@ -1,0 +1,171 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-vaultwarden
+spec:
+  schedule: "0 22 * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  suspend: false
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+      template:
+        spec:
+          restartPolicy: Never
+
+          volumes:
+            - name: export
+              emptyDir: {}
+            - name: cache
+              persistentVolumeClaim:
+                claimName: vaultwarden-support-pvc
+            - name: policies
+              secret:
+                secretName: all-in-one
+                items:
+                  - key: restic-policy.json
+                    path: restic-policy.json
+                  - key: deny-all-policy.json
+                    path: deny-all-policy.json
+                  - key: public-access-block-restic.json
+                    path: public-access-block-restic.json
+                  - key: public-access-block-deny-all.json
+                    path: public-access-block-deny-all.json
+
+          containers:
+            - name: backup
+              image: alpine:3.21
+              env:
+                - name: VAULTWARDEN_HOST
+                  value: vaultwarden.tryrocket.cloud
+                - name: VAULTWARDEN_USER_ID
+                  value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
+                - name: BW_CLI_VERSION
+                  value: "2025.4.0"
+                - name: AGE_VERSION
+                  value: "1.2.1"
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+                - name: RESTIC_CACHE_DIR
+                  value: /cache/ionos.com/vaultwarden/restic
+              envFrom:
+                - secretRef:
+                    name: all-in-one     # AWS creds, AGE_RECIPIENT, BW username/password
+                - secretRef:
+                    name: healthchecksio # HC_UUID
+              volumeMounts:
+                - name: export
+                  mountPath: /export
+                - name: cache
+                  mountPath: /cache
+                - name: policies
+                  mountPath: /policies
+
+              command:
+                - /bin/sh
+                - -eo
+                - pipefail
+                - -c
+              args:
+                - |
+                  #–– install dependencies ––
+                  apk update \
+                    && apk add --no-cache \
+                         bash \
+                         curl \
+                         jq \
+                         unzip \
+                         ca-certificates \
+                         iputils-ping \
+                         tar \
+                         restic \
+                    && update-ca-certificates
+
+                  #–– install AWS CLI v2 ––
+                  AWSCLI_VERSION=2.16.7
+                  curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip" -o /tmp/awscliv2.zip
+                  unzip -q /tmp/awscliv2.zip -d /tmp \
+                    && /tmp/aws/install --update \
+                    && rm -rf /tmp/aws /tmp/awscliv2.zip
+
+                  #–– healthcheck start ––
+                  curl -fsS -m 10 https://hc-ping.com/${HC_UUID}/start
+
+                  #–– always-run “finally” block ––
+                  function finally {
+                    echo "🔐 enforcing final S3 block policy…"
+                    aws s3api put-public-access-block \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --public-access-block-configuration file:///policies/public-access-block-deny-all.json
+
+                    aws s3api put-bucket-policy \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --policy file:///policies/deny-all-policy.json
+                  }
+                  trap finally EXIT
+
+                  #–– 1) get Vaultwarden version ––
+                  VW_VERSION=$(curl -sSf -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
+                                | jq -r '.version // empty')
+                  echo "Vaultwarden version: $VW_VERSION"
+
+                  #–– 2) export Vaultwarden ––
+                  curl -sSL \
+                    "https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip" \
+                    -o /tmp/bw.zip \
+                    && unzip -q /tmp/bw.zip -d /usr/local/bin \
+                    && chmod +x /usr/local/bin/bw \
+                    && rm /tmp/bw.zip
+
+                  bw config server https://${VAULTWARDEN_HOST}
+                  export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+                  bw sync
+                  bw export --format encrypted_json \
+                            --password "${VAULTWARDEN_PASSWORD}" \
+                            --output /export/vw-${VAULTWARDEN_USER_ID}.age
+                  bw export --format json \
+                            --output /export/vw-${VAULTWARDEN_USER_ID}.json
+                  bw logout
+
+                  #–– 3) encrypt with age ––
+                  curl -fsSL \
+                    "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" \
+                    | tar xz -C /usr/local/bin --strip-components=1 \
+                    && chmod +x /usr/local/bin/age
+
+                  age --recipient "${AGE_RECIPIENT}" \
+                      --output /export/vw-${VAULTWARDEN_USER_ID}.age \
+                      /export/vw-${VAULTWARDEN_USER_ID}.json
+                  rm /export/vw-${VAULTWARDEN_USER_ID}.json
+
+                  #–– 4) configure S3 for restic ––
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy file:///policies/restic-policy.json
+                  aws s3api put-public-access-block \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --public-access-block-configuration file:///policies/public-access-block-restic.json
+
+                  #–– 5) restic backup & prune ––
+                  restic backup \
+                    --host "${HOSTNAME}" \
+                    --tag restic_version:$(restic version | awk 'NR==1{print $2}') \
+                    --tag bw_cli_version:$BW_CLI_VERSION \
+                    --tag vaultwarden_version:$VW_VERSION \
+                    --tag age_version:$AGE_VERSION \
+                    --tag environment:production \
+                    /export
+                  restic check --read-data
+                  restic forget --keep-last 180 --prune
+
+                  #–– 6) final healthcheck ping ––
+                  curl -fsS -m 10 https://hc-ping.com/${HC_UUID}
+
+                  echo "✅ backup completed successfully."
