@@ -173,28 +173,11 @@ spec:
                   # Install resticprofile (latest release)
                   curl -fsSL https://github.com/creativeprojects/resticprofile/releases/download/v${RESTICPROFILE_VERSION}/resticprofile_${RESTICPROFILE_VERSION}_linux_amd64.tar.gz \
                     | tar xz -C /usr/local/bin resticprofile
-
                   chmod +x /usr/local/bin/resticprofile
 
-                  # Optionally, check version
                   resticprofile version
 
-
-                  stat --format=%F /etc/resticprofile/profiles.yaml
                   resticprofile run vaultwarden
-
-                  # curl -fsSL \
-                  #   "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2" \
-                  #   -o /tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2
-
-                  # bunzip2 "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2"
-                  # mv "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64" /usr/local/bin/autorestic
-                  # chmod +x /usr/local/bin/autorestic
-
-                  # autorestic --version
-                  # autorestic backup -a --config /etc/autorestic/autorestic.yml
-                  # autorestic check  -a --config /etc/autorestic/autorestic.yml
-                  # autorestic forget -a --config /etc/autorestic/autorestic.yml --prune
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \
