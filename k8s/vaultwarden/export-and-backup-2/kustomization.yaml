@@ -9,4 +9,3 @@ resources:
   # - backup-support-pvc.yaml
 
   - export-and-backup-cronjob-3.yaml
-  - export-and-backup-cronjob-4.yaml
