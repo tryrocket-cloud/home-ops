@@ -68,7 +68,7 @@ spec:
 
               command:
                 - /bin/bash
-                - -eo
+                - -exo
                 - pipefail
                 - -c
               args:
