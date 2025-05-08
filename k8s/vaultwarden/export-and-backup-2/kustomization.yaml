@@ -9,3 +9,8 @@ resources:
   # - backup-support-pvc.yaml
 
   - export-and-backup-cronjob-3.yaml
+
+configMapGenerator:
+  - name: autorestic-config
+    files:
+      - autorestic.yml

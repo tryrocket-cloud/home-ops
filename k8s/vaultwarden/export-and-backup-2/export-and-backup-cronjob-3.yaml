@@ -34,7 +34,9 @@ spec:
                     path: public-access-block-restic.json
                   - key: public-access-block-deny-all.json
                     path: public-access-block-deny-all.json
-
+            - name: autorestic-config
+              configMap:
+                name: autorestic-config
           containers:
             - name: backup
               image: debian:bookworm-slim
@@ -55,9 +57,9 @@ spec:
                   value: "1.8.3"
               envFrom:
                 - secretRef:
-                    name: all-in-one    # AWS creds, AGE_RECIPIENT, BW username/password
+                    name: all-in-one
                 - secretRef:
-                    name: healthchecksio # HC_UUID
+                    name: healthchecksio
               volumeMounts:
                 - name: export
                   mountPath: /export
@@ -65,7 +67,9 @@ spec:
                   mountPath: /cache
                 - name: policies
                   mountPath: /policies
-
+                - name: autorestic-config
+                  mountPath: /etc/autorestic/autorestic.yml
+                  subPath: autorestic.yml
               command:
                 - /bin/bash
                 - -exo
@@ -151,17 +155,18 @@ spec:
                   chmod +x /usr/local/bin/autorestic
 
                   autorestic --version
+                  autorestic run vaultwarden --config /etc/autorestic/autorestic.yml
 
-                  restic backup \
-                    --host "${HOSTNAME}" \
-                    --tag restic_version:$(restic version | awk 'NR==1{print $2}') \
-                    --tag bw_cli_version:$BW_CLI_VERSION \
-                    --tag vaultwarden_version:$VW_VERSION \
-                    --tag age_version:$AGE_VERSION \
-                    --tag environment:production \
-                    /export
-                  restic check --read-data
-                  restic forget --keep-last 180 --prune
+                  # restic backup \
+                  #   --host "${HOSTNAME}" \
+                  #   --tag restic_version:$(restic version | awk 'NR==1{print $2}') \
+                  #   --tag bw_cli_version:$BW_CLI_VERSION \
+                  #   --tag vaultwarden_version:$VW_VERSION \
+                  #   --tag age_version:$AGE_VERSION \
+                  #   --tag environment:production \
+                  #   /export
+                  # restic check --read-data
+                  # restic forget --keep-last 180 --prune
 
                   #–– 6) final healthcheck ping ––
                   curl -fsS -m 10 https://hc-ping.com/${HC_UUID}
