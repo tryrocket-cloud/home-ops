@@ -76,7 +76,7 @@ spec:
                   mountPath: /etc/autorestic/autorestic.yml
                   subPath: autorestic.yml
                 - name: resticprofile-config
-                  mountPath: /etc/resticprofile/resticprofile.yaml
+                  mountPath: /etc/resticprofile/profiles.yaml
                   subPath: resticprofile-config
               command:
                 - /bin/bash
