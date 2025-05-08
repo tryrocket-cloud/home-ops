@@ -3,11 +3,10 @@ version: 2
 backends:
   s3-main:
     type: s3
-    config:
-      bucket: "{{ env \"BUCKET\" }}"
-      endpoint: "{{ env \"AWS_ENDPOINT_URL\" }}"
-      access_key_id: "{{ env \"AWS_ACCESS_KEY_ID\" }}"
-      secret_access_key: "{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
+    bucket: "{{ env \"BUCKET\" }}"
+    endpoint: "{{ env \"AWS_ENDPOINT_URL\" }}"
+    access_key_id: "{{ env \"AWS_ACCESS_KEY_ID\" }}"
+    secret_access_key: "{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
 
 locations:
   vaultwarden:
@@ -15,8 +14,6 @@ locations:
       - "/export"
     to:
       - s3-main
-
-actions:
-  forget:
-    keep_last: 180
-    prune: true
+    forget:
+      keep_last: 180
+      prune: true
