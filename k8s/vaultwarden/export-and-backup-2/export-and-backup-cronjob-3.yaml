@@ -167,7 +167,9 @@ spec:
                   chmod +x /usr/local/bin/autorestic
 
                   autorestic --version
-                  autorestic run vaultwarden --config /etc/autorestic/autorestic.yml
+                  autorestic backup -a --config /etc/autorestic/autorestic.yml
+                  autorestic check vaultwarden --config /etc/autorestic/autorestic.yml
+                  autorestic forget vaultwarden --config /etc/autorestic/autorestic.yml --prune
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \
