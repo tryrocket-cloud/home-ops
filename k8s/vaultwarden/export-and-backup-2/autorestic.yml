@@ -3,11 +3,11 @@ version: 2
 backends:
   s3-main:
     type: s3
-    bucket:            "{{ env \"BUCKET\" }}"
-    endpoint:          "{{ env \"AWS_ENDPOINT_URL\" }}"
-    access_key_id:     "{{ env \"AWS_ACCESS_KEY_ID\" }}"
-    secret_access_key: "{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
-    # prefix:            "vaultwarden"
+    config:
+      bucket: "{{ env \"BUCKET\" }}"
+      endpoint: "{{ env \"AWS_ENDPOINT_URL\" }}"
+      access_key_id: "{{ env \"AWS_ACCESS_KEY_ID\" }}"
+      secret_access_key: "{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
 
 locations:
   vaultwarden:
@@ -15,14 +15,8 @@ locations:
       - "/export"
     to:
       - s3-main
-    hostname: "{{ env \"HOSTNAME\" }}"
-    tags:
-      restic_version:      "{{ .BinaryVersion }}"
-      bw_cli_version:      "{{ env \"BW_CLI_VERSION\" }}"
-      vaultwarden_version: "{{ env \"VW_VERSION\" }}"
-      age_version:         "{{ env \"AGE_VERSION\" }}"
-      environment:         "production"
-    check: true
-    forget:
-      keep_last: 180
-      prune:     true
+
+actions:
+  forget:
+    keep_last: 180
+    prune: true
