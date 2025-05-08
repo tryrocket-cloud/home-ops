@@ -70,6 +70,7 @@ spec:
                 - |
                   set -euo pipefail
 
+                  ping -c 3 "${VAULTWARDEN_HOST}"
                   ping -c 3 dl-cdn.alpinelinux.org
 
                   apk add --no-cache curl jq
@@ -104,6 +105,7 @@ spec:
                   set -euo
 
                   ping -c 3 "${VAULTWARDEN_HOST}"
+                  ping -c 3 dl-cdn.alpinelinux.org
 
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
