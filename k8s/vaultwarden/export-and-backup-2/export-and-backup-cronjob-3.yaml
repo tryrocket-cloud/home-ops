@@ -104,6 +104,7 @@ spec:
                     && unzip -q /tmp/bw.zip -d /usr/local/bin \
                     && chmod +x /usr/local/bin/bw
 
+                  bw config server https://${VAULTWARDEN_HOST}
                   export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
                   bw sync
                   bw export --format encrypted_json \
