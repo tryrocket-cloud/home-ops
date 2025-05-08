@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: backup-vaultwarden
+  name: backup-vaultwarden-alpine
 spec:
   schedule: "0 22 * * *"
   concurrencyPolicy: Forbid
