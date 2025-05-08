@@ -109,7 +109,7 @@ spec:
 
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-                    curl unzip ca-certificates \
+                    iputils-ping curl unzip ca-certificates \
                   && rm -rf /var/lib/apt/lists/*
 
                   curl -sSL --fail https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip -o /tmp/bw.zip
