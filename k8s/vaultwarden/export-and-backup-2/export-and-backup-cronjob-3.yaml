@@ -37,6 +37,9 @@ spec:
             - name: autorestic-config
               configMap:
                 name: autorestic-config
+            - name: resticprofile-config
+              configMap:
+                name: resticprofile-config
           containers:
             - name: backup
               image: debian:bookworm-slim
@@ -70,6 +73,9 @@ spec:
                 - name: autorestic-config
                   mountPath: /etc/autorestic/autorestic.yml
                   subPath: autorestic.yml
+                - name: resticprofile-config
+                  mountPath: /etc/resticprofile/resticprofile.yaml
+                  subPath: resticprofile-config
               command:
                 - /bin/bash
                 - -exo
@@ -158,18 +164,28 @@ spec:
                     --public-access-block-configuration file:///policies/public-access-block-restic.json
 
                   #–– 5) restic backup & prune ––
-                  curl -fsSL \
-                    "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2" \
-                    -o /tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2
 
-                  bunzip2 "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2"
-                  mv "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64" /usr/local/bin/autorestic
-                  chmod +x /usr/local/bin/autorestic
+                  # Install resticprofile (latest release)
+                  curl -fsSL https://github.com/creativeprojects/resticprofile/releases/latest/download/resticprofile-linux-amd64 -o /usr/local/bin/resticprofile
+                  chmod +x /usr/local/bin/resticprofile
 
-                  autorestic --version
-                  autorestic backup -a --config /etc/autorestic/autorestic.yml
-                  autorestic check  -a --config /etc/autorestic/autorestic.yml
-                  autorestic forget -a --config /etc/autorestic/autorestic.yml --prune
+                  # Optionally, check version
+                  resticprofile --version
+
+                  resticprofile run vaultwarden
+
+                  # curl -fsSL \
+                  #   "https://github.com/cupcakearmy/autorestic/releases/download/v${AUTORESTIC_VERSION}/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2" \
+                  #   -o /tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2
+
+                  # bunzip2 "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64.bz2"
+                  # mv "/tmp/autorestic_${AUTORESTIC_VERSION}_linux_amd64" /usr/local/bin/autorestic
+                  # chmod +x /usr/local/bin/autorestic
+
+                  # autorestic --version
+                  # autorestic backup -a --config /etc/autorestic/autorestic.yml
+                  # autorestic check  -a --config /etc/autorestic/autorestic.yml
+                  # autorestic forget -a --config /etc/autorestic/autorestic.yml --prune
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \

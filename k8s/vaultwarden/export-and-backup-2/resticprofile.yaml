@@ -1,0 +1,34 @@
+# resticprofile.yaml
+profiles:
+  vaultwarden:
+    repository: ${RESTIC_REPOSITORY}
+    password-file: ${RESTIC_PASSWORD_FILE}
+    backup:
+      source:
+        - /export
+      options:
+        host: ${HOSTNAME}
+        tag:
+          - restic_version:${RESTIC_VERSION}
+          - bw_cli_version:${BW_CLI_VERSION}
+          - vaultwarden_version:${VW_VERSION}
+          - age_version:${AGE_VERSION}
+          - environment:production
+    check:
+      options:
+        read-data: true
+    forget:
+      options:
+        keep-last: 180
+        prune: true
+    env:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - RESTIC_REPOSITORY
+      - RESTIC_PASSWORD_FILE
+      - HOSTNAME
+      - RESTIC_VERSION
+      - BW_CLI_VERSION
+      - VW_VERSION
+      - AGE_VERSION
