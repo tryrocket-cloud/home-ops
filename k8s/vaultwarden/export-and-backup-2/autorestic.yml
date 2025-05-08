@@ -1,19 +1,21 @@
 # autorestic.yml
+version: 2
+
 backends:
   s3-main:
     type: s3
-    bucket:            "{{ env \"BUCKET\" }}"
-    endpoint:          "{{ env \"AWS_ENDPOINT_URL\" }}"
-    access_key_id:     "{{ env \"AWS_ACCESS_KEY_ID\" }}"
-    secret_access_key: "{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
+    bucket:          "{{ env \"BUCKET\" }}"
+    endpoint:        "{{ env \"AWS_ENDPOINT_URL\" }}"
+    access_key_id:   "{{ env \"AWS_ACCESS_KEY_ID\" }}"
+    secret_access_key:"{{ env \"AWS_SECRET_ACCESS_KEY\" }}"
     prefix: vaultwarden
 
-sources:
+locations:
   vaultwarden:
-    kind: backup
-    backend: s3-main
-    paths:
+    from:
       - /export
+    to:
+      - s3-main
     hostname: "{{ env \"HOSTNAME\" }}"
     tags:
       restic_version:      "{{ .BinaryVersion }}"

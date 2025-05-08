@@ -168,8 +168,8 @@ spec:
 
                   autorestic --version
                   autorestic backup -a --config /etc/autorestic/autorestic.yml
-                  autorestic check vaultwarden --config /etc/autorestic/autorestic.yml
-                  autorestic forget vaultwarden --config /etc/autorestic/autorestic.yml --prune
+                  autorestic check  -a --config /etc/autorestic/autorestic.yml
+                  autorestic forget -a --config /etc/autorestic/autorestic.yml --prune
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \
