@@ -171,7 +171,9 @@ spec:
 
                   resticprofile version
 
-                  resticprofile run --name vaultwarden
+                  resticprofile backup vaultwarden
+                  resticprofile check   vaultwarden
+                  resticprofile forget  vaultwarden --prune
 
                   # restic backup \
                   #   --host "${HOSTNAME}" \
