@@ -37,9 +37,11 @@ spec:
             - name: autorestic-config
               configMap:
                 name: autorestic-config
-            - name: resticprofile-config
-              configMap:
-                name: resticprofile-config
++              configMap:
++                name: resticprofile-config
++                items:
++                  - key: resticprofile.yaml
++                    path: profiles.yaml
           containers:
             - name: backup
               image: debian:bookworm-slim
