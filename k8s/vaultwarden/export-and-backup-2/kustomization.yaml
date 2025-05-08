@@ -11,9 +11,6 @@ resources:
   - export-and-backup-cronjob-3.yaml
 
 configMapGenerator:
-  - name: autorestic-config
-    files:
-      - autorestic.yml
   - name: resticprofile-config
     files:
       - resticprofile.yaml
