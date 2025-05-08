@@ -60,7 +60,7 @@ spec:
                   curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/start
 
             - name: get-vaultwarden-version
-              image: alpine/curl
+              image: alpine:3.21
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
@@ -70,7 +70,7 @@ spec:
                 - |
                   set -euo pipefail
 
-                    
+                  ping -c 3 dl-cdn.alpinelinux.org
 
                   apk add --no-cache curl jq
 
@@ -103,6 +103,8 @@ spec:
                 - |
                   set -euo
 
+                  ping -c 3 "${VAULTWARDEN_HOST}"
+
                   apt-get update
                   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
                     curl unzip ca-certificates \
@@ -133,7 +135,7 @@ spec:
                   mountPath: /export
 
             - name: encrypt-with-age
-              image: alpine:3.18
+              image: alpine:3.21
               env:
                 - name: VAULTWARDEN_USER_ID
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
