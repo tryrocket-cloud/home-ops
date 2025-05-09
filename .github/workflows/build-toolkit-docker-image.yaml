@@ -31,12 +31,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     context: toolkit/
-      #     push: true
-      #     tags: ghcr.io/${{ github.repository }}:toolkit
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: toolkit/
+          push: true
+          tags: ghcr.io/${{ github.repository }}:toolkit
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
