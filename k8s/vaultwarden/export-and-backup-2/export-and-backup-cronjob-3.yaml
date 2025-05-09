@@ -71,33 +71,86 @@ spec:
                   error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
                   check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
 
-                  VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
-                  [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
-                  echo "export VW_VERSION=${VW_VERSION}" > /export/.env
-                  check_file "/export/.env"
+                  get_vaultwarden_version() {
+                    VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
+                      | jq -r '.version // empty')
+                    [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
+                    echo "export VW_VERSION=${VW_VERSION}" > /export/.env
+                    check_file "/export/.env"
+                  }
 
-                  log "Logging into Bitwarden and exporting data…"
-                  bw config server "https://${VAULTWARDEN_HOST}"
-                  export BW_SESSION
-                  BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
-                  bw sync --cleanexit --quiet
+                  export_vaultwarden_vault() {
+                    log "Logging into Bitwarden and exporting data…"
+                    bw config server "https://${VAULTWARDEN_HOST}"
+                    export BW_SESSION
+                    BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+                    bw sync --cleanexit --quiet
 
-                  enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
-                  plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+                    local enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
+                    local plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
 
-                  bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "${enc_json}" --cleanexit --quiet
-                  bw export --format json --output "${plain_json}" --cleanexit --quiet
-                  bw logout --cleanexit --quiet
+                    bw export --format encrypted_json \
+                      --password "${VAULTWARDEN_PASSWORD}" \
+                      --output "${enc_json}" --cleanexit --quiet
 
-                  check_file "${enc_json}"
-                  check_file "${plain_json}"
+                    bw export --format json \
+                      --output "${plain_json}" --cleanexit --quiet
 
-                  log "Encrypting export with age…"
-                  cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-                  age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
-                  check_file "${cipher_file}"
-                  head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' || error "Invalid age header"
-                  rm -f "${plain_json}"
+                    bw logout --cleanexit --quiet
+
+                    check_file "${enc_json}"
+                    check_file "${plain_json}"
+
+                    log "Encrypting export with age…"
+                    local cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
+                    age --recipient "${AGE_RECIPIENT}" \
+                        --output "${cipher_file}" "${plain_json}"
+                    check_file "${cipher_file}"
+                    head -c21 "${cipher_file}" \
+                      | grep -q '^age-encryption\.org/v1' \
+                      || error "Invalid age header"
+                    rm -f "${plain_json}"
+                  }
+
+                  export -f get_vaultwarden_version export_vaultwarden_vault log warn error check_file
+
+                  parallel ::: get_vaultwarden_version export_vaultwarden_vault
+                  echo "All jobs finished!"
+
+                  # log()   { echo "[INFO]  $(date -Iseconds) $*"; }
+                  # warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
+                  # error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
+                  # check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
+
+                  # VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
+                  # [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
+                  # echo "export VW_VERSION=${VW_VERSION}" > /export/.env
+                  # check_file "/export/.env"
+
+                  # log "Logging into Bitwarden and exporting data…"
+                  # bw config server "https://${VAULTWARDEN_HOST}"
+                  # export BW_SESSION
+                  # BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+                  # bw sync --cleanexit --quiet
+
+                  # enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
+                  # plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+
+                  # bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "${enc_json}" --cleanexit --quiet
+                  # bw export --format json --output "${plain_json}" --cleanexit --quiet
+                  # bw logout --cleanexit --quiet
+
+                  # check_file "${enc_json}"
+                  # check_file "${plain_json}"
+
+                  # log "Encrypting export with age…"
+                  # cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
+                  # age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
+                  # check_file "${cipher_file}"
+                  # head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' || error "Invalid age header"
+                  # rm -f "${plain_json}"
+
+
 
           containers:
             - name: backup
@@ -183,7 +236,6 @@ spec:
                     --public-access-block-configuration "file:///policies/public-access-block-restic.json"
 
                   run_restic_backup() {
-                    log "Running Restic backup…"
                     restic backup \
                       --host "${HOSTNAME}" \
                       --tag "restic_version:$(restic version | awk 'NR==1{print $2}')" \
@@ -197,37 +249,6 @@ spec:
                     restic forget --keep-within "180d" --prune
                   }
                   export -f run_restic_backup
-                  
-                  # jobs=(
-                  #   'ionos.com|run_restic_backup'
-                  #   'JobB     |bash -c "sleep 1; echo '\''Job B done'\''"'
-                  #   'JobC     |bash -c "sleep 2; echo '\''Job C done'\''"'
-                  # )
-
-                  # printf '%s\n' "${jobs[@]}" | \
-                  #   parallel --colsep '\|' --tag --group -j0 '
-                  #     echo "─── [ {1} ] starting ───"
-                  #     {2}
-                  #     echo "─── [ {1} ] done ───"
-                  #   '
 
                   parallel ::: run_restic_backup 'echo MyJobB' 'echo MyJobC'
                   echo "All jobs finished!"
-
-                  # run_job_buffered() {
-                  #   local name="$1"; shift
-                  #   local tmp; tmp=$(mktemp)
-                  #   (
-                  #     { "$@"; } >"$tmp" 2>&1
-                  #     echo "─── [${name}] done ───"
-                  #     sed "s/^/[${name}] /" "$tmp"
-                  #     rm -f "$tmp"
-                  #   ) &
-                  # }
-
-                  # run_job_buffered 'ionos.com' run_restic_backup
-                  # run_job_buffered B bash -c 'sleep 1; echo "Job B done"'
-                  # run_job_buffered C bash -c 'sleep 2; echo "Job C done"'
-
-                  # wait
-                  # echo "All jobs finished!"
