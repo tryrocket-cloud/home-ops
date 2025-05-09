@@ -7,17 +7,20 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 ARG AGE_VERSION=1.2.1
+ENV AGE_VERSION=${AGE_VERSION}
 RUN curl -fsSL "https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz" | \ 
     tar xz -C /usr/local/bin --strip-components=1 && \
     chmod +x /usr/local/bin/age
 
 ARG BW_CLI_VERSION=2025.3.0
+ENV BW_CLI_VERSION=${BW_CLI_VERSION}
 RUN wget -qO /tmp/bw.zip "https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip" && \
     unzip /tmp/bw.zip -d /usr/local/bin && \
     chmod +x /usr/local/bin/bw && \
     rm /tmp/bw.zip
 
 ARG KOPIA_VERSION=0.19.0
+ENV KOPIA_VERSION=${KOPIA_VERSION}
 RUN wget -qO /tmp/kopia.deb "https://github.com/kopia/kopia/releases/download/v${KOPIA_VERSION}/kopia_${KOPIA_VERSION}_linux_amd64.deb" && \
     dpkg -i /tmp/kopia.deb && \
     rm /tmp/kopia.deb
