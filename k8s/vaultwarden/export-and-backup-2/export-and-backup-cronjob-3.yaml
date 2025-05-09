@@ -63,10 +63,18 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
+                - -eo
+                - pipefail
                 - -c
               args:
                 - |
-                  set -euo pipefail
+                  hc_start() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1; }
+                  hc_ping() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}" > /dev/null 2>&1; }
+                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+
+                  trap 'hc_fail' ERR
+
+                  hc_start
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -111,20 +119,6 @@ spec:
                       | grep -q '^age-encryption\.org/v1' \
                       || error "Invalid age header"
                     rm -f "${plain_json}"
-
-                    local ts tar_file
-                    ts=$(date -u +"%Y%m%dT%H%M%SZ")
-                    tar_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}-${ts}.tar.gz"
-
-                    log "Creating archive ${tar_file}…"
-                    # -C /export so paths inside the tar are relative
-                    tar -czf "${tar_file}" -C /export \
-                        "vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json" \
-                        "vaultwarden-${VAULTWARDEN_USER_ID}.age" \
-                        ".env"
-
-                    check_file "${tar_file}"
-                    log "Archive ready: ${tar_file}"
                   }
 
                   run_job_buffered() {
@@ -168,13 +162,15 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
-                - -eox
+                - -eo
                 - pipefail
                 - -c
               args:
                 - |
-                  curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
-                  ls -la /policies
+                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+
+                  trap 'hc_fail' ERR
+                  
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
@@ -255,7 +251,6 @@ spec:
                   log "Restic backup completed."
 
                   hc_ping
-                  
 
             - name: deny-all-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
@@ -276,6 +271,9 @@ spec:
                 - -c
                 - |
                   log() { echo "[INFO]  $(date -Iseconds) $*"; }
+                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+
+                  trap 'hc_fail' ERR
 
                   log "waiting for A and B to finish"
                   until [ -f /signals/A.done ]; do
