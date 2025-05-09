@@ -60,45 +60,45 @@ trap on_exit EXIT
 
 #─── MAIN LOGIC ─────────────────────────────────────────────────────────────────
 main() {
-  require_env
-  require_cmds
+  # require_env
+  # require_cmds
 
-  log "Starting health-check ping…"
-  curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1 || warn "Start ping failed"
+  # log "Starting health-check ping…"
+  # curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1 || warn "Start ping failed"
 
-  # 1) Fetch Vaultwarden version
-  VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
-    | jq -r '.version // empty')
-  [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
+  # # 1) Fetch Vaultwarden version
+  # VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
+  #   | jq -r '.version // empty')
+  # [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
 
-  # 2) Bitwarden login & export
-  log "Logging into Bitwarden and exporting data…"
-  bw config server "https://${VAULTWARDEN_HOST}"
-  export BW_SESSION
-  BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
-  bw sync --cleanexit --quiet
+  # # 2) Bitwarden login & export
+  # log "Logging into Bitwarden and exporting data…"
+  # bw config server "https://${VAULTWARDEN_HOST}"
+  # export BW_SESSION
+  # BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+  # bw sync --cleanexit --quiet
 
-  local enc_json="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
-  local plain_json="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+  # local enc_json="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
+  # local plain_json="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
 
-  bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" \
-    --output "${enc_json}" --cleanexit --quiet
-  bw export --format json \
-    --output "${plain_json}" --cleanexit --quiet
-  bw logout --cleanexit --quiet
+  # bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" \
+  #   --output "${enc_json}" --cleanexit --quiet
+  # bw export --format json \
+  #   --output "${plain_json}" --cleanexit --quiet
+  # bw logout --cleanexit --quiet
 
-  check_file "${enc_json}"
-  check_file "${plain_json}"
+  # check_file "${enc_json}"
+  # check_file "${plain_json}"
 
-  # 3) AGE encryption
-  log "Encrypting export with age…"
-  local cipher_file="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-  age --recipient "${AGE_RECIPIENT}" \
-      --output "${cipher_file}" "${plain_json}"
-  check_file "${cipher_file}"
-  head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' \
-    || error "Invalid age header"
-  rm -f "${plain_json}"
+  # # 3) AGE encryption
+  # log "Encrypting export with age…"
+  # local cipher_file="${EXPORT_DIR}/vaultwarden-${VAULTWARDEN_USER_ID}.age"
+  # age --recipient "${AGE_RECIPIENT}" \
+  #     --output "${cipher_file}" "${plain_json}"
+  # check_file "${cipher_file}"
+  # head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' \
+  #   || error "Invalid age header"
+  # rm -f "${plain_json}"
 
   # 4) Prepare S3 policies for restic run
   log "Applying S3 policies for Restic…"

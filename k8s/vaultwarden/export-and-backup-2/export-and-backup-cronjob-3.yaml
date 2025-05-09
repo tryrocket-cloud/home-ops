@@ -37,6 +37,64 @@ spec:
                     path: public-access-block-restic.json
                   - key: public-access-block-deny-all.json
                     path: public-access-block-deny-all.json
+
+          initContainers:
+            - name: vaultwarden-export
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-dac626759170cfa9660ede089433470c89ca40a2
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: TZ
+                  value: Europe/Berlin
+                - name: VAULTWARDEN_HOST
+                  value: vaultwarden.tryrocket.cloud
+                - name: VAULTWARDEN_USER_ID
+                  value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              volumeMounts:
+                - name: export
+                  mountPath: /export
+                - name: restic-backup-script
+                  mountPath: /scripts
+                - name: policies
+                  mountPath: /policies
+              command:
+                - /bin/bash
+                - -c
+              args:
+                - |
+                  set -exuo pipefail
+
+                  check_file() { [[ -s "$1" ]] || echo "File missing or empty: $1"; }
+
+                  VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
+                  [[ -n "$VW_VERSION" ]] || echo "Unable to retrieve Vaultwarden version"
+
+                  bw config server "https://${VAULTWARDEN_HOST}"
+                  export BW_SESSION
+                  BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+                  bw sync --cleanexit --quiet
+
+                  enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
+                  plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+
+                  bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "${enc_json}" --cleanexit --quiet
+                  bw export --format json --output "${plain_json}" --cleanexit --quiet
+                  bw logout --cleanexit --quiet
+
+                  check_file "${enc_json}"
+                  check_file "${plain_json}"
+
+                  cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
+
+                  age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
+
+                  check_file "${cipher_file}"
+                  head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' || error "Invalid age header"
+                  
+                  rm -f "${plain_json}"
+
           containers:
             - name: backup
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-dac626759170cfa9660ede089433470c89ca40a2
@@ -75,4 +133,5 @@ spec:
                 - -c
               args:
                 - |
+                  curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1
                   bash /scripts/restic-backup.sh
