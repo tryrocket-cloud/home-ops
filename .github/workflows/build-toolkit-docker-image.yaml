@@ -36,11 +36,15 @@ jobs:
         with:
           context: toolkit/
           push: true
-          tags: ghcr.io/${{ github.repository }}:toolkit
+          tags: |
+            ghcr.io/${{ github.repository }}:toolkit
+            ghcr.io/${{ github.repository }}:toolkit-${{ github.sha }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: immich/
           push: true
-          tags: ghcr.io/${{ github.repository }}:immich
+          tags: |
+            ghcr.io/${{ github.repository }}:immich
+            ghcr.io/${{ github.repository }}:immich-${{ github.sha }}

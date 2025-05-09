@@ -40,7 +40,7 @@ spec:
           containers:
             - name: backup
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit
-              imagePullPolicy: Always # TOOD: Change to IfNotPresent
+              imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
                   value: Europe/Berlin
