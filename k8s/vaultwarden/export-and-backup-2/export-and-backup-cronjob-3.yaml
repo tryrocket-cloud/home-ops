@@ -24,12 +24,9 @@ spec:
             - name: cache
               persistentVolumeClaim:
                 claimName: vaultwarden-support-pvc
-            - name: restic-backup-script
+            - name: helper-scripts
               configMap:
-                name: restic-backup-script
-            - name: hc-script
-              configMap:
-                name: hc-script
+                name: helper-scripts
             - name: policies
               secret:
                 secretName: all-in-one
@@ -60,9 +57,7 @@ spec:
               volumeMounts:
                 - name: export
                   mountPath: /export
-                - name: restic-backup-script
-                  mountPath: /scripts
-                - name: hc-script
+                - name: helper-scripts
                   mountPath: /scripts
                 - name: policies
                   mountPath: /policies
@@ -164,7 +159,7 @@ spec:
               volumeMounts:
                 - name: policies
                   mountPath: /policies
-                - name: hc-script
+                - name: helper-scripts
                   mountPath: /scripts
               command:
                 - /bin/bash
@@ -222,7 +217,7 @@ spec:
                   mountPath: /scripts
                 - name: policies
                   mountPath: /policies
-                - name: hc-script
+                - name: helper-scripts
                   mountPath: /scripts
               command:
                 - /bin/bash
@@ -267,7 +262,7 @@ spec:
                   mountPath: /signals
                 - name: policies
                   mountPath: /policies
-                - name: hc-script
+                - name: helper-scripts
                   mountPath: /scripts
               envFrom:
                 - secretRef:

@@ -11,9 +11,8 @@ resources:
   - export-and-backup-cronjob-3.yaml
 
 configMapGenerator:
-  - name: restic-backup-script
+  - name: helper-scripts
     files:
       - restic-backup.sh
-  - name: hc-script
-    files:
       - hc.sh
+      
