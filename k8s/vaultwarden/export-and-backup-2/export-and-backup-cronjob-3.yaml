@@ -39,7 +39,7 @@ spec:
                     path: public-access-block-deny-all.json
           containers:
             - name: backup
-              image: debian:bookworm-slim
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
