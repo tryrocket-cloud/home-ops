@@ -1,81 +1,71 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-#–– healthcheck start ––
-curl -fsS -m 10 https://hc-ping.com/${HC_UUID}/start
+required_vars=(
+  HC_UUID VAULTWARDEN_HOST VAULTWARDEN_USERNAME VAULTWARDEN_PASSWORD
+  VAULTWARDEN_USER_ID BW_CLI_VERSION AGE_RECIPIENT
+  BUCKET AWS_ENDPOINT_URL HOSTNAME AGE_VERSION
+)
+for var in "${required_vars[@]}"; do
+  [[ -z "${!var:-}" ]] && { echo "Missing required env: $var" >&2; exit 1; }
+done
 
-#–– always-run “finally” block ––
+function check_file() {
+  local file="$1"
+  [[ -s "$file" ]] || { echo "ERROR: $file missing or empty" >&2; exit 1; }
+}
+
+curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}/start"
+
 function finally {
-echo "🔐 enforcing final S3 block policy…"
-aws s3api put-public-access-block \
+  echo "🔐 Enforcing final S3 block policy…"
+  aws s3api put-public-access-block \
     --bucket "${BUCKET}" \
     --endpoint-url "${AWS_ENDPOINT_URL}" \
     --public-access-block-configuration file:///policies/public-access-block-deny-all.json
-
-aws s3api put-bucket-policy \
+  aws s3api put-bucket-policy \
     --bucket "${BUCKET}" \
     --endpoint-url "${AWS_ENDPOINT_URL}" \
     --policy file:///policies/deny-all-policy.json
 }
 trap finally EXIT
 
-#–– 1) get VW version ––
-VW_VERSION=$(curl -sSf -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
-                | jq -r '.version // empty')
-echo "Vaultwarden version: $VW_VERSION"
+VW_VERSION=$(curl -sSf -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
 
-bw config server https://${VAULTWARDEN_HOST}
-export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+bw config server "https://${VAULTWARDEN_HOST}"
+export BW_SESSION
+BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
 bw sync
-bw export \
---format encrypted_json \
---password "${VAULTWARDEN_PASSWORD}" \
---output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-encrypted_json.json
-bw export \
---format json \
---output /export/vaultwarden-export-"${VAULTWARDEN_USER_ID}"-plain.json
+bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json"
+bw export --format json --output "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
 bw logout
 
-[ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-[ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
-
+check_file "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json"
+check_file "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
 
 PLAIN="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
 CIPHER="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
 
-[ -s "${PLAIN}" ] || { echo "ERROR: missing plaintext export" >&2; exit 1; }
-
+check_file "$PLAIN"
 age --recipient "${AGE_RECIPIENT}" --output "${CIPHER}" "${PLAIN}"
-
-[ -s "${CIPHER}" ] || { echo "ERROR: age encryption failed" >&2; exit 1; }
+check_file "$CIPHER"
 head -c21 "${CIPHER}" | grep -q '^age-encryption\.org/v1'
+rm "$PLAIN"
 
-rm "${PLAIN}"
-
-#–– 4) configure S3 for restic ––
-aws s3api put-bucket-policy \
---bucket "${BUCKET}" \
---endpoint-url "${AWS_ENDPOINT_URL}" \
---policy file:///policies/restic-policy.json
-aws s3api put-public-access-block \
---bucket "${BUCKET}" \
---endpoint-url "${AWS_ENDPOINT_URL}" \
---public-access-block-configuration file:///policies/public-access-block-restic.json
-
-#–– 5) restic backup & prune ––
+aws s3api put-bucket-policy --bucket "${BUCKET}" --endpoint-url "${AWS_ENDPOINT_URL}" --policy file:///policies/restic-policy.json
+aws s3api put-public-access-block --bucket "${BUCKET}" --endpoint-url "${AWS_ENDPOINT_URL}" --public-access-block-configuration file:///policies/public-access-block-restic.json
 
 restic backup \
---host "${HOSTNAME}" \
---tag restic_version:$(restic version | awk 'NR==1{print $2}') \
---tag bw_cli_version:$BW_CLI_VERSION \
---tag vaultwarden_version:$VW_VERSION \
---tag age_version:$AGE_VERSION \
---tag environment:production \
-/export
+  --host "${HOSTNAME}" \
+  --tag restic_version:"$(restic version | awk 'NR==1{print $2}')" \
+  --tag bw_cli_version:"$BW_CLI_VERSION" \
+  --tag vaultwarden_version:"$VW_VERSION" \
+  --tag age_version:"$AGE_VERSION" \
+  --tag environment:production \
+  /export
 restic check --read-data
 restic forget --keep-within '180d' --prune
 
-#–– 6) final healthcheck ping ––
-curl -fsS -m 10 https://hc-ping.com/${HC_UUID}
+curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}"
 
 echo "✅ backup completed successfully."
