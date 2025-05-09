@@ -150,7 +150,35 @@ spec:
                   #parallel ::: get_vaultwarden_version export_vaultwarden_vault
                   #log "Vaultwarden export completed."
 
+            - name: enable-s3
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: TZ
+                  value: Europe/Berlin
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+              volumeMounts:
+                - name: policies
+                  mountPath: /policies
+              command:
+                - /bin/bash
+                - -eo
+                - pipefail
+                - -c
+              args:
+                - |
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy "file:///policies/export-policy.json"
+                  aws s3api put-public-access-block \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --public-access-block-configuration "file:///policies/public-access-block-export.json"
 
+                  curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
 
           containers:
             - name: backup
@@ -163,8 +191,6 @@ spec:
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_USER_ID
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
-                - name: BW_CLI_VERSION
-                  value: "2025.4.0"
                 - name: HOSTNAME
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
@@ -203,23 +229,8 @@ spec:
                   trap 'hc_fail' ERR
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
-                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
-                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
-                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
 
                   source /export/.env
-
-                  curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
-
-                  log "Applying S3 policies for Restic…"
-                  aws s3api put-bucket-policy \
-                    --bucket "${BUCKET}" \
-                    --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --policy "file:///policies/restic-policy.json"
-                  aws s3api put-public-access-block \
-                    --bucket "${BUCKET}" \
-                    --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --public-access-block-configuration "file:///policies/public-access-block-restic.json"
 
                   run_restic_backup() {
                     restic backup \
