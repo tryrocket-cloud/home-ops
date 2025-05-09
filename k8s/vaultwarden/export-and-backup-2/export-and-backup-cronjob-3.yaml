@@ -64,7 +64,7 @@ spec:
                 - -c
               args:
                 - |
-                  set -exuo pipefail
+                  set -euo pipefail
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -136,7 +136,7 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
-                - -exo
+                - -eo
                 - pipefail
                 - -c
               args:
