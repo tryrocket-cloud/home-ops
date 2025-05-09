@@ -213,8 +213,6 @@ spec:
                   mountPath: /signals
                 - name: cache
                   mountPath: /cache
-                - name: restic-backup-script
-                  mountPath: /scripts
                 - name: policies
                   mountPath: /policies
                 - name: helper-scripts
