@@ -244,17 +244,13 @@ spec:
                 - pipefail
                 - -c
                 - |
-                  echo "[final] waiting for A and B to finis h…"
+                  log() { echo "[INFO]  $(date -Iseconds) $*"; }
 
-                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
-                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
-                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
-                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
-
+                  log "waiting for A and B to finish"
                   until [ -f /signals/A.done ]; do
                     sleep 1
                   done
-                  echo "[final] all workers done; blocking s3"
+                  log "all workers done; blocking s3"
 
                   on_exit() {
                     log "Applying final S3 block policy…"
@@ -269,5 +265,5 @@ spec:
                   }
 
                   on_exit
-                  echo "[final] all done"
+                  log "all done! exiting…"
                   exit 0
