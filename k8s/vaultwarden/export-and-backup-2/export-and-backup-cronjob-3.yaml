@@ -197,6 +197,24 @@ spec:
                     restic forget --keep-within "180d" --prune
                   }
 
+                  run_job_buffered() {
+                    local name="$1"; shift
+                    local tmp; tmp=$(mktemp)
+                    (
+                      { "$@"; } >"$tmp" 2>&1
+                      echo "─── [${name}] done ───"
+                      sed "s/^/[${name}] /" "$tmp"
+                      rm -f "$tmp"
+                    ) &
+                  }
+
+                  run_job_buffered 'ionos.com' run_restic_backup'
+                  run_job_buffered B bash -c 'sleep 1; echo "Job B done"'
+                  run_job_buffered C bash -c 'sleep 2; echo "Job C done"'
+
+                  wait
+                  echo "All jobs finished."
+
                   run_restic_backup && log "Job A done" &
                   sleep 1  && echo "Job B done" &
                   sleep 2  && echo "Job C done" &
