@@ -42,6 +42,8 @@ spec:
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit
               imagePullPolicy: Always # TOOD: Change to IfNotPresent
               env:
+                - name: TZ
+                  value: Europe/Berlin
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_USER_ID
