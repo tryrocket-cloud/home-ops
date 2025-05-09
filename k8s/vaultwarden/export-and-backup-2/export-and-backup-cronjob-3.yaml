@@ -47,8 +47,6 @@ spec:
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
                 - name: BW_CLI_VERSION
                   value: "2025.4.0"
-                - name: AGE_VERSION
-                  value: "1.2.1"
                 - name: HOSTNAME
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
