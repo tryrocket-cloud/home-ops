@@ -204,7 +204,7 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eox
+                - -eo
                 - pipefail
                 - -c
               args:
@@ -212,7 +212,7 @@ spec:
                   source /scripts/hs.sh
                   source /export/.env
 
-                  trap 'touch /signals/A.done' EXIT
+                  trap 'touch /signals/restic-ionos.done' EXIT
                   trap 'hc_ping fail' ERR
 
                   run_restic_backup() {
@@ -256,15 +256,17 @@ spec:
                 - -c
                 - |
                   source /scripts/hs.sh
+
+                  trap 'hc_ping' EXIT
                   trap 'hc_ping fail' ERR
 
-                  log "waiting for A and B to finish"
-                  until [ -f /signals/A.done ]; do
+                  log "waiting for workers to finish"
+                  until [ -f /signals/restic-ionos.done ]; do
                     sleep 1
                   done
                   log "all workers done; blocking s3"
 
-                  on_exit() {
+                  enable_s3_block() {
                     log "Applying final S3 block policy…"
                     aws s3api put-public-access-block \
                       --bucket "${BUCKET}" \
@@ -274,8 +276,7 @@ spec:
                       --bucket "${BUCKET}" \
                       --endpoint-url "${AWS_ENDPOINT_URL}" \
                       --policy "file:///policies/deny-all-policy.json"
+                    log "S3 block policy applied."
                   }
 
-                  on_exit
-                  log "all done! exiting…"
-                  exit 0
+                  enable_s3_block
