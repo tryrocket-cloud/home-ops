@@ -210,7 +210,7 @@ spec:
                   #     echo "─── [ {1} ] done ───"
                   #   '
 
-                  parallel ::: 'run_restic_backup' 'echo MyJobB' 'echo MyJobC'
+                  parallel ::: run_restic_backup 'echo MyJobB' 'echo MyJobC'
                   echo "All jobs finished!"
 
                   # run_job_buffered() {
