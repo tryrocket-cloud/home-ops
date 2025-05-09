@@ -172,11 +172,11 @@ spec:
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --policy "file:///policies/export-policy.json"
+                    --policy "file:///policies/restic-policy.json"
                   aws s3api put-public-access-block \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --public-access-block-configuration "file:///policies/public-access-block-export.json"
+                    --public-access-block-configuration "file:///policies/public-access-block-restic.json"
 
                   curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
 
