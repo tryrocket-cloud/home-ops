@@ -226,6 +226,7 @@ spec:
                   mountPath: /signals
                 - name: policies
                   mountPath: /policies
+              envFrom:
                 - secretRef:
                     name: all-in-one
                 - secretRef:
