@@ -39,7 +39,7 @@ spec:
                     path: public-access-block-deny-all.json
           containers:
             - name: backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-dac626759170cfa9660ede089433470c89ca40a2
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
