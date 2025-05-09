@@ -196,7 +196,8 @@ spec:
                     restic check --read-data
                     restic forget --keep-within "180d" --prune
                   }
-
+                  export -f run_restic_backup
+                  
                   # jobs=(
                   #   'ionos.com|run_restic_backup'
                   #   'JobB     |bash -c "sleep 1; echo '\''Job B done'\''"'
