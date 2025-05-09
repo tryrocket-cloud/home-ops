@@ -74,4 +74,4 @@ spec:
                 - -c
               args:
                 - |
-                  bash /scripts/vaultwarden-backup.sh
+                  bash /scripts/backup.sh
