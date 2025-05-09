@@ -156,6 +156,8 @@ spec:
               env:
                 - name: TZ
                   value: Europe/Berlin
+                - name: HC_URL
+                  value: https://hc-ping.com
               envFrom:
                 - secretRef:
                     name: all-in-one
