@@ -225,10 +225,17 @@ spec:
                 - name: signals
                   mountPath: /signals
               command:
-                - sh
+                - /bin/bash
+                - -eo
+                - pipefail
                 - -c
                 - |
                   echo "[final] waiting for A and B to finish…"
+
+                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
+                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
+                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
+                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
 
                   until [ -f /signals/A.done ]; do
                     sleep 1
