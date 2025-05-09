@@ -70,7 +70,7 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
-                - -exo
+                - -eo
                 - pipefail
                 - -c
               args:

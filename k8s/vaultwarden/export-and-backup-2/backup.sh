@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
-set -euxo pipefail
-
-#–– basic setup ––
-# apt-get update \
-# && apt-get install -y --no-install-recommends \
-#         curl jq unzip ca-certificates iputils-ping awscli \
-#         bash restic bzip2 \
-# && rm -rf /var/lib/apt/lists/*
+set -euo pipefail
 
 #–– healthcheck start ––
 curl -fsS -m 10 https://hc-ping.com/${HC_UUID}/start
@@ -31,13 +24,6 @@ VW_VERSION=$(curl -sSf -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
                 | jq -r '.version // empty')
 echo "Vaultwarden version: $VW_VERSION"
 
-#–– 2) export vaultwarden ––
-# curl -sSL \
-# https://github.com/bitwarden/clients/releases/download/cli-v${BW_CLI_VERSION}/bw-linux-${BW_CLI_VERSION}.zip \
-# -o /tmp/bw.zip \
-# && unzip -q /tmp/bw.zip -d /usr/local/bin \
-# && chmod +x /usr/local/bin/bw
-
 bw config server https://${VAULTWARDEN_HOST}
 export BW_SESSION=$(bw login --raw "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
 bw sync
@@ -53,11 +39,6 @@ bw logout
 [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
 [ -s "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json" ] || { echo "ERROR: export failed or produced empty file" >&2; exit 1; }
 
-#–– 3) encrypt with age ––
-# curl -fsSL \
-# https://github.com/FiloSottile/age/releases/download/v${AGE_VERSION}/age-v${AGE_VERSION}-linux-amd64.tar.gz \
-# | tar xz -C /usr/local/bin --strip-components=1
-# chmod +x /usr/local/bin/age
 
 PLAIN="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
 CIPHER="/export/vaultwarden-export-${VAULTWARDEN_USER_ID}.age"
