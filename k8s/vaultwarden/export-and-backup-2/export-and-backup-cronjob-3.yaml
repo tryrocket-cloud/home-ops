@@ -51,9 +51,13 @@ spec:
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_USER_ID
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
+                - name: HC_URL
+                  value: https://hc-ping.com
               envFrom:
                 - secretRef:
                     name: all-in-one
+                - secretRef:
+                    name: healthchecksio
               volumeMounts:
                 - name: export
                   mountPath: /export
