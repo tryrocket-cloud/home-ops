@@ -66,11 +66,18 @@ spec:
                 - |
                   set -exuo pipefail
 
-                  check_file() { [[ -s "$1" ]] || echo "File missing or empty: $1"; }
+                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
+                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
+                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
+                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
+
+                  log "Starting health-check ping…"
+                  curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1 || warn "Start ping failed"
 
                   VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
-                  [[ -n "$VW_VERSION" ]] || echo "Unable to retrieve Vaultwarden version"
+                  [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
 
+                  log "Logging into Bitwarden and exporting data…"
                   bw config server "https://${VAULTWARDEN_HOST}"
                   export BW_SESSION
                   BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
@@ -86,13 +93,11 @@ spec:
                   check_file "${enc_json}"
                   check_file "${plain_json}"
 
+                  log "Encrypting export with age…"
                   cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-
                   age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
-
                   check_file "${cipher_file}"
                   head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' || error "Invalid age header"
-                  
                   rm -f "${plain_json}"
 
           containers:
