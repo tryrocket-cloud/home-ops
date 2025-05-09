@@ -180,8 +180,8 @@ spec:
                 - -c
               args:
                 - |
-                  hc_ping() { curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1; }
-                  hc_fail() { curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1; }
+                  hc_ping() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}" > /dev/null 2>&1; }
+                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
 
                   trap 'touch /signals/A.done' EXIT
                   trap 'hc_fail' ERR
