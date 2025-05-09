@@ -152,11 +152,11 @@ spec:
                     aws s3api put-public-access-block \
                       --bucket "${BUCKET}" \
                       --endpoint-url "${AWS_ENDPOINT_URL}" \
-                      --public-access-block-configuration file:///policies/public-access-block-deny-all.json"
+                      --public-access-block-configuration "file:///policies/public-access-block-deny-all.json"
                     aws s3api put-bucket-policy \
                       --bucket "${BUCKET}" \
                       --endpoint-url "${AWS_ENDPOINT_URL}" \
-                      --policy file:///policies/deny-all-policy.json
+                      --policy "file:///policies/deny-all-policy.json"
 
                     if [[ $code -eq 0 ]]; then
                       curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1 || warn "Health check ping failed"
