@@ -51,8 +51,6 @@ spec:
                   value: vaultwarden.tryrocket.cloud
                 - name: VAULTWARDEN_USER_ID
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
-                - name: HC_URL
-                  value: https://hc-ping.com
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -74,9 +72,9 @@ spec:
                 - |
                   source /scripts/hc.sh
 
-                  trap 'hc fail' ERR
+                  trap 'hc_ping fail' ERR
 
-                  hc start
+                  hc_ping start
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -146,8 +144,6 @@ spec:
               env:
                 - name: TZ
                   value: Europe/Berlin
-                - name: HC_URL
-                  value: https://hc-ping.com
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -167,7 +163,7 @@ spec:
                 - |
                   source /scripts/hc.sh
 
-                  trap 'hc fail' ERR
+                  trap 'hc_ping fail' ERR
                   
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
@@ -193,8 +189,6 @@ spec:
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
                   value: /cache/ionos.com/vaultwarden/restic
-                - name: HC_URL
-                  value: https://hc-ping.com
                 - name: BACKUP_DATA_PATH
                   value: /export
               envFrom:
@@ -224,7 +218,7 @@ spec:
                   source /export/.env
 
                   trap 'touch /signals/A.done' EXIT
-                  trap 'hc fail' ERR
+                  trap 'hc_ping fail' ERR
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
 
@@ -248,7 +242,7 @@ spec:
                   run_restic_backup
                   log "Restic backup completed."
 
-                  hc
+                  hc_ping
 
             - name: deny-all-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
@@ -271,7 +265,7 @@ spec:
                 - -c
                 - |
                   source /scripts/hc.sh
-                  trap 'hc fail' ERR
+                  trap 'hc_ping fail' ERR
 
                   log() { echo "[INFO]  $(date -Iseconds) $*"; }
 

@@ -13,6 +13,5 @@ resources:
 configMapGenerator:
   - name: helper-scripts
     files:
-      - restic-backup.sh
       - hc.sh
       
