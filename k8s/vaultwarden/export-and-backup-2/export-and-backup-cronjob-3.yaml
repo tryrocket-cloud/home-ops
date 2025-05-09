@@ -114,8 +114,9 @@ spec:
 
                   export -f get_vaultwarden_version export_vaultwarden_vault log warn error check_file
 
+                  log "Starting Vaultwarden export…"
                   parallel ::: get_vaultwarden_version export_vaultwarden_vault
-                  echo "All jobs finished!"
+                  log "Vaultwarden export completed."
 
                   # log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   # warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -250,5 +251,6 @@ spec:
                   }
                   export -f run_restic_backup
 
+                  log "Starting Restic backup…"
                   parallel ::: run_restic_backup 'echo MyJobB' 'echo MyJobC'
-                  echo "All jobs finished!"
+                  log "Restic backup completed."
