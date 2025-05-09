@@ -19,6 +19,8 @@ spec:
           volumes:
             - name: export
               emptyDir: {}
+            - name: signals
+              emptyDir: {}
             - name: cache
               persistentVolumeClaim:
                 claimName: vaultwarden-support-pvc
@@ -163,6 +165,8 @@ spec:
               volumeMounts:
                 - name: export
                   mountPath: /export
+                - name: signals
+                  mountPath: /signals
                 - name: cache
                   mountPath: /cache
                 - name: restic-backup-script
@@ -176,32 +180,12 @@ spec:
                 - -c
               args:
                 - |
+                  trap 'touch /signals/A.done' EXIT
+
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
                   error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
                   check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
-
-                  on_exit() {
-                    local code=$?
-                    log "Applying final S3 block policy…"
-                    aws s3api put-public-access-block \
-                      --bucket "${BUCKET}" \
-                      --endpoint-url "${AWS_ENDPOINT_URL}" \
-                      --public-access-block-configuration "file:///policies/public-access-block-deny-all.json"
-                    aws s3api put-bucket-policy \
-                      --bucket "${BUCKET}" \
-                      --endpoint-url "${AWS_ENDPOINT_URL}" \
-                      --policy "file:///policies/deny-all-policy.json"
-
-                    if [[ $code -eq 0 ]]; then
-                      curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1 || warn "Health check ping failed"
-                      log "Backup completed successfully."
-                    else
-                      curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1 || warn "Failure ping failed"
-                      error "Backup exited with code $code."
-                    fi
-                  }
-                  trap on_exit EXIT
 
                   source /export/.env
 
@@ -235,3 +219,43 @@ spec:
                   run_restic_backup
                   log "Restic backup completed."
 
+            - name: final-cleanup
+              image: your-image
+              volumeMounts:
+                - name: signals
+                  mountPath: /signals
+              command:
+                - sh
+                - -c
+                - |
+                  echo "[final] waiting for A and B to finish…"
+
+                  until [ -f /signals/A.done ]; do
+                    sleep 1
+                  done
+                  echo "[final] all workers done; blocking s3"
+
+                  on_exit() {
+                    local code=$?
+                    log "Applying final S3 block policy…"
+                    aws s3api put-public-access-block \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --public-access-block-configuration "file:///policies/public-access-block-deny-all.json"
+                    aws s3api put-bucket-policy \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --policy "file:///policies/deny-all-policy.json"
+
+                    if [[ $code -eq 0 ]]; then
+                      curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1 || warn "Health check ping failed"
+                      log "Backup completed successfully."
+                    else
+                      curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1 || warn "Failure ping failed"
+                      error "Backup exited with code $code."
+                    fi
+                  }
+
+                  on_exit
+                  echo "[final] all done"
+                  exit 0
