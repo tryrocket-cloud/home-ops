@@ -40,7 +40,7 @@ spec:
           containers:
             - name: backup
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit
-              imagePullPolicy: Always
+              imagePullPolicy: Always # TOOD: Change to IfNotPresent
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud

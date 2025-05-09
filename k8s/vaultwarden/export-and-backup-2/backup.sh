@@ -2,11 +2,11 @@
 set -euxo pipefail
 
 #–– basic setup ––
-apt-get update \
-&& apt-get install -y --no-install-recommends \
-        curl jq unzip ca-certificates iputils-ping awscli \
-        bash restic bzip2 \
-&& rm -rf /var/lib/apt/lists/*
+# apt-get update \
+# && apt-get install -y --no-install-recommends \
+#         curl jq unzip ca-certificates iputils-ping awscli \
+#         bash restic bzip2 \
+# && rm -rf /var/lib/apt/lists/*
 
 #–– healthcheck start ––
 curl -fsS -m 10 https://hc-ping.com/${HC_UUID}/start
