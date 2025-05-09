@@ -12,7 +12,7 @@ ARG KOPIA_VERSION=0.19.0
 ENV KOPIA_VERSION=${KOPIA_VERSION}
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl wget ca-certificates tar unzip jq iputils-ping awscli bzip2 gnupg && \
+    apt-get install -y --no-install-recommends parallel curl wget ca-certificates tar unzip jq iputils-ping awscli bzip2 gnupg && \
     rm -rf /var/lib/apt/lists/* && \
     \
     curl -fsSL "https://github.com/restic/restic/releases/download/v${RESTIC_VERSION}/restic_${RESTIC_VERSION}_linux_amd64.bz2" | \
