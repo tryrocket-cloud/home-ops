@@ -67,12 +67,11 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
-                - -eox
+                - -eo
                 - pipefail
                 - -c
               args:
                 - |
-                  ls -la /scripts
                   source /scripts/hc.sh
 
                   trap 'hc fail' ERR
@@ -141,12 +140,6 @@ spec:
                   wait
                   echo "All jobs finished!"
 
-                  #export -f get_vaultwarden_version export_vaultwarden_vault log warn error check_file
-
-                  #log "Starting Vaultwarden export…"
-                  #parallel ::: get_vaultwarden_version export_vaultwarden_vault
-                  #log "Vaultwarden export completed."
-
             - name: restic-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               imagePullPolicy: IfNotPresent
@@ -167,12 +160,11 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eox
+                - -eo
                 - pipefail
                 - -c
               args:
                 - |
-                  ls -la /scripts
                   source /scripts/hc.sh
 
                   trap 'hc fail' ERR
@@ -223,19 +215,20 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
                 - |
                   source /scripts/hc.sh
+                  source /export/.env
 
                   trap 'touch /signals/A.done' EXIT
                   trap 'hc fail' ERR
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
 
-                  source /export/.env
+                  
 
                   run_restic_backup() {
                     restic backup \
@@ -255,7 +248,7 @@ spec:
                   run_restic_backup
                   log "Restic backup completed."
 
-                  hc ping
+                  hc
 
             - name: deny-all-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
