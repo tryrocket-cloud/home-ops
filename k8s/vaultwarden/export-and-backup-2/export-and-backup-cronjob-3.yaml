@@ -71,9 +71,6 @@ spec:
                   error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
                   check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
 
-                  log "Starting health-check ping…"
-                  curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1 || warn "Start ping failed"
-
                   VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
                   [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
 
