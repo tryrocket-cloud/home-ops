@@ -197,19 +197,20 @@ spec:
                     restic forget --keep-within "180d" --prune
                   }
 
-                  jobs=(
-                    'ionos.com|run_restic_backup'
-                    'JobB     |bash -c "sleep 1; echo '\''Job B done'\''"'
-                    'JobC     |bash -c "sleep 2; echo '\''Job C done'\''"'
-                  )
+                  # jobs=(
+                  #   'ionos.com|run_restic_backup'
+                  #   'JobB     |bash -c "sleep 1; echo '\''Job B done'\''"'
+                  #   'JobC     |bash -c "sleep 2; echo '\''Job C done'\''"'
+                  # )
 
-                  printf '%s\n' "${jobs[@]}" | \
-                    parallel --colsep '\|' --tag --group -j0 '
-                      echo "─── [ {1} ] starting ───"
-                      {2}
-                      echo "─── [ {1} ] done ───"
-                    '
+                  # printf '%s\n' "${jobs[@]}" | \
+                  #   parallel --colsep '\|' --tag --group -j0 '
+                  #     echo "─── [ {1} ] starting ───"
+                  #     {2}
+                  #     echo "─── [ {1} ] done ───"
+                  #   '
 
+                  parallel ::: 'run_restic_backup' 'echo MyJobB' 'echo MyJobC'
                   echo "All jobs finished!"
 
                   # run_job_buffered() {
