@@ -150,7 +150,7 @@ spec:
                   #parallel ::: get_vaultwarden_version export_vaultwarden_vault
                   #log "Vaultwarden export completed."
 
-            - name: enable-s3
+            - name: enable-s3-access
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               imagePullPolicy: IfNotPresent
               env:
@@ -253,7 +253,7 @@ spec:
                   hc_ping
                   
 
-            - name: final-cleanup
+            - name: disable-s3-access
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               volumeMounts:
                 - name: signals
