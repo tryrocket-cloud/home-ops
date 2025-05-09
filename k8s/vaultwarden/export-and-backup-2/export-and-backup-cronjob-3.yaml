@@ -169,12 +169,9 @@ spec:
                   trap on_exit EXIT
 
                   source /export/.env
-                  log "test"
 
-                  
-                  log "test2"
                   curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
-                  log "test3"
+
                   log "Applying S3 policies for Restic…"
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
