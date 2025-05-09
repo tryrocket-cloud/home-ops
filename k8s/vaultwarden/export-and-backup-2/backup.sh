@@ -34,7 +34,7 @@ VW_VERSION=$(curl -sSf -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.
 
 bw config server "https://${VAULTWARDEN_HOST}"
 export BW_SESSION
-BW_SESSION=$(bw login --raw --cleanexit --quiet "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
 bw sync --cleanexit --quiet
 bw export --cleanexit --quiet --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-encrypted_json.json"
 bw export --cleanexit --quiet --format json --output "/export/vaultwarden-export-${VAULTWARDEN_USER_ID}-plain.json"
