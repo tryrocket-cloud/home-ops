@@ -326,12 +326,6 @@ spec:
                   trap 'hc_ping' EXIT
                   trap 'hc_ping fail' ERR
 
-                  log "waiting for workers to finish"
-                  until [ -f /signals/restic-ionos.done ] && [ -f /signals/kopia-ionos.done ]; do
-                    sleep 1
-                  done
-                  log "all workers done; blocking s3"
-
                   enable_s3_block() {
                     log "Applying final S3 block policy…"
                     aws s3api put-public-access-block \
@@ -344,5 +338,11 @@ spec:
                       --policy "file:///policies/deny-all-policy.json"
                     log "S3 block policy applied."
                   }
+
+                  log "waiting for workers to finish"
+                  until [ -f /signals/restic-ionos.done ] && [ -f /signals/kopia-ionos.done ]; do
+                    sleep 1
+                  done
+                  log "all workers done; blocking s3"
 
                   enable_s3_block
