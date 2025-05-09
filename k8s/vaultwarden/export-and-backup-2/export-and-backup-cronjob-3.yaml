@@ -224,6 +224,12 @@ spec:
               volumeMounts:
                 - name: signals
                   mountPath: /signals
+                - name: policies
+                  mountPath: /policies
+                - secretRef:
+                    name: all-in-one
+                - secretRef:
+                    name: healthchecksio
               command:
                 - /bin/bash
                 - -eo
