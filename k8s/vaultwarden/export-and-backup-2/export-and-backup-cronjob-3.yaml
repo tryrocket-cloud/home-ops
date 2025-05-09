@@ -103,8 +103,7 @@ spec:
 
                     log "Encrypting export with age…"
                     local cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-                    age --recipient "${AGE_RECIPIENT}" \
-                        --output "${cipher_file}" "${plain_json}"
+                    age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
                     check_file "${cipher_file}"
                     head -c21 "${cipher_file}" \
                       | grep -q '^age-encryption\.org/v1' \
@@ -112,46 +111,28 @@ spec:
                     rm -f "${plain_json}"
                   }
 
-                  export -f get_vaultwarden_version export_vaultwarden_vault log warn error check_file
+                  run_job_buffered() {
+                    local name="$1"; shift
+                    local tmp; tmp=$(mktemp)
+                    (
+                      { "$@"; } >"$tmp" 2>&1
+                      echo "─── [${name}] done ───"
+                      sed "s/^/[${name}] /" "$tmp"
+                      rm -f "$tmp"
+                    ) &
+                  }
 
-                  log "Starting Vaultwarden export…"
-                  parallel ::: get_vaultwarden_version export_vaultwarden_vault
-                  log "Vaultwarden export completed."
+                  run_job_buffered 'get vaultwarden version' get_vaultwarden_version
+                  run_job_buffered 'export vaultwarden vault' export_vaultwarden_vault
 
-                  # log()   { echo "[INFO]  $(date -Iseconds) $*"; }
-                  # warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
-                  # error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
-                  # check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
+                  wait
+                  echo "All jobs finished!"
 
-                  # VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
-                  # [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
-                  # echo "export VW_VERSION=${VW_VERSION}" > /export/.env
-                  # check_file "/export/.env"
+                  #export -f get_vaultwarden_version export_vaultwarden_vault log warn error check_file
 
-                  # log "Logging into Bitwarden and exporting data…"
-                  # bw config server "https://${VAULTWARDEN_HOST}"
-                  # export BW_SESSION
-                  # BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
-                  # bw sync --cleanexit --quiet
-
-                  # enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
-                  # plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
-
-                  # bw export --format encrypted_json --password "${VAULTWARDEN_PASSWORD}" --output "${enc_json}" --cleanexit --quiet
-                  # bw export --format json --output "${plain_json}" --cleanexit --quiet
-                  # bw logout --cleanexit --quiet
-
-                  # check_file "${enc_json}"
-                  # check_file "${plain_json}"
-
-                  # log "Encrypting export with age…"
-                  # cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-                  # age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
-                  # check_file "${cipher_file}"
-                  # head -c21 "${cipher_file}" | grep -q '^age-encryption\.org/v1' || error "Invalid age header"
-                  # rm -f "${plain_json}"
-
-
+                  #log "Starting Vaultwarden export…"
+                  #parallel ::: get_vaultwarden_version export_vaultwarden_vault
+                  #log "Vaultwarden export completed."
 
           containers:
             - name: backup
@@ -249,8 +230,8 @@ spec:
                     restic check --read-data
                     restic forget --keep-within "180d" --prune
                   }
-                  export -f run_restic_backup
-
+                  
                   log "Starting Restic backup…"
-                  parallel ::: run_restic_backup 'echo MyJobB' 'echo MyJobC'
+                  run_restic_backup
                   log "Restic backup completed."
+
