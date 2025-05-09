@@ -180,7 +180,11 @@ spec:
                 - -c
               args:
                 - |
+                  hc_ping() { curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1; }
+                  hc_fail() { curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1; }
+
                   trap 'touch /signals/A.done' EXIT
+                  trap 'hc_fail' ERR
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -219,6 +223,9 @@ spec:
                   run_restic_backup
                   log "Restic backup completed."
 
+                  hc_ping
+                  
+
             - name: final-cleanup
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               volumeMounts:
@@ -237,7 +244,7 @@ spec:
                 - pipefail
                 - -c
                 - |
-                  echo "[final] waiting for A and B to finish…"
+                  echo "[final] waiting for A and B to finis h…"
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -250,7 +257,6 @@ spec:
                   echo "[final] all workers done; blocking s3"
 
                   on_exit() {
-                    local code=$?
                     log "Applying final S3 block policy…"
                     aws s3api put-public-access-block \
                       --bucket "${BUCKET}" \
@@ -260,14 +266,6 @@ spec:
                       --bucket "${BUCKET}" \
                       --endpoint-url "${AWS_ENDPOINT_URL}" \
                       --policy "file:///policies/deny-all-policy.json"
-
-                    if [[ $code -eq 0 ]]; then
-                      curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1 || warn "Health check ping failed"
-                      log "Backup completed successfully."
-                    else
-                      curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1 || warn "Failure ping failed"
-                      error "Backup exited with code $code."
-                    fi
                   }
 
                   on_exit
