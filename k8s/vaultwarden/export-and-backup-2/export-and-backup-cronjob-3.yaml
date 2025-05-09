@@ -167,11 +167,12 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
                 - |
+                  ls -la /scripts
                   source /scripts/hc.sh
 
                   trap 'hc fail' ERR
