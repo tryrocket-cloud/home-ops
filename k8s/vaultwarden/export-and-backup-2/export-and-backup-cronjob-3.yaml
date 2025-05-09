@@ -40,7 +40,7 @@ spec:
 
           initContainers:
             - name: vaultwarden-export
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-dac626759170cfa9660ede089433470c89ca40a2
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
@@ -101,7 +101,7 @@ spec:
 
           containers:
             - name: backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-dac626759170cfa9660ede089433470c89ca40a2
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
