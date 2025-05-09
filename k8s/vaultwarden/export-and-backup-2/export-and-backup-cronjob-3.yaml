@@ -170,7 +170,7 @@ spec:
               args:
                 - |
                   curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
-
+                  ls -la /policies
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
