@@ -159,6 +159,8 @@ spec:
               envFrom:
                 - secretRef:
                     name: all-in-one
+                - secretRef:
+                    name: healthchecksio
               volumeMounts:
                 - name: policies
                   mountPath: /policies
