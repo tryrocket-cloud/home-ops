@@ -92,7 +92,7 @@ restic backup \
 --tag environment:production \
 /export
 restic check --read-data
-restic forget --keep-last 180 --prune
+restic forget --keep-within '180d' --prune
 
 #–– 6) final healthcheck ping ––
 curl -fsS -m 10 https://hc-ping.com/${HC_UUID}
