@@ -118,6 +118,8 @@ spec:
                   value: /cache/ionos.com/vaultwarden/restic
                 - name: HC_URL
                   value: https://hc-ping.com
+                - name: BACKUP_DATA_PATH
+                  value: /export
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -139,7 +141,56 @@ spec:
                 - -c
               args:
                 - |
+                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
+                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
+                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
+                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
+
                   source /export/.env
 
+                  on_exit() {
+                    local code=$?
+                    log "Applying final S3 block policy…"
+                    aws s3api put-public-access-block \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --public-access-block-configuration file:///policies/public-access-block-deny-all.json"
+                    aws s3api put-bucket-policy \
+                      --bucket "${BUCKET}" \
+                      --endpoint-url "${AWS_ENDPOINT_URL}" \
+                      --policy file:///policies/deny-all-policy.json
+
+                    if [[ $code -eq 0 ]]; then
+                      curl -fsS -m 10 "${HC_URL}" > /dev/null 2>&1 || warn "Health check ping failed"
+                      log "Backup completed successfully."
+                    else
+                      curl -fsS -m 10 "${HC_URL}/fail" > /dev/null 2>&1 || warn "Failure ping failed"
+                      error "Backup exited with code $code."
+                    fi
+                  }
+                  trap on_exit EXIT
+
                   curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
-                  bash /scripts/restic-backup.sh
+
+                  log "Applying S3 policies for Restic…"
+                  aws s3api put-bucket-policy \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --policy file:///policies/restic-policy.json
+                  aws s3api put-public-access-block \
+                    --bucket "${BUCKET}" \
+                    --endpoint-url "${AWS_ENDPOINT_URL}" \
+                    --public-access-block-configuration file:///policies/public-access-block-restic.json"
+
+                  log "Running Restic backup…"
+                  restic backup \
+                    --host "${HOSTNAME}" \
+                    --tag "restic_version:$(restic version | awk 'NR==1{print $2}')" \
+                    --tag "bw_cli_version:${BW_CLI_VERSION}" \
+                    --tag "vaultwarden_version:${VW_VERSION}" \
+                    --tag "age_version:${AGE_VERSION}" \
+                    --tag "environment:production" \
+                    "${BACKUP_DATA_PATH}"
+
+                  restic check --read-data
+                  restic forget --keep-within "180d" --prune
