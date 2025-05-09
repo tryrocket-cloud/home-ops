@@ -27,6 +27,9 @@ spec:
             - name: restic-backup-script
               configMap:
                 name: restic-backup-script
+            - name: hc-script
+              configMap:
+                name: hc-script
             - name: policies
               secret:
                 secretName: all-in-one
@@ -59,6 +62,8 @@ spec:
                   mountPath: /export
                 - name: restic-backup-script
                   mountPath: /scripts
+                - name: hc-script
+                  mountPath: /scripts
                 - name: policies
                   mountPath: /policies
               command:
@@ -68,13 +73,11 @@ spec:
                 - -c
               args:
                 - |
-                  hc_start() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1; }
-                  hc_ping() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}" > /dev/null 2>&1; }
-                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+                  source /scripts/hc.sh
 
-                  trap 'hc_fail' ERR
+                  trap 'hc fail' ERR
 
-                  hc_start
+                  hc start
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
                   warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
@@ -160,6 +163,8 @@ spec:
               volumeMounts:
                 - name: policies
                   mountPath: /policies
+                - name: hc-script
+                  mountPath: /scripts
               command:
                 - /bin/bash
                 - -eo
@@ -167,9 +172,9 @@ spec:
                 - -c
               args:
                 - |
-                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+                  source /scripts/hc.sh
 
-                  trap 'hc_fail' ERR
+                  trap 'hc fail' ERR
                   
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
@@ -215,6 +220,8 @@ spec:
                   mountPath: /scripts
                 - name: policies
                   mountPath: /policies
+                - name: hc-script
+                  mountPath: /scripts
               command:
                 - /bin/bash
                 - -eo
@@ -222,11 +229,10 @@ spec:
                 - -c
               args:
                 - |
-                  hc_ping() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}" > /dev/null 2>&1; }
-                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+                  source /scripts/hc.sh
 
                   trap 'touch /signals/A.done' EXIT
-                  trap 'hc_fail' ERR
+                  trap 'hc fail' ERR
 
                   log()   { echo "[INFO]  $(date -Iseconds) $*"; }
 
@@ -250,7 +256,7 @@ spec:
                   run_restic_backup
                   log "Restic backup completed."
 
-                  hc_ping
+                  hc ping
 
             - name: deny-all-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
@@ -259,6 +265,8 @@ spec:
                   mountPath: /signals
                 - name: policies
                   mountPath: /policies
+                - name: hc-script
+                  mountPath: /scripts
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -270,10 +278,10 @@ spec:
                 - pipefail
                 - -c
                 - |
-                  log() { echo "[INFO]  $(date -Iseconds) $*"; }
-                  hc_fail() { curl -fsS -m 10 "${HC_URL}/${HC_UUID}/fail" > /dev/null 2>&1; }
+                  source /scripts/hc.sh
+                  trap 'hc fail' ERR
 
-                  trap 'hc_fail' ERR
+                  log() { echo "[INFO]  $(date -Iseconds) $*"; }
 
                   log "waiting for A and B to finish"
                   until [ -f /signals/A.done ]; do
