@@ -185,15 +185,23 @@ spec:
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
                     --public-access-block-configuration "file:///policies/public-access-block-restic.json"
 
-                  log "Running Restic backup…"
-                  restic backup \
-                    --host "${HOSTNAME}" \
-                    --tag "restic_version:$(restic version | awk 'NR==1{print $2}')" \
-                    --tag "bw_cli_version:${BW_CLI_VERSION}" \
-                    --tag "vaultwarden_version:${VW_VERSION}" \
-                    --tag "age_version:${AGE_VERSION}" \
-                    --tag "environment:production" \
-                    "${BACKUP_DATA_PATH}"
+                  run_restic_backup() {
+                    log "Running Restic backup…"
+                    restic backup \
+                      --host "${HOSTNAME}" \
+                      --tag "restic_version:$(restic version | awk 'NR==1{print $2}')" \
+                      --tag "bw_cli_version:${BW_CLI_VERSION}" \
+                      --tag "vaultwarden_version:${VW_VERSION}" \
+                      --tag "age_version:${AGE_VERSION}" \
+                      --tag "environment:production" \
+                      "${BACKUP_DATA_PATH}"
 
-                  restic check --read-data
-                  restic forget --keep-within "180d" --prune
+                    restic check --read-data
+                    restic forget --keep-within "180d" --prune
+                  }
+
+                  run_restic_backup && log "Job A done" &
+                  sleep 1  && echo "Job B done" &
+                  sleep 2  && echo "Job C done" &
+
+                  wait
