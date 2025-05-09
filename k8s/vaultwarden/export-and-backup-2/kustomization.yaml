@@ -11,6 +11,6 @@ resources:
   - export-and-backup-cronjob-3.yaml
 
 configMapGenerator:
-  - name: vaultwarden-backup-script
+  - name: restic-backup-script
     files:
-      - backup.sh
+      - restic-backup.sh

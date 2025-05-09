@@ -22,9 +22,9 @@ spec:
             - name: cache
               persistentVolumeClaim:
                 claimName: vaultwarden-support-pvc
-            - name: backup-script
+            - name: restic-backup-script
               configMap:
-                name: vaultwarden-backup-script
+                name: restic-backup-script
             - name: policies
               secret:
                 secretName: all-in-one
@@ -64,7 +64,7 @@ spec:
                   mountPath: /export
                 - name: cache
                   mountPath: /cache
-                - name: backup-script
+                - name: restic-backup-script
                   mountPath: /scripts
                 - name: policies
                   mountPath: /policies
@@ -75,4 +75,4 @@ spec:
                 - -c
               args:
                 - |
-                  bash /scripts/backup.sh
+                  bash /scripts/restic-backup.sh
