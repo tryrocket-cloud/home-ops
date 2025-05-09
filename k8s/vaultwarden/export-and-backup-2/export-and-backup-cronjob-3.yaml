@@ -111,6 +111,20 @@ spec:
                       | grep -q '^age-encryption\.org/v1' \
                       || error "Invalid age header"
                     rm -f "${plain_json}"
+
+                    local ts tar_file
+                    ts=$(date -u +"%Y%m%dT%H%M%SZ")
+                    tar_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}-${ts}.tar.gz"
+
+                    log "Creating archive ${tar_file}…"
+                    # -C /export so paths inside the tar are relative
+                    tar -czf "${tar_file}" -C /export \
+                        "vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json" \
+                        "vaultwarden-${VAULTWARDEN_USER_ID}.age" \
+                        ".env"
+
+                    check_file "${tar_file}"
+                    log "Archive ready: ${tar_file}"
                   }
 
                   run_job_buffered() {
@@ -135,6 +149,8 @@ spec:
                   #log "Starting Vaultwarden export…"
                   #parallel ::: get_vaultwarden_version export_vaultwarden_vault
                   #log "Vaultwarden export completed."
+
+
 
           containers:
             - name: backup
