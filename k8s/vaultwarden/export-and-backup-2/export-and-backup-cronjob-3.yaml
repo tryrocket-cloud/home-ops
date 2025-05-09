@@ -73,6 +73,8 @@ spec:
 
                   VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" | jq -r '.version // empty')
                   [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
+                  echo "export VW_VERSION=${VW_VERSION}" > /export/.env
+                  check_file "/export/.env"
 
                   log "Logging into Bitwarden and exporting data…"
                   bw config server "https://${VAULTWARDEN_HOST}"
@@ -137,5 +139,7 @@ spec:
                 - -c
               args:
                 - |
+                  source /export/.env
+
                   curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
                   bash /scripts/restic-backup.sh
