@@ -179,11 +179,11 @@ spec:
                   aws s3api put-bucket-policy \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --policy file:///policies/restic-policy.json
+                    --policy "file:///policies/restic-policy.json"
                   aws s3api put-public-access-block \
                     --bucket "${BUCKET}" \
                     --endpoint-url "${AWS_ENDPOINT_URL}" \
-                    --public-access-block-configuration file:///policies/public-access-block-restic.json"
+                    --public-access-block-configuration "file:///policies/public-access-block-restic.json"
 
                   log "Running Restic backup…"
                   restic backup \
