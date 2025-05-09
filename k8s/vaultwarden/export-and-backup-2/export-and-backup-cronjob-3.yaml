@@ -208,7 +208,7 @@ spec:
                     ) &
                   }
 
-                  run_job_buffered 'ionos.com' run_restic_backup'
+                  run_job_buffered 'ionos.com' run_restic_backup
                   run_job_buffered B bash -c 'sleep 1; echo "Job B done"'
                   run_job_buffered C bash -c 'sleep 2; echo "Job C done"'
 
