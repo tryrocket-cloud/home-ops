@@ -13,5 +13,5 @@ resources:
 configMapGenerator:
   - name: helper-scripts
     files:
-      - hc.sh
+      - hs.sh
       

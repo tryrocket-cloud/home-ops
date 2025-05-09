@@ -70,16 +70,11 @@ spec:
                 - -c
               args:
                 - |
-                  source /scripts/hc.sh
+                  source /scripts/hs.sh
 
                   trap 'hc_ping fail' ERR
 
                   hc_ping start
-
-                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
-                  warn()  { echo "[WARN]  $(date -Iseconds) $*" >&2; }
-                  error() { echo "[ERROR] $(date -Iseconds) $*" >&2; exit 1; }
-                  check_file() { [[ -s "$1" ]] || error "File missing or empty: $1"; }
 
                   get_vaultwarden_version() {
                     VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
@@ -161,7 +156,7 @@ spec:
                 - -c
               args:
                 - |
-                  source /scripts/hc.sh
+                  source /scripts/hs.sh
 
                   trap 'hc_ping fail' ERR
                   
@@ -214,15 +209,11 @@ spec:
                 - -c
               args:
                 - |
-                  source /scripts/hc.sh
+                  source /scripts/hs.sh
                   source /export/.env
 
                   trap 'touch /signals/A.done' EXIT
                   trap 'hc_ping fail' ERR
-
-                  log()   { echo "[INFO]  $(date -Iseconds) $*"; }
-
-                  
 
                   run_restic_backup() {
                     restic backup \
@@ -264,10 +255,8 @@ spec:
                 - pipefail
                 - -c
                 - |
-                  source /scripts/hc.sh
+                  source /scripts/hs.sh
                   trap 'hc_ping fail' ERR
-
-                  log() { echo "[INFO]  $(date -Iseconds) $*"; }
 
                   log "waiting for A and B to finish"
                   until [ -f /signals/A.done ]; do
