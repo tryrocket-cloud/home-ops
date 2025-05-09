@@ -114,6 +114,8 @@ spec:
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
                   value: /cache/ionos.com/vaultwarden/restic
+                - name: HC_URL
+                  value: https://hc-ping.com
               envFrom:
                 - secretRef:
                     name: all-in-one
@@ -135,5 +137,5 @@ spec:
                 - -c
               args:
                 - |
-                  curl -fsS -m 10 "${HC_URL}/start" > /dev/null 2>&1
-                  # bash /scripts/restic-backup.sh
+                  curl -fsS -m 10 "${HC_URL}/${HC_UUID}/start" > /dev/null 2>&1
+                  bash /scripts/restic-backup.sh
