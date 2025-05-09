@@ -6,6 +6,7 @@ resources:
   - all-in-one-external-secret.yaml
   - restic-external-secret.yaml
   - healthckecksio-external-secret.yaml
+  - healthchecksio-kopia-ionos-external-secret.yaml
   # - backup-support-pvc.yaml
 
   - export-and-backup-cronjob-3.yaml

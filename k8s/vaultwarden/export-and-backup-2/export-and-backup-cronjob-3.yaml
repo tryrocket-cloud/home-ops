@@ -176,20 +176,16 @@ spec:
                   disable_s3_block
 
           containers:
-            - name: backup
+            - name: restic-ionos-backup
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
                   value: Europe/Berlin
-                - name: VAULTWARDEN_HOST
-                  value: vaultwarden.tryrocket.cloud
-                - name: VAULTWARDEN_USER_ID
-                  value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
                 - name: HOSTNAME
                   value: tryrocket.cloud
                 - name: RESTIC_CACHE_DIR
-                  value: /cache/ionos.com/vaultwarden/restic
+                  value: /cache/ionos/vaultwarden/restic
                 - name: BACKUP_DATA_PATH
                   value: /export
               envFrom:
@@ -239,6 +235,72 @@ spec:
                   
                   run_restic_backup
 
+            - name: kopia-ionos-backup
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: TZ
+                  value: Europe/Berlin
+                - name: HOSTNAME
+                  value: tryrocket.cloud
+                - name: KOPIA_CHECK_FOR_UPDATES
+                  value: "false"
+                - name: KOPIA_CACHE_DIRECTORY
+                  value: /cache/ionos/vaultwarden/kopia
+                - name: BACKUP_DATA_PATH
+                  value: /export
+              envFrom:
+                - secretRef:
+                    name: all-in-one
+                - secretRef:
+                    name: healthchecksio-kopia-ionos
+              volumeMounts:
+                - name: export
+                  mountPath: /export
+                - name: signals
+                  mountPath: /signals
+                - name: cache
+                  mountPath: /cache
+                - name: policies
+                  mountPath: /policies
+                - name: helper-scripts
+                  mountPath: /scripts
+              command:
+                - /bin/bash
+                - -eo
+                - pipefail
+                - -c
+              args:
+                - |
+                  source /scripts/hs.sh
+                  source /export/.env
+
+                  trap 'touch /signals/kopia-ionos.done; hc_ping' EXIT
+                  trap 'hc_ping fail' ERR
+
+                  run_kopia_backup() {
+                    log "Starting Kopia backup…"
+                    kopia repository connect s3 \
+                      --bucket="$BUCKET" \
+                      --endpoint="$ENDPOINT" \
+                      --region="$REGION" \
+                      --prefix="$PREFIX"
+
+                    kopia snapshot create "${BACKUP_DATA_PATH}" \
+                      --description="Daily export" \
+                      --tags="hostname:$HOSTNAME \
+                        kopia_version:$KOPIA_VERSION \
+                        vaultwarden_version:$VAULTWARDEN_VERSION" \
+                        bw_cli_version:${BW_CLI_VERSION} \
+                        age_version:${AGE_VERSION} \
+                        environment:production"
+
+                    kopia snapshot verify
+                    log "Kopia backup completed."
+                  }
+
+                  run_kopia_backup
+
             - name: deny-all-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
               volumeMounts:
@@ -265,7 +327,7 @@ spec:
                   trap 'hc_ping fail' ERR
 
                   log "waiting for workers to finish"
-                  until [ -f /signals/restic-ionos.done ]; do
+                  until [ -f /signals/restic-ionos.done ] && [ -f /signals/kopia-ionos.done ]; do
                     sleep 1
                   done
                   log "all workers done; blocking s3"
