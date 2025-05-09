@@ -15,7 +15,7 @@ function check_file() {
   [[ -s "$file" ]] || { echo "ERROR: $file missing or empty" >&2; exit 1; }
 }
 
-curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}/start"
+curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}/start"  > /dev/null 2>&1
 
 function finally {
   echo "🔐 Enforcing final S3 block policy…"
@@ -68,6 +68,6 @@ restic backup \
 restic check --read-data
 restic forget --keep-within '180d' --prune
 
-curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}"
+curl -fsS -m 10 "https://hc-ping.com/${HC_UUID}" > /dev/null 2>&1
 
 echo "✅ backup completed successfully."
