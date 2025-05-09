@@ -198,13 +198,13 @@ spec:
                   }
 
                   jobs=(
-                    "ionos.com|run_restic_backup"
-                    "JobB|bash -c 'sleep 1; echo \"Job B done\"'"
-                    "JobC|bash -c 'sleep 2; echo \"Job C done\"'"
+                    'ionos.com|run_restic_backup'
+                    'JobB     |bash -c "sleep 1; echo '\''Job B done'\''"'
+                    'JobC     |bash -c "sleep 2; echo '\''Job C done'\''"'
                   )
 
-                  printf "%s\n" "${jobs[@]}" | \
-                    parallel --colsep '|' --tag --group -j0 '
+                  printf '%s\n' "${jobs[@]}" | \
+                    parallel --colsep '\|' --tag --group -j0 '
                       echo "─── [ {1} ] starting ───"
                       {2}
                       echo "─── [ {1} ] done ───"
