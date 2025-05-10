@@ -65,7 +65,7 @@ spec:
                   mountPath: /policies
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
@@ -151,7 +151,7 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
@@ -206,7 +206,7 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
@@ -267,7 +267,7 @@ spec:
                   mountPath: /scripts
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
               args:
@@ -317,7 +317,7 @@ spec:
                     name: healthchecksio
               command:
                 - /bin/bash
-                - -eo
+                - -eox
                 - pipefail
                 - -c
                 - |
