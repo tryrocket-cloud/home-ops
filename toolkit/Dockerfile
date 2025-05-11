@@ -11,11 +11,6 @@ ENV BW_CLI_VERSION=${BW_CLI_VERSION}
 ARG KOPIA_VERSION=0.19.0
 ENV KOPIA_VERSION=${KOPIA_VERSION}
 
-RUN curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
-RUN echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
-RUN sudo apt update
-RUN sudo apt install nushell
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends parallel curl wget ca-certificates tar unzip jq iputils-ping awscli bzip2 gnupg && \
     rm -rf /var/lib/apt/lists/* && \
@@ -35,6 +30,11 @@ RUN apt-get update && \
     wget -qO /tmp/kopia.deb "https://github.com/kopia/kopia/releases/download/v${KOPIA_VERSION}/kopia_${KOPIA_VERSION}_linux_amd64.deb" && \
     dpkg -i /tmp/kopia.deb && \
     rm /tmp/kopia.deb
+
+RUN curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
+RUN echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
+RUN sudo apt update
+RUN sudo apt install nushell
 
 RUN mkdir -p "/root/.config/Bitwarden CLI" && \
     touch "/root/.config/Bitwarden CLI/data.json"
