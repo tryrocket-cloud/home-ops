@@ -31,10 +31,10 @@ RUN apt-get update && \
     dpkg -i /tmp/kopia.deb && \
     rm /tmp/kopia.deb
 
-RUN curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
-RUN echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
-RUN sudo apt update
-RUN sudo apt install nushell
+RUN curl -fsSL https://apt.fury.io/nushell/gpg.key | gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
+RUN echo "deb https://apt.fury.io/nushell/ /" | tee /etc/apt/sources.list.d/fury.list
+RUN apt update
+RUN apt install nushell
 
 RUN mkdir -p "/root/.config/Bitwarden CLI" && \
     touch "/root/.config/Bitwarden CLI/data.json"
