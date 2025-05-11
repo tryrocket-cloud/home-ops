@@ -75,7 +75,7 @@ spec:
                   def hc-ping [action:string] {
                     let base = $"https://hc-ping.com/($env.HC_UUID)"
                     if $action != "" { let base = $"$base/($action)" }
-                    http get $base --max-time 10 | ignore
+                    http get $base --max-time 10s | ignore
                   }
 
                   def log [msg:string] {
@@ -102,7 +102,7 @@ spec:
                   # —————————————————————————————————————————————————————————————
 
                   def get-vaultwarden-version [] {
-                    let resp = http get https://($env.VAULTWARDEN_HOST)/api/config --max-time 10
+                    let resp = http get https://($env.VAULTWARDEN_HOST)/api/config --max-time 10s
                     let version = ($resp | from json | get version)
                     if $version == $null {
                       error "Unable to retrieve Vaultwarden version"
