@@ -79,14 +79,18 @@ spec:
                   }
 
                   def log [msg:string] {
-                    # ISO-8601 timestamp
                     let ts = (date now | date format "%Y-%m-%dT%H:%M:%SZ")
                     echo $"[INFO]  $ts $msg"
                   }
 
+                  def warn [msg:string] {
+                    let ts = (date now | date format "%Y-%m-%dT%H:%M:%SZ")
+                    echo $"[WARN]  $ts $msg" > /dev/stderr
+                  }
+
                   def error [msg:string] {
                     let ts = (date now | date format "%Y-%m-%dT%H:%M:%SZ")
-                    echo $"[ERROR] $ts $msg" | echo -l
+                    echo $"[ERROR] $ts $msg" > /dev/stderr
                     exit 1
                   }
 
