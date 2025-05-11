@@ -64,74 +64,172 @@ spec:
                 - name: policies
                   mountPath: /policies
               command:
-                - /bin/bash
-                - -eox
-                - pipefail
+                - nu
                 - -c
+                # - /bin/bash
+                # - -eox
+                # - pipefail
+                # - -c
               args:
                 - |
-                  source /scripts/hs.sh
-
-                  trap 'hc_ping fail' ERR
-
-                  hc_ping start
-
-                  get_vaultwarden_version() {
-                    VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
-                      | jq -r '.version // empty')
-                    [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
-                    echo "export VW_VERSION=${VW_VERSION}" > /export/.env
-                    check_file "/export/.env"
+                  def hc-ping [action:string] {
+                    # Build URL
+                    let base = $"https://hc-ping.com/($env.HC_UUID)"
+                    if $action != "" { let base = $"$base/($action)" }
+                    # Fire and forget
+                    http get $base --timeout 10s | ignore
                   }
 
-                  export_vaultwarden_vault() {
+                  def log [msg:string] {
+                    # ISO-8601 timestamp
+                    let ts = (date now | date format "%Y-%m-%dT%H:%M:%SZ")
+                    echo $"[INFO]  $ts $msg"
+                  }
+
+                  def error [msg:string] {
+                    let ts = (date now | date format "%Y-%m-%dT%H:%M:%SZ")
+                    echo $"[ERROR] $ts $msg" | echo -l
+                    exit 1
+                  }
+
+                  def check-file [path:string] {
+                    # open as raw string, check length > 0
+                    if (open $path --raw | str length) == 0 {
+                      error $"File missing or empty: $path"
+                    }
+                  }
+
+                  # —————————————————————————————————————————————————————————————
+                  # Vaultwarden version fetch
+                  # —————————————————————————————————————————————————————————————
+
+                  def get-vaultwarden-version [] {
+                    let resp = http get https://($env.VAULTWARDEN_HOST)/api/config --timeout 10s
+                    let version = ($resp | from json | get version)
+                    if $version == $null {
+                      error "Unable to retrieve Vaultwarden version"
+                    }
+                    # Write to .env
+                    echo $"export VW_VERSION=$version" > "./export/.env"
+                    check-file "./export/.env"
+                  }
+
+                  # —————————————————————————————————————————————————————————————
+                  # Vaultwarden export → age encryption
+                  # —————————————————————————————————————————————————————————————
+
+                  def export-vaultwarden-vault [] {
                     log "Logging into Bitwarden and exporting data…"
-                    bw config server "https://${VAULTWARDEN_HOST}"
-                    export BW_SESSION
-                    BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+
+                    # Configure & login
+                    bw config server https://($env.VAULTWARDEN_HOST)
+                    let session = bw login --raw --cleanexit $env.VAULTWARDEN_USERNAME $env.VAULTWARDEN_PASSWORD
+                    let-env BW_SESSION = $session
                     bw sync --cleanexit --quiet
 
-                    local enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
-                    local plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+                    # Paths
+                    let enc_json   = $"./export/vaultwarden-($env.VAULTWARDEN_USER_ID).encrypted.json"
+                    let plain_json = $"./export/vaultwarden-($env.VAULTWARDEN_USER_ID).plain.json"
 
-                    bw export --format encrypted_json \
-                      --password "${VAULTWARDEN_PASSWORD}" \
-                      --output "${enc_json}" --cleanexit --quiet
-
-                    bw export --format json \
-                      --output "${plain_json}" --cleanexit --quiet
-
+                    # Exports
+                    bw export --format encrypted_json --password $env.VAULTWARDEN_PASSWORD --output $enc_json   --cleanexit --quiet
+                    bw export --format json           --output $plain_json --cleanexit --quiet
                     bw logout --cleanexit --quiet
 
-                    check_file "${enc_json}"
-                    check_file "${plain_json}"
+                    check-file $enc_json
+                    check-file $plain_json
 
+                    # Encrypt with age
                     log "Encrypting export with age…"
-                    local cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
-                    age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
-                    check_file "${cipher_file}"
-                    head -c21 "${cipher_file}" \
-                      | grep -q '^age-encryption\.org/v1' \
-                      || error "Invalid age header"
-                    rm -f "${plain_json}"
+                    let cipher = $"./export/vaultwarden-($env.VAULTWARDEN_USER_ID).age"
+                    age --recipient $env.AGE_RECIPIENT --output $cipher $plain_json
+                    check-file $cipher
+
+                    # Validate header
+                    let header = (open $cipher --raw | str substr 0 21)
+                    if ($header | str starts-with "age-encryption.org/v1") == $false {
+                      error "Invalid age header"
+                    }
+
+                    rm $plain_json
                   }
 
-                  run_job_buffered() {
-                    local name="$1"; shift
-                    local tmp; tmp=$(mktemp)
-                    (
-                      { "$@"; } >"$tmp" 2>&1
-                      echo "─── [${name}] done ───"
-                      sed "s/^/[${name}] /" "$tmp"
-                      rm -f "$tmp"
-                    ) &
+                  # —————————————————————————————————————————————————————————————
+                  # Main — ping “start”, run, catch any error → ping “fail”
+                  # —————————————————————————————————————————————————————————————
+
+                  do {
+                    hc-ping ""
+                    get-vaultwarden-version
+                    export-vaultwarden-vault
+                  } catch {
+                    hc-ping "fail"
+                    exit 1
                   }
 
-                  run_job_buffered 'get vaultwarden version' get_vaultwarden_version
-                  run_job_buffered 'export vaultwarden vault' export_vaultwarden_vault
-
-                  wait
                   echo "All jobs finished!"
+                  # source /scripts/hs.sh
+
+                  # trap 'hc_ping fail' ERR
+
+                  # hc_ping start
+
+                  # get_vaultwarden_version() {
+                  #   VW_VERSION=$(curl -fsS -m 10 "https://${VAULTWARDEN_HOST}/api/config" \
+                  #     | jq -r '.version // empty')
+                  #   [[ -n "$VW_VERSION" ]] || error "Unable to retrieve Vaultwarden version"
+                  #   echo "export VW_VERSION=${VW_VERSION}" > /export/.env
+                  #   check_file "/export/.env"
+                  # }
+
+                  # export_vaultwarden_vault() {
+                  #   log "Logging into Bitwarden and exporting data…"
+                  #   bw config server "https://${VAULTWARDEN_HOST}"
+                  #   export BW_SESSION
+                  #   BW_SESSION=$(bw login --raw --cleanexit "${VAULTWARDEN_USERNAME}" "${VAULTWARDEN_PASSWORD}")
+                  #   bw sync --cleanexit --quiet
+
+                  #   local enc_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.encrypted.json"
+                  #   local plain_json="/export/vaultwarden-${VAULTWARDEN_USER_ID}.plain.json"
+
+                  #   bw export --format encrypted_json \
+                  #     --password "${VAULTWARDEN_PASSWORD}" \
+                  #     --output "${enc_json}" --cleanexit --quiet
+
+                  #   bw export --format json \
+                  #     --output "${plain_json}" --cleanexit --quiet
+
+                  #   bw logout --cleanexit --quiet
+
+                  #   check_file "${enc_json}"
+                  #   check_file "${plain_json}"
+
+                  #   log "Encrypting export with age…"
+                  #   local cipher_file="/export/vaultwarden-${VAULTWARDEN_USER_ID}.age"
+                  #   age --recipient "${AGE_RECIPIENT}" --output "${cipher_file}" "${plain_json}"
+                  #   check_file "${cipher_file}"
+                  #   head -c21 "${cipher_file}" \
+                  #     | grep -q '^age-encryption\.org/v1' \
+                  #     || error "Invalid age header"
+                  #   rm -f "${plain_json}"
+                  # }
+
+                  # run_job_buffered() {
+                  #   local name="$1"; shift
+                  #   local tmp; tmp=$(mktemp)
+                  #   (
+                  #     { "$@"; } >"$tmp" 2>&1
+                  #     echo "─── [${name}] done ───"
+                  #     sed "s/^/[${name}] /" "$tmp"
+                  #     rm -f "$tmp"
+                  #   ) &
+                  # }
+
+                  # run_job_buffered 'get vaultwarden version' get_vaultwarden_version
+                  # run_job_buffered 'export vaultwarden vault' export_vaultwarden_vault
+
+                  # wait
+                  # echo "All jobs finished!"
 
             - name: restic-s3-policy
               image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
