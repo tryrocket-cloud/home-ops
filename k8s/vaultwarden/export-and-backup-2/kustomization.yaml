@@ -6,7 +6,9 @@ resources:
   - all-in-one-external-secret.yaml
   - restic-external-secret.yaml
   - healthckecksio-external-secret.yaml
-  # - backup-support-pvc.yaml
+  - s3-credentials-external-secret.yaml
+  - s3-admin-credentials-external-secret.yaml
+  - s3-connection-external-secret.yaml
 
   - export-and-backup-cronjob-3.yaml
 
