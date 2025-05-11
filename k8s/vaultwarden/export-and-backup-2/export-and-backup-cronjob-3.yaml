@@ -73,11 +73,9 @@ spec:
               args:
                 - |
                   def hc-ping [action:string] {
-                    # Build URL
                     let base = $"https://hc-ping.com/($env.HC_UUID)"
                     if $action != "" { let base = $"$base/($action)" }
-                    # Fire and forget
-                    http get $base --timeout 10s | ignore
+                    http get $base --max-time 10 | ignore
                   }
 
                   def log [msg:string] {
@@ -104,12 +102,11 @@ spec:
                   # —————————————————————————————————————————————————————————————
 
                   def get-vaultwarden-version [] {
-                    let resp = http get https://($env.VAULTWARDEN_HOST)/api/config --timeout 10s
+                    let resp = http get https://($env.VAULTWARDEN_HOST)/api/config --max-time 10
                     let version = ($resp | from json | get version)
                     if $version == $null {
                       error "Unable to retrieve Vaultwarden version"
                     }
-                    # Write to .env
                     echo $"export VW_VERSION=$version" > "./export/.env"
                     check-file "./export/.env"
                   }
