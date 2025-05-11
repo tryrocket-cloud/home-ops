@@ -11,6 +11,11 @@ ENV BW_CLI_VERSION=${BW_CLI_VERSION}
 ARG KOPIA_VERSION=0.19.0
 ENV KOPIA_VERSION=${KOPIA_VERSION}
 
+RUN curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
+RUN echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
+RUN sudo apt update
+RUN sudo apt install nushell
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends parallel curl wget ca-certificates tar unzip jq iputils-ping awscli bzip2 gnupg && \
     rm -rf /var/lib/apt/lists/* && \
