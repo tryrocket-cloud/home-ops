@@ -18,7 +18,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: papra
-          image: ghcr.io/papra-hq/papra:latest
+          image: ghcr.io/papra-hq/papra:latest@sha256:a1172d18d4d6f1dcdffd626a789cdf683734de0a0c87ae9fdf2bcbaabf891f9a
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
