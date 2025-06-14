@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:trixie-slim@sha256:1fb8e914b9c7e1bb8576766b44c474b07f0e370fd12ce2083078af3cb72f4545
 
 RUN apt-get update && \
     apt-get install -y \
