@@ -12,7 +12,7 @@ semaphoreui.tryrocket.cloud {
     reverse_proxy semaphore:3000
 }
 upsnap.tryrocket.cloud {
-    reverse_proxy upsnap:8090
+    reverse_proxy 192.168.188.178:8090
 }
 minio.tryrocket.cloud {
     reverse_proxy 192.168.178.75:9002
