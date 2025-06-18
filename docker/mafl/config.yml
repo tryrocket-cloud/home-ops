@@ -235,16 +235,9 @@ services:
         enabled: true
 
   Infrastructure (Device):
-    - title: Fritz!Box
-      description: 6660 Cable
-      link: http://192.168.178.1
-      icon:
-        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/fritz.webp
-      status:
-        enabled: false
     - title: MikroTik
       description: CRS326-24G-2S+RM
-      link: http://192.168.178.205
+      link: http://192.168.188.1
       icon:
         name: simple-icons:mikrotik
         wrap: true
