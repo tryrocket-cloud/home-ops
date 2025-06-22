@@ -15,10 +15,10 @@ upsnap.tryrocket.cloud {
     reverse_proxy 192.168.188.178:8090
 }
 minio.tryrocket.cloud {
-    reverse_proxy 192.168.188.73:9002
+    reverse_proxy 192.168.188.173:9002
 }
 immich.tryrocket.cloud {
-    reverse_proxy 192.168.188.73:30041
+    reverse_proxy 192.168.188.173:30041
 }
 id.tryrocket.cloud {
     reverse_proxy pocket-id:80
