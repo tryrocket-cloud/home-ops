@@ -1,6 +1,6 @@
 services:
   portainer:
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ce:latest@sha256:afc56f082203f833267c747a63119f395da41c82be835885000207db2372e7e8
     container_name: portainer
     restart: unless-stopped
     ports:
