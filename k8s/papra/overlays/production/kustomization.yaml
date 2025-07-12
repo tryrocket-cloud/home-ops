@@ -10,4 +10,4 @@ resources:
 # https://github.com/thomiceli/opengist/releases
 images:
   - name: ghcr.io/papra-hq/papra
-    newTag: latest
+    newTag: latest@sha256:d17fcc4bab0ce48b8ea5282731f7a9cf298a350c0beee78563bccaebab1ce4a9
