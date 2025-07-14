@@ -20,7 +20,7 @@ services:
       - SMTP_SKIP_CERT_VERIFY=$SMTP_SKIP_CERT_VERIFY
       - EMAIL_ONE_TIME_ACCESS_ENABLED=${EMAIL_ONE_TIME_ACCESS_ENABLED}
       - LDAP_ENABLED=true
-      - LDAP_URL=ldaps://lldap:3890
+      - LDAP_URL=ldap://lldap:3890
       - LDAP_BIND_DN=cn=admin,ou=users,dc=tryrocket,dc=cloud
       - LDAP_BIND_PASSWORD=$LDAP_BIND_PASSWORD
       - LDAP_SEARCH_BASE=dc=tryrocket,dc=cloud
