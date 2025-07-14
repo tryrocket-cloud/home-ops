@@ -22,6 +22,7 @@ services:
       - LDAP_ENABLED=true
       - LDAP_URL=ldap://lldap:3890
       - LDAP_BIND_DN=cn=admin,ou=users,dc=tryrocket,dc=cloud
+      - LDAP_BASE=dc=tryrocket,dc=cloud
       - LDAP_BIND_PASSWORD=$LDAP_BIND_PASSWORD
       - LDAP_SEARCH_BASE=dc=tryrocket,dc=cloud
       - LDAP_USER_SEARCH_FILTER=(objectClass=person)
