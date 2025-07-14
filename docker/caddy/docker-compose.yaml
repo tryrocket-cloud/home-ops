@@ -27,3 +27,5 @@ networks:
     external: true
   pocket-id_default:
     external: true
+  ldap_default:
+    external: true
