@@ -115,6 +115,14 @@ services:
         url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/pocket-id.webp
       status:
         enabled: true
+    - title: LLDAP
+      description: Self-hosted ldap server
+      link: https://ldap.tryrocket.cloud
+      icon:
+        url: https://cdn.jsdelivr.net/gh/selfhst/icons/webp/lldap.webp
+      status:
+        enabled: true
+        
   TrueNAS:
     - title: TrueNAS
       description: Admin Dashboard
