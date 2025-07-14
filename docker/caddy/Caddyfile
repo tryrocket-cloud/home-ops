@@ -23,3 +23,6 @@ immich.tryrocket.cloud {
 id.tryrocket.cloud {
     reverse_proxy pocket-id:80
 }
+ldap.tryrocket.cloud {
+    reverse_proxy ldap:3890
+}
