@@ -41,3 +41,5 @@ services:
 networks:
   ldap_default:
     external: true
+  pocket-id_default:
+    external: true
