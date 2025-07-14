@@ -35,6 +35,7 @@ services:
       retries: 2
       start_period: 10s
     networks:
+      - pocket-id_default
       - ldap_default
 
 networks:
