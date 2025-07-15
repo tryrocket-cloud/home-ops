@@ -23,9 +23,9 @@ immich.tryrocket.cloud {
 id.tryrocket.cloud {
     reverse_proxy pocket-id:80
 }
-#id-ldap.tryrocket.cloud {
-#    reverse_proxy pocket-id-ldap:80
-#}
-#ldap.tryrocket.cloud {
-#    reverse_proxy lldap:17170
-#}
+id-ldap.tryrocket.cloud {
+    reverse_proxy pocket-id-ldap:80
+}
+ldap.tryrocket.cloud {
+    reverse_proxy lldap:17170
+}
