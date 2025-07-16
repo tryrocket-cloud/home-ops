@@ -24,7 +24,7 @@ id.tryrocket.cloud {
     reverse_proxy pocket-id:80
 }
 id-ldap.tryrocket.cloud {
-    reverse_proxy pocket-id-ldap:1411
+    reverse_proxy pocket-id-lldap:1411
 }
 ldap.tryrocket.cloud {
     reverse_proxy lldap:17170
