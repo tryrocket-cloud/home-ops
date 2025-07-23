@@ -1,6 +1,6 @@
 services:
   semaphore:
-    image: semaphoreui/semaphore:v2.13.1
+    image: semaphoreui/semaphore:v2.15.4@sha256:385ce864e9c0652d312a04bcde0fd2c275e384c5cf9ab89c31659bc410bc2c76
     container_name: semaphore
     environment:
       TZ: Europe/Berlin
