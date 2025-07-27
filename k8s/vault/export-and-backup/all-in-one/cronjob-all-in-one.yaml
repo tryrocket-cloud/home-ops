@@ -17,7 +17,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: backup-vault-export
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit@sha256:ea236fdc6aeef87891f567c751a9f71411956970c8e89854b73d942cfba07687
               imagePullPolicy: Always
               env:
                 - name: RESTIC_CACHE_DIR
