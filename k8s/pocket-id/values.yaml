@@ -14,7 +14,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
   host: id.tryrocket.cloud
 
-  tls: []
+  tls:
     - hosts:
       - id.tryrocket.cloud
       secretName: id-tryrocket-cloud-production-tls
