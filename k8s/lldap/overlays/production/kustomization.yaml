@@ -9,13 +9,11 @@ configMapGenerator:
       - FOO=bar
       - HELLO=world
 
-patchesJson6902:
-  - target:
-      group: apps
-      version: v1
-      kind: Deployment
-      name: lldap
-    patch: |-
-      - op: replace
-        path: /metadata/name
-        value: lldap-dummy
+patches:
+- patch: |-
+    - op: replace
+      path: /metadata/name
+      value: lldap-dummy
+  target:
+    kind: Deployment
+    name: lldap
