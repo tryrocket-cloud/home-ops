@@ -1,0 +1,15 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: lldap-ldaps
+  namespace: default
+spec:
+  entryPoints:
+    - ldaps
+  routes:
+    - match: HostSNI(`tryrocket.cloud`)
+      services:
+        - name: ldap-service
+          port: 3890
+  tls:
+    passthrough: true
