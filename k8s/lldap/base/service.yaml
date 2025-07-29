@@ -10,4 +10,8 @@ spec:
     - name: http
       protocol: TCP
       port: 80
-      targetPort: 17170
+      targetPort: http
+    - name: ldap
+      protocol: TCP
+      port: 3890
+      targetPort: ldap
