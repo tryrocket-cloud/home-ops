@@ -38,9 +38,9 @@ spec:
 
           envFrom:
             - secretRef:
-                name: ldap-config
+                name: ldap
             - secretRef:
-                name: smtp-config
+                name: smtp
           volumeMounts:
             - name: lldap-volume
               mountPath: /etc/lldap/data
