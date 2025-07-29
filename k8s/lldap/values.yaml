@@ -1,0 +1,11 @@
+ingress:
+  enabled: true
+  className: "traefik"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-production
+  hosts:
+    - host: ldap.tryrocket.cloud
+  tls:
+    - hosts:
+      - ldap.tryrocket.cloud
+      secretName: ldap-tryrocket-cloud-production-tls
