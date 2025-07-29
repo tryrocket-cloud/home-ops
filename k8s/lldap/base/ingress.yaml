@@ -18,9 +18,6 @@ spec:
                 name: lldap
                 port:
                   name: http
-    - host: ldap.tryrocket.cloud
-      ldap:
-        paths:
           - path: /
             pathType: Prefix
             backend:
