@@ -27,6 +27,10 @@ spec:
           env:
             - name: TZ
               value: Europe/Berlin
+            - name: UID
+              value: 1000
+            - name: GID
+              value: 1000
           volumeMounts:
             - name: lldap-volume
               mountPath: /etc/lldap/data
