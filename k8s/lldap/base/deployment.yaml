@@ -31,6 +31,16 @@ spec:
               value: "1000"
             - name: GID
               value: "1000"
+            - name: LLDAP_VERBOSE
+              value: "true"
+            - name: LLDAP_SMTP_OPTIONS__ENABLE_PASSWORD_RESET
+              value: "true"
+
+          envFrom:
+            - secretRef:
+                name: ldap-config
+            - secretRef:
+                name: smtp-config
           volumeMounts:
             - name: lldap-volume
               mountPath: /etc/lldap/data
