@@ -20,7 +20,7 @@ spec:
           image: lldap/lldap:stable-alpine
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 3891
+            - containerPort: 17170
           env:
             - name: TZ
               value: Europe/Berlin
