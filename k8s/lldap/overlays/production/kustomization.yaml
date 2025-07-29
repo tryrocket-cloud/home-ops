@@ -6,7 +6,7 @@ resources:
   - pvc.yaml
   - ldap-external-secret.yaml
   - smtp-external-secret.yaml
-  - ingressRouteTCP.yaml
+#  - ingressRouteTCP.yaml
 
 namespace: lldap
 
