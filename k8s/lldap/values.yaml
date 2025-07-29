@@ -5,7 +5,10 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
   hosts:
     - host: ldap.tryrocket.cloud
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   tls:
     - hosts:
-      - ldap.tryrocket.cloud
+        - ldap.tryrocket.cloud
       secretName: ldap-tryrocket-cloud-production-tls
