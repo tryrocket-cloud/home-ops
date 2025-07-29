@@ -1,3 +1,22 @@
+lldap:
+  baseDN: "dc=tryrocket,dc=cloud"
+  
+  secretName: "lldap"
+
+  # -- Random secret for JWT signature.
+  jwtSecretKey: "jwtSecret"
+
+  # -- Admin credentials
+  ldapUserDN: "lldap-admin"
+  ldapUserPassKey: "ldapUserPassword"
+
+  # -- Seed to generate the server private key.
+  keySeedKey: "keySeed"
+
+  verbose: false
+  tz: "Europe/Berlin"
+
+
 ingress:
   enabled: true
   className: "traefik"
