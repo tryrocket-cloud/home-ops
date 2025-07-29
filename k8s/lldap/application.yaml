@@ -7,21 +7,10 @@ metadata:
     app.kubernetes.io/managed-by: argocd
 spec:
   project: default
-  sources:
-    - repoURL: https://djjudas21.github.io/charts/ 
-      targetRevision: v0.5.3
-      chart: lldap
-      helm:
-        valueFiles:
-          - $values/k8s/lldap/values.yaml
-
-    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-      targetRevision: main
-      ref: values
-
-    - repoURL: https://github.com/tryrocket-cloud/home-ops.git
-      path: k8s/lldap/overlays/production
-      targetRevision: main
+  source:
+    repoURL: https://github.com/tryrocket-cloud/home-ops.git
+    targetRevision: main
+    path: 'k8s/lldap/overlays/production'
 
   destination:
     server: https://kubernetes.default.svc

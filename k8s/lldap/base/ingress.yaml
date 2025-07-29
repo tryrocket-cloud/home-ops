@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lldap
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-production'
+    traefik.ingress.kubernetes.io/router.middlewares: 'kube-system-https-redirect@kubernetescrd'
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: ldap.tryrocket.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lldap
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - ldap.tryrocket.cloud
+      secretName: lldap-tryrocket-cloud-production-tls

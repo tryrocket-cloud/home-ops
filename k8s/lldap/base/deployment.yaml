@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lldap
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: lldap
+  template:
+    metadata:
+      labels:
+        app: lldap
+    spec:
+      containers:
+        - name: lldap
+          image: lldap/lldap:stable-alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3891
+          env:
+            - name: TZ
+              value: Europe/Berlin
+          volumeMounts:
+            - name: lldap-volume
+              mountPath: /etc/lldap/data
+      volumes:
+        - name: lldap-volume
+          persistentVolumeClaim:
+            claimName: lldap-pvc
