@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
   - pvc.yaml
-  - ldap-config-external-secret.yaml
-  - smtp-config-external-secret.yaml
+  - ldap-external-secret.yaml
+  - smtp-external-secret.yaml
 
 namespace: lldap
 
