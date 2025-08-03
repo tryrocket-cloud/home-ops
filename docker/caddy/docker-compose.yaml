@@ -12,21 +12,21 @@ services:
       - ./config:/config
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
-    networks:
-      - mafl_default
-      - semaphoreui_default
-      - portainer_default
-      - pocket-id_default
-      - pocket-id-lldap_default
+#    networks:
+#      - mafl_default
+#      - semaphoreui_default
+#      - portainer_default
+#      - pocket-id_default
+#      - pocket-id-lldap_default
 
-networks:
-  mafl_default:
-    external: true
-  semaphoreui_default:
-    external: true
-  portainer_default:
-    external: true
-  pocket-id_default:
-    external: true
-  pocket-id-lldap_default:
-    external: true
+#networks:
+#  mafl_default:
+#    external: true
+#  semaphoreui_default:
+#    external: true
+#  portainer_default:
+#    external: true
+#  pocket-id_default:
+#    external: true
+#  pocket-id-lldap_default:
+ #   external: true
