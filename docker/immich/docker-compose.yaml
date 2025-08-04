@@ -196,13 +196,6 @@ services:
         source: /mnt/tank/apps/immich/data/immich-data/upload
         target: /usr/src/app/upload/upload
         type: bind
-        
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pocket-id-dashboard.rule=Host(`immich.${DOMAIN}`)"
-      - "traefik.http.routers.pocket-id-dashboard.entrypoints=https"
-      - "traefik.http.routers.pocket-id-dashboard.tls.certresolver=letsencrypt"
-      - "traefik.http.services.pocket-id-dashboard.loadbalancer.server.port=30041"
 
 #  backup:
 #    container_name: immich-backup
