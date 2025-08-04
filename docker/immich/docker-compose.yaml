@@ -1,4 +1,4 @@
-Gservices:
+services:
   machine-learning:
     cap_drop:
       - ALL
