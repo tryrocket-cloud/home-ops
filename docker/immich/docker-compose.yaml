@@ -1,4 +1,4 @@
-services:
+Gservices:
   machine-learning:
     cap_drop:
       - ALL
@@ -196,26 +196,33 @@ services:
         source: /mnt/tank/apps/immich/data/immich-data/upload
         target: /usr/src/app/upload/upload
         type: bind
+        
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pocket-id-dashboard.rule=Host(`immich.${DOMAIN}`)"
+      - "traefik.http.routers.pocket-id-dashboard.entrypoints=https"
+      - "traefik.http.routers.pocket-id-dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pocket-id-dashboard.loadbalancer.server.port=30041"
 
-  backup:
-    container_name: immich-backup
-    image: ghcr.io/tryrocket-cloud/home-ops:immich
-    platform: linux/amd64
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      HC_UUID: ${HC_UUID}
-      HC_API_KEY: ${HC_API_KEY}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
-      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
-      RESTIC_CACHE_DIR: /app/data/.cache/restic
-      RESTIC_HOST: truenas.tryrocket.cloud
-      TZ: Europe/Berlin
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt/tank/apps/immich/data/immich-data:/app/data/immich-data:ro
-      - /mnt/tank/apps/immich/.cache/restic:/app/data/.cache/restic
+#  backup:
+#    container_name: immich-backup
+#    image: ghcr.io/tryrocket-cloud/home-ops:immich
+#    platform: linux/amd64
+#    environment:
+#      POSTGRES_USER: ${POSTGRES_USER}
+#      HC_UUID: ${HC_UUID}
+#      HC_API_KEY: ${HC_API_KEY}
+#      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+#      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+#      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY}
+#      RESTIC_PASSWORD: ${RESTIC_PASSWORD}
+#      RESTIC_CACHE_DIR: /app/data/.cache/restic
+#      RESTIC_HOST: truenas.tryrocket.cloud
+#      TZ: Europe/Berlin
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - /mnt/tank/apps/immich/data/immich-data:/app/data/immich-data:ro
+#      - /mnt/tank/apps/immich/.cache/restic:/app/data/.cache/restic
 
 volumes:
   redis-data: {}
