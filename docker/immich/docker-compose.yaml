@@ -66,38 +66,45 @@ services:
         type: bind
 
   redis:
-    cap_drop:
-      - ALL
-    environment:
-      ALLOW_EMPTY_PASSWORD: no
-      NVIDIA_VISIBLE_DEVICES: void
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_PORT_NUMBER: "6379"
-      TZ: Europe/Berlin
-      UMASK: "002"
-      UMASK_SET: "002"
+    container_name: immich_redis
+    image: docker.io/valkey/valkey:8-bookworm@sha256:facc1d2c3462975c34e10fccb167bfa92b0e0dbd992fc282c29a61c3243afb11
     healthcheck:
-      interval: 10s
-      retries: 30
-      start_period: 10s
-      test: redis-cli -h 127.0.0.1 -p 6379 -a $$REDIS_PASSWORD ping | grep -q PONG
-      timeout: 5s
-    image: bitnami/redis:7.4.2
-    platform: linux/amd64
-    privileged: false
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges=true
-    stdin_open: false
-    tty: false
-    user: "1001:0"
-    volumes:    
-      - read_only: false
-        source: redis-data
-        target: /bitnami/redis/data
-        type: volume
-        volume:
-          nocopy: false
+      test: redis-cli ping || exit 1
+    restart: always
+
+#  redis:
+#    cap_drop:
+#      - ALL
+#    environment:
+#      ALLOW_EMPTY_PASSWORD: no
+#      NVIDIA_VISIBLE_DEVICES: void
+#      REDIS_PASSWORD: ${REDIS_PASSWORD}
+#      REDIS_PORT_NUMBER: "6379"
+#      TZ: Europe/Berlin
+#      UMASK: "002"
+#      UMASK_SET: "002"
+#    healthcheck:
+#      interval: 10s
+#      retries: 30
+#      start_period: 10s
+#      test: redis-cli -h 127.0.0.1 -p 6379 -a $$REDIS_PASSWORD ping | grep -q PONG
+#      timeout: 5s
+#    image: bitnami/redis:7.4.2
+#    platform: linux/amd64
+#    privileged: false
+#    restart: unless-stopped
+#    security_opt:
+#      - no-new-privileges=true
+#    stdin_open: false
+#    tty: false
+#    user: "1001:0"
+#    volumes:    
+#      - read_only: false
+#        source: redis-data
+#        target: /bitnami/redis/data
+#        type: volume
+#        volume:
+#          nocopy: false
 
   server:
     container_name: immich-server
