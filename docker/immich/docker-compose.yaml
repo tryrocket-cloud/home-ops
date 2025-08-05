@@ -31,8 +31,8 @@ services:
 
   pgvecto:
     image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
-    cap_drop:
-      - ALL
+    #cap_drop:
+    #  - ALL
     environment:
       NVIDIA_VISIBLE_DEVICES: void
       POSTGRES_DB: ${POSTGRES_DB}
@@ -50,13 +50,13 @@ services:
 #      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
 #      timeout: 5s
     # image: tensorchord/pgvecto-rs:pg15-v0.2.0 update to 1.133
-    platform: linux/amd64
-    privileged: false
+    #platform: linux/amd64
+    #privileged: false
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges=true
-    stdin_open: false
-    tty: false
+    #security_opt:
+    #  - no-new-privileges=true
+    #stdin_open: false
+    #tty: false
     #user: "3000:3000"
     volumes:
       - bind:
