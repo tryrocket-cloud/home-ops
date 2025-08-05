@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.136.0
+    image: ghcr.io/immich-app/immich-machine-learning:v1.137.0
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -161,7 +161,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-server:v1.136.0
+    image: ghcr.io/immich-app/immich-server:v1.137.0
     #platform: linux/amd64
     #ports:
     #  - mode: ingress
@@ -176,47 +176,48 @@ services:
     #tty: false
     user: "3000:3000"
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/backups
-        target: /usr/src/app/upload/backups
+        target: /data/backups
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/encoded-video
-        target: /usr/src/app/upload/encoded-video
+        target: /data/encoded-video
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/library
-        target: /usr/src/app/upload/library
+        target: /data/library
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/profile
-        target: /usr/src/app/upload/profile
+        target: /data/profile
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/thumbs
-        target: /usr/src/app/upload/thumbs
+        target: /data/thumbs
         type: bind
       - bind:
           create_host_path: false
           propagation: rprivate
         read_only: false
         source: /mnt/tank/apps/immich/data/immich-data/upload
-        target: /usr/src/app/upload/upload
+        target: /data/upload
         type: bind
     labels:
       - "traefik.enable=true"
