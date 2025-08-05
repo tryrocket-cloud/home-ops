@@ -137,11 +137,11 @@ services:
       timeout: 5s
     image: ghcr.io/immich-app/immich-server:v1.131.3
     platform: linux/amd64
-    ports:
-      - mode: ingress
-        protocol: tcp
-        published: 30041
-        target: 30041
+    #ports:
+    #  - mode: ingress
+    #    protocol: tcp
+    #    published: 30041
+    #    target: 30041
     privileged: false
     restart: unless-stopped
     security_opt:
@@ -192,6 +192,34 @@ services:
         source: /mnt/tank/apps/immich/data/immich-data/upload
         target: /usr/src/app/upload/upload
         type: bind
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mafl-dashboard.rule=Host(`immich.tryrocket.cloud}`)"
+      - "traefik.http.routers.mafl-dashboard.entrypoints=https"
+      - "traefik.http.routers.mafl-dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.services.mafl-dashboard.loadbalancer.server.port=30041
+
+  traefik:
+    image: traefik:v3.5.0
+    container_name: traefik
+    restart: unless-stopped
+      #read_only: true
+    healthcheck:
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    environment:
+      TZ: ${TZ}
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/tank/apps/immich/acme.json:/acme.json
+      - /mnt/tank/apps/immich/traefik.yml:/etc/traefik/traefik.yml:ro
 
 #  backup:
 #    container_name: immich-backup
