@@ -154,7 +154,7 @@ services:
       NVIDIA_VISIBLE_DEVICES: void
       REDIS_DBINDEX: "0"
       REDIS_HOSTNAME: redis
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      #REDIS_PASSWORD: ${REDIS_PASSWORD}
       REDIS_PORT: "6379"
       TZ: Europe/Berlin
       UMASK: "002"
