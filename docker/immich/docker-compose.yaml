@@ -160,24 +160,20 @@ services:
       UMASK: "002"
       UMASK_SET: "002"
     healthcheck:
-      interval: 10s
-      retries: 30
-      start_period: 10s
-      test: /usr/src/app/bin/immich-healthcheck
-      timeout: 5s
+      disable: false
     image: ghcr.io/immich-app/immich-server:v1.136.0
-    platform: linux/amd64
+    #platform: linux/amd64
     #ports:
     #  - mode: ingress
     #    protocol: tcp
     #    published: 30041
     #    target: 30041
-    privileged: false
+    #privileged: false
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges=true
-    stdin_open: false
-    tty: false
+    #security_opt:
+    #  - no-new-privileges=true
+    #stdin_open: false
+    #tty: false
     user: "3000:3000"
     volumes:
       - bind:
