@@ -142,9 +142,9 @@ services:
         condition: service_healthy
     environment:
       DB_DATABASE_NAME: ${POSTGRES_DB}
-      DB_HOSTNAME: pgvecto
+      DB_HOSTNAME: database
       DB_PASSWORD: ${POSTGRES_PASSWORD}
-      DB_PORT: "5432"
+      DB_PORT: "5433"
       DB_USERNAME: ${POSTGRES_USER}
       IMMICH_LOG_LEVEL: log
       IMMICH_MACHINE_LEARNING_ENABLED: "true"
