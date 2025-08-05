@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.132.3
+    image: ghcr.io/immich-app/immich-machine-learning:v1.133.0
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -30,6 +30,7 @@ services:
           nocopy: false
 
   pgvecto:
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
     cap_drop:
       - ALL
     environment:
@@ -41,13 +42,14 @@ services:
       TZ: Europe/Berlin
       UMASK: "002"
       UMASK_SET: "002"
-    healthcheck:
-      interval: 10s
-      retries: 30
-      start_period: 10s
-      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
-      timeout: 5s
-    image: tensorchord/pgvecto-rs:pg15-v0.2.0
+      DB_STORAGE_TYPE: 'HDD'
+#    healthcheck:
+#      interval: 10s
+#      retries: 30
+#      start_period: 10s
+#      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
+#      timeout: 5s
+    # image: tensorchord/pgvecto-rs:pg15-v0.2.0 update to 1.133
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -142,7 +144,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.132.3
+    image: ghcr.io/immich-app/immich-server:v1.133.0
     platform: linux/amd64
     #ports:
     #  - mode: ingress
