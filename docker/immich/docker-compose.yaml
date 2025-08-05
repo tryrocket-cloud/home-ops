@@ -13,11 +13,7 @@ services:
       UMASK: "002"
       UMASK_SET: "002"
     healthcheck:
-      interval: 10s
-      retries: 30
-      start_period: 10s
-      test: python3 /usr/src/app/healthcheck.py
-      timeout: 5s
+      disable: false
     image: ghcr.io/immich-app/immich-machine-learning:v1.131.3
     platform: linux/amd64
     privileged: false
