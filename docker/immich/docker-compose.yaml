@@ -194,7 +194,7 @@ services:
         type: bind
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.immich-dashboard.rule=Host(`immich.tryrocket.cloud}`)"
+      - "traefik.http.routers.immich-dashboard.rule=Host(`immich.tryrocket.cloud`)"
       - "traefik.http.routers.immich-dashboard.entrypoints=https"
       - "traefik.http.routers.immich-dashboard.tls.certresolver=letsencrypt"
       - "traefik.http.services.immich-dashboard.loadbalancer.server.port=30041
