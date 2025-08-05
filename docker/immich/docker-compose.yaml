@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.133.0
+    image: ghcr.io/immich-app/immich-machine-learning:v1.134.0
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -165,7 +165,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.133.0
+    image: ghcr.io/immich-app/immich-server:v1.134.0
     platform: linux/amd64
     #ports:
     #  - mode: ingress
