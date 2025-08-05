@@ -220,11 +220,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/tank/apps/immich/acme.json:/acme.json
       - /mnt/tank/apps/immich/traefik.yml:/etc/traefik/traefik.yml:ro
-      - /mnt/tank/apps/immich/truenas-ui.yml:/etc/traefik/dynamic/truenas-ui.yml:ro
-    command:
-      - --providers.docker=true
-      - --providers.file.directory=/etc/traefik/dynamic
-      - --providers.file.watch=true
+      #- /mnt/tank/apps/immich/truenas-ui.yml:/etc/traefik/dynamic/truenas-ui.yml:ro
+    #command:
+      #- --providers.docker=true
+      #- --providers.file.directory=/etc/traefik/dynamic
+      #- --providers.file.watch=true
   
 #  backup:
 #    container_name: immich-backup
