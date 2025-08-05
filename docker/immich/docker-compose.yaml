@@ -52,7 +52,7 @@ services:
         type: bind
 
   pgvecto:
-    image: tensorchord/pgvecto-rs:pg15-v0.2.0 update to 1.133
+    image: tensorchord/pgvecto-rs:pg15-v0.2.0
     cap_drop:
       - ALL
     environment:
