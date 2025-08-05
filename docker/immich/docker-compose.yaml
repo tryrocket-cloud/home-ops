@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.133.0
+    image: ghcr.io/immich-app/immich-machine-learning:v1.132.3
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -29,10 +29,8 @@ services:
         volume:
           nocopy: false
 
-  pgvecto:
+  database:
     image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
-    #cap_drop:
-    #  - ALL
     environment:
       NVIDIA_VISIBLE_DEVICES: void
       POSTGRES_DB: ${POSTGRES_DB}
@@ -43,21 +41,44 @@ services:
       UMASK: "002"
       UMASK_SET: "002"
       DB_STORAGE_TYPE: 'HDD'
-#    healthcheck:
-#      interval: 10s
-#      retries: 30
-#      start_period: 10s
-#      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
-#      timeout: 5s
-    # image: tensorchord/pgvecto-rs:pg15-v0.2.0 update to 1.133
-    #platform: linux/amd64
-    #privileged: false
     restart: unless-stopped
-    #security_opt:
-    #  - no-new-privileges=true
-    #stdin_open: false
-    #tty: false
-    #user: "3000:3000"
+    volumes:
+      - bind:
+          create_host_path: false
+          propagation: rprivate
+        read_only: false
+        source: /mnt/tank/apps/immich/postgres-data/data
+        target: /var/lib/postgresql/data
+        type: bind
+
+  pgvecto:
+    image: tensorchord/pgvecto-rs:pg15-v0.2.0 update to 1.133
+    cap_drop:
+      - ALL
+    environment:
+      NVIDIA_VISIBLE_DEVICES: void
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      TZ: Europe/Berlin
+      UMASK: "002"
+      UMASK_SET: "002"
+      DB_STORAGE_TYPE: 'HDD'
+    healthcheck:
+      interval: 10s
+      retries: 30
+      start_period: 10s
+      test: pg_isready -h 127.0.0.1 -p 5432 -U $$POSTGRES_USER -d $$POSTGRES_DB
+      timeout: 5s
+    platform: linux/amd64
+    privileged: false
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges=true
+    stdin_open: false
+    tty: false
+    user: "3000:3000"
     volumes:
       - bind:
           create_host_path: false
@@ -144,7 +165,7 @@ services:
       start_period: 10s
       test: /usr/src/app/bin/immich-healthcheck
       timeout: 5s
-    image: ghcr.io/immich-app/immich-server:v1.133.0
+    image: ghcr.io/immich-app/immich-server:v1.132.3
     platform: linux/amd64
     #ports:
     #  - mode: ingress
