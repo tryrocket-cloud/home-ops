@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.137.1
+    image: ghcr.io/immich-app/immich-machine-learning:v1.137.3
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -161,7 +161,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-server:v1.137.1
+    image: ghcr.io/immich-app/immich-server:v1.137.3
     #platform: linux/amd64
     #ports:
     #  - mode: ingress
