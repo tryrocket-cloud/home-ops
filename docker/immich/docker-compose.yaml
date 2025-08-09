@@ -14,7 +14,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-machine-learning:v1.137.3
+    image: ghcr.io/immich-app/immich-machine-learning:v1.137.3@sha256:ef517c041fa4a6a84a6c3c4f88a1124058e686c9c92bf09a973e7e60c3c3ea1e
     platform: linux/amd64
     privileged: false
     restart: unless-stopped
@@ -30,7 +30,7 @@ services:
           nocopy: false
 
   database:
-    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.3.0-pgvectors0.2.0@sha256:f36625fffae9611b0e6e28cc1a9bb573d20a9d3cc5e62ab0ff1a19874e34e1f4
     environment:
       NVIDIA_VISIBLE_DEVICES: void
       POSTGRES_DB: ${POSTGRES_DB}
@@ -52,7 +52,7 @@ services:
         type: bind
 
   pgvecto:
-    image: tensorchord/pgvecto-rs:pg15-v0.2.0
+    image: tensorchord/pgvecto-rs:pg15-v0.2.0@sha256:104a26ad4d0446c54a46d3a694c6193ef018c5ad4f9d9faf7765ab09cb9ffe06
     cap_drop:
       - ALL
     environment:
@@ -161,7 +161,7 @@ services:
       UMASK_SET: "002"
     healthcheck:
       disable: false
-    image: ghcr.io/immich-app/immich-server:v1.137.3
+    image: ghcr.io/immich-app/immich-server:v1.137.3@sha256:e517f806457057d44695152a0af2dfa094225a7d85eb37f518925e68864c658d
     #platform: linux/amd64
     #ports:
     #  - mode: ingress
@@ -227,7 +227,7 @@ services:
       - "traefik.http.services.immich-dashboard.loadbalancer.server.port=30041"
 
   traefik:
-    image: traefik:v3.5.0
+    image: traefik:v3.5.0@sha256:4e7175cfe19be83c6b928cae49dde2f2788fb307189a4dc9550b67acf30c11a5
     container_name: traefik
     restart: unless-stopped
       #read_only: true
