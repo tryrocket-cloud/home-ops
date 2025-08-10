@@ -9,4 +9,4 @@ resources:
 
 images:
   - name: hywax/mafl:latest
-    newTag: v0.15.4@sha256:2c89020be334b341da41a6b95830b1b52b1b9f43c9f16d09c0ab4e9dad3ea4ad
+    newTag: v1.4.1@sha256:502a51f2cfcb7ab4dc2c44e22de07b585deee956d37bd0e37a5a1b87e49966ff
