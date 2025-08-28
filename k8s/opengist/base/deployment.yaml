@@ -18,7 +18,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
         - name: opengist
-          image: ghcr.io/thomiceli/opengist:latest
+          image: ghcr.io/thomiceli/opengist:latest@sha256:b3ae8c4614fcfc3099ed08317f0113444f314d3d390e89161cff9b673729d191
           imagePullPolicy: IfNotPresent
           env:
             - name: TZ
