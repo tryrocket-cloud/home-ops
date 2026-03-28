@@ -6,7 +6,7 @@ croniter==2.0.7
 docker==7.1.0
 filelock==3.18.0
 h11==0.14.0
-healthchecks_io==0.4.3
+healthchecks_io==0.4.4
 httpcore==1.0.8
 httpx==0.27.2
 idna==3.10
