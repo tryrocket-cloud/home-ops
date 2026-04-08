@@ -4,8 +4,8 @@
     "config:best-practices"
   ],
   "kubernetes": {
-    "fileMatch": [
-      "\\.ya?ml"
+    "managerFilePatterns": [
+      "/\\.ya?ml/"
     ]
   }
 }
