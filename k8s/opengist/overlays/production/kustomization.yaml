@@ -12,4 +12,4 @@ resources:
 # https://github.com/thomiceli/opengist/releases
 images:
   - name: ghcr.io/thomiceli/opengist:latest
-    newTag: 1.9.1@sha256:75fc200bde38459be4e3aed5e40ef2e3076fddcca5eb6bd08ebd0c7d7a939d85
+    newTag: 1.15.2@sha256:7edc91273ee7d10a17406da8a08c803158baaff984c39b789c1313473d068f21
