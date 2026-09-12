@@ -15,7 +15,7 @@ spec:
           restartPolicy: Never
           initContainers:
             - name: export-hashicorp-vault
-              image: ghcr.io/jonasvinther/medusa:latest
+              image: ghcr.io/jonasvinther/medusa:latest@sha256:bc4696d3328bed5a0712318d643766e36c87d2ae836d14170d010df6abf0447d
               imagePullPolicy: IfNotPresent
               command: ["./medusa", "export", "$(VAULT_PATH)", "-o", "/export/vault-export.json"]
               env:
