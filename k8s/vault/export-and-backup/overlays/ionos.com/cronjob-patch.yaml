@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: ionos-com-objectstorage-eu-central-3-s3-kopia-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:e2fd33fbc084b186b36ac350bdc6fcf48ecf22ff116c78caa6fb5ecbec99b125
               imagePullPolicy: Always
               env:
                 - name: EXPORT_JSON
@@ -60,7 +60,7 @@ spec:
                   mountPath: /export
                   readOnly: true
             - name: ionos-com-objectstorage-eu-central-3-s3-restic-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:e2fd33fbc084b186b36ac350bdc6fcf48ecf22ff116c78caa6fb5ecbec99b125
               imagePullPolicy: Always
               env:
                 - name: EXPORT_JSON

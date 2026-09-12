@@ -8,7 +8,7 @@ volumes:
 
 services:
   postgres:
-    image: postgres
+    image: postgres@sha256:4ef4dbc939d61acea57712655ddb4b4ab27419c913f94cca0cd57cb3ea3c2280
     volumes:
       - postgres-data:/var/lib/postgresql/data
     environment:
@@ -22,7 +22,7 @@ services:
       retries: 10
 
   kestra:
-    image: kestra/kestra:latest
+    image: kestra/kestra:latest@sha256:948dae5aa8a1131d5df3d0f2c3010b34a6cd20a5514a517efcdbcbc0407eb8ff
     pull_policy: always
     # Note that this setup with a root user is intended for development purpose.
     # Our base image runs without root, but the Docker Compose implementation needs root to access the Docker socket
