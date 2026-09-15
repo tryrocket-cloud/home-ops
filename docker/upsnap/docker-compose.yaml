@@ -1,7 +1,7 @@
 services:
   upsnap:
     container_name: upsnap
-    image: ghcr.io/seriousm4x/upsnap:5
+    image: ghcr.io/seriousm4x/upsnap:5@sha256:2bda1e8638d97269ddeacf9b9d60b14557c3b6685e1d1facf496dfc0df4a8a92
     network_mode: host
     restart: unless-stopped
     volumes:

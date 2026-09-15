@@ -42,7 +42,7 @@ spec:
 
           initContainers:
             - name: vaultwarden-export
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-38dfa08a823162b91b8b4b579a025a471c475a33
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-38dfa08a823162b91b8b4b579a025a471c475a33@sha256:0bfead9e4ae9f6b86fc8b14f89cc8a396909dbc9a08acc7246cd60892a3ced84
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
@@ -134,7 +134,7 @@ spec:
                   echo "All jobs finished!"
 
             - name: restic-s3-policy
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a@sha256:2a9ba7ee98f0af4a7fbad3ef11e8acb388024c2e95936c825fae014b9c8da164
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
@@ -177,7 +177,7 @@ spec:
 
           containers:
             - name: restic-ionos-backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a@sha256:2a9ba7ee98f0af4a7fbad3ef11e8acb388024c2e95936c825fae014b9c8da164
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
@@ -236,7 +236,7 @@ spec:
                   run_restic_backup
 
             - name: kopia-ionos-backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a@sha256:2a9ba7ee98f0af4a7fbad3ef11e8acb388024c2e95936c825fae014b9c8da164
               imagePullPolicy: IfNotPresent
               env:
                 - name: TZ
@@ -302,7 +302,7 @@ spec:
                   run_kopia_backup
 
             - name: deny-all-s3-policy
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit-ac3e21cade59942ed7c1ef4a8dc595b3a71d815a@sha256:2a9ba7ee98f0af4a7fbad3ef11e8acb388024c2e95936c825fae014b9c8da164
               volumeMounts:
                 - name: signals
                   mountPath: /signals
