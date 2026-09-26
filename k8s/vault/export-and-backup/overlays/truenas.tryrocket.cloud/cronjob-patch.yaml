@@ -11,7 +11,7 @@ spec:
         spec:
           containers:
             - name: truenas-tryrocket-cloud-objectstorage-backup
-              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup
+              image: ghcr.io/tryrocket-cloud/tryrocket-cloud:backup@sha256:4e8de6f38cfdc3e850c31726eb46884f2cb54934bbebc1afc4c587c739f7a54f
               imagePullPolicy: Always
               env:
                 - name: VAULT_EXPORT_JSON
