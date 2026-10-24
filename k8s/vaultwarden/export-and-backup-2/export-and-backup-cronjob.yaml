@@ -49,7 +49,7 @@ spec:
 
           initContainers:
             - name: healthcheck-start
-              image: curlimages/curl
+              image: curlimages/curl@sha256:11e64e28c5f58c8d93ee95fcf22ac055f48b0bc440e0ce7d8013bbb5ad6aa8ac
               envFrom:
                 - secretRef:
                     name: healthchecksio
@@ -60,7 +60,7 @@ spec:
                   curl -fsS -m 10 --retry 5 https://hc-ping.com/$HC_UUID/start
 
             - name: get-vaultwarden-version
-              image: alpine:3.21
+              image: alpine:3.21@sha256:ee16d92f96db08d9d2d07da48555a27f3a69d8f0759021dbc601195ed0d2b5bd
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
@@ -88,7 +88,7 @@ spec:
                   mountPath: /export
 
             - name: export-2967ac9f-f0e5-4881-8be5-9d08371a167a
-              image: debian:bookworm-slim
+              image: debian:bookworm-slim@sha256:7ff6ba31527b9e336162fa061746c366c4b2032f4d2cff2078bea43f78efe3f8
               env:
                 - name: VAULTWARDEN_HOST
                   value: vaultwarden.tryrocket.cloud
@@ -139,7 +139,7 @@ spec:
                   mountPath: /export
 
             - name: encrypt-with-age
-              image: alpine:3.21
+              image: alpine:3.21@sha256:ee16d92f96db08d9d2d07da48555a27f3a69d8f0759021dbc601195ed0d2b5bd
               env:
                 - name: VAULTWARDEN_USER_ID
                   value: 2967ac9f-f0e5-4881-8be5-9d08371a167a
@@ -178,7 +178,7 @@ spec:
                   mountPath: /export
 
             - name: configure-s3-access-allowance
-              image: public.ecr.aws/aws-cli/aws-cli:latest
+              image: public.ecr.aws/aws-cli/aws-cli:latest@sha256:c8156a0e74e13929a42d7e60f0d4e14e7d28d980cd21822505d4bff80e5460c1
               command: ["/bin/sh","-c"]
               args:
                 - |
@@ -208,7 +208,7 @@ spec:
                   readOnly: true
 
             - name: restic
-              image: restic/restic:0.18.0
+              image: restic/restic:0.18.0@sha256:4cf4a61ef9786f4de53e9de8c8f5c040f33830eb0a10bf3d614410ee2fcb6120
               envFrom:
                 - secretRef:
                     name: restic
@@ -244,7 +244,7 @@ spec:
                   mountPath: /export
 
             - name: configure-s3-access-block
-              image: public.ecr.aws/aws-cli/aws-cli:latest
+              image: public.ecr.aws/aws-cli/aws-cli:latest@sha256:c8156a0e74e13929a42d7e60f0d4e14e7d28d980cd21822505d4bff80e5460c1
               command: ["/bin/sh","-c"]
               args:
                 - |
@@ -273,7 +273,7 @@ spec:
                   readOnly: true
 
             - name: healthcheck-ping
-              image: curlimages/curl
+              image: curlimages/curl@sha256:11e64e28c5f58c8d93ee95fcf22ac055f48b0bc440e0ce7d8013bbb5ad6aa8ac
               envFrom:
                 - secretRef:
                     name: healthchecksio
@@ -285,5 +285,5 @@ spec:
 
           containers:
             - name: teardown
-              image: alpine
+              image: alpine@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
               command: ["sh","-c","echo backup done!"]

@@ -1,6 +1,6 @@
 services:
   caddy:
-    image: ghcr.io/caddybuilds/caddy-cloudflare:latest
+    image: ghcr.io/caddybuilds/caddy-cloudflare:latest@sha256:202f0928fe075b7a914703b7a4759506de6c95c33ce5a256cecbd5c44d8869d0
     container_name: caddy
     restart: unless-stopped
     ports:
