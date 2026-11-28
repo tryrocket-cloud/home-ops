@@ -17,7 +17,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: test-restic-backup
-              image: ghcr.io/tryrocket-cloud/home-ops:toolkit
+              image: ghcr.io/tryrocket-cloud/home-ops:toolkit@sha256:38fa27513b6eb05e4eb36888f67966994c8666b3adf5787cc0aea98da98796d0
               imagePullPolicy: Always
               env:
                 - name: RESTIC_CACHE_DIR

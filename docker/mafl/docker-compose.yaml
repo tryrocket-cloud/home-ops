@@ -1,6 +1,6 @@
 services:
   mafl:
-    image: hywax/mafl
+    image: hywax/mafl@sha256:2c89020be334b341da41a6b95830b1b52b1b9f43c9f16d09c0ab4e9dad3ea4ad
     container_name: mafl
     restart: unless-stopped
     volumes:
