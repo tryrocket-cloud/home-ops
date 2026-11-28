@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: subscription-manager
-          image: dh1011/subscription-manager:latest
+          image: dh1011/subscription-manager:latest@sha256:71d9b6f73e38ccdb380434f6f4bc43f76a58ab462c0a9f98b5c407905d03f0d5
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
